@@ -7,7 +7,6 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
 <VBox prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="datamer.ctrl.WinC">
    <children>
       <MenuBar>
@@ -35,16 +34,16 @@
             </Menu>
         </menus>
       </MenuBar>
-      <TabPane VBox.vgrow="ALWAYS" />
+      <TabPane fx:id="tabPane" VBox.vgrow="ALWAYS" />
       <HBox prefHeight="22.0" prefWidth="1000.0" VBox.vgrow="NEVER">
          <children>
-            <Label text="Left Status">
+            <Label fx:id="leftStatus" alignment="CENTER" prefHeight="20.0" text="Left Status">
                <HBox.margin>
                   <Insets left="10.0" />
                </HBox.margin>
             </Label>
             <Pane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
-            <Label text="Rigth Status">
+            <Label fx:id="rigthStatus" alignment="CENTER" prefHeight="20.0" text="Rigth Status">
                <HBox.margin>
                   <Insets right="10.0" />
                </HBox.margin>

@@ -19,7 +19,7 @@ public class Datamer extends Application {
     
     @Override
     public void init(){
-        
+        Var.initVar();
     }
     
     @Override

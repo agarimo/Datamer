@@ -65,7 +65,6 @@ public class Var {
 
     public static void initVar() {
         initVarDriver();
-        initVarLoadConfig();
     }
 
     private static void initVarDriver() {

@@ -54,6 +54,7 @@ public class Var {
     public static String configFile = "config.xml";
     public static String defaultFile = "/resources/default.xml";
     public static String dbName = "idbl";
+    public static String dbNameBoes = "boes";
     public static String dbNameStats = "idbl_stats";
 
     public static boolean modoAdmin;
@@ -62,6 +63,12 @@ public class Var {
 
     public static File runtimeData;
     public static boolean isRunning;
+    
+    /**
+     * BOES
+     */
+    
+    public static boolean boesIsDownloading;
 
     public static void initVar() {
         initVarDriver();

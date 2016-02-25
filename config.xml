@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+  <conexion>
+    <db-host>192.168.1.40</db-host>
+    <db-port>3306</db-port>
+    <db-username>admin</db-username>
+    <db-password>IkuinenK@@m.s84</db-password>
+  </conexion>
+</config>

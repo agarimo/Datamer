@@ -93,6 +93,7 @@ public class Boe {
         } catch (IOException ex) {
             Logger.getLogger(Boe.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
         return buffer.toString();
     }
 

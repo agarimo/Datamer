@@ -11,12 +11,12 @@ import java.util.List;
  */
 public class Publicacion {
 
-    String entidad;
-    String origen;
-    String datos;
-    List boletines;
-    Date fecha;
-    List pdfs;
+    private String entidad;
+    private String origen;
+    private String datos;
+    private List boletines;
+    private Date fecha;
+    private List pdfs;
 
     public Publicacion(String entidad, String datos, Date fecha) {
         this.fecha = fecha;

@@ -7,65 +7,71 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" fx:id="rootPane" prefHeight="600.0" prefWidth="1000.0" style="-fx-background-color: #f2f2f2;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.ClasificacionC">
+
+<VBox alignment="CENTER" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="datamer.ctrl.boes.ClasificacionC">
    <children>
-      <ToolBar prefHeight="40.0" prefWidth="1000.0">
-         <items>
-            <Button contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#volverInicio" prefHeight="30.0" prefWidth="40.0" style="-fx-graphic: url(https://cdn3.iconfinder.com/data/icons/google-material-design-icons/48/ic_reply_all_48px-32.png);" />
-            <Separator orientation="VERTICAL" prefHeight="30.0" prefWidth="300.0" visible="false" />
-            <DatePicker fx:id="dpFechaC" onAction="#xLisDatePicker" prefHeight="30.0" prefWidth="150.0" />
-            <Button fx:id="btSelect" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pdfSelect" prefHeight="30.0" prefWidth="40.0" style="-fx-graphic: url(https://cdn3.iconfinder.com/data/icons/google-material-design-icons/48/ic_done_48px-32.png);" />
-            <Button fx:id="btDiscard" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pdfDiscard" prefHeight="30.0" prefWidth="40.0" style="-fx-graphic: url(https://cdn3.iconfinder.com/data/icons/google-material-design-icons/48/ic_close_48px-32.png);" />
-            <Separator orientation="VERTICAL" prefHeight="30.0" prefWidth="310.0" visible="false" />
-            <Button fx:id="btSelectAll" contentDisplay="GRAPHIC_ONLY" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pdfSelectAll" prefHeight="30.0" prefWidth="40.0" style="-fx-graphic: url(https://cdn3.iconfinder.com/data/icons/google-material-design-icons/48/ic_format_line_spacing_48px-32.png);" text="Seleccionar TODO" />
-            <Button fx:id="btRecargarClasificacion" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#xLisDatePicker" prefHeight="30.0" prefWidth="40.0" style="-fx-graphic: url(https://cdn3.iconfinder.com/data/icons/google-material-design-icons/48/ic_refresh_48px-32.png);" />
-         </items>
-      </ToolBar>
-      <AnchorPane layoutX="7.0" layoutY="54.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
+      <AnchorPane id="AnchorPane" fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" style="-fx-background-color: #f2f2f2;">
          <children>
-            <Button fx:id="btFinClas" contentDisplay="TOP" layoutX="844.0" layoutY="471.0" mnemonicParsing="false" onAction="#procesar" prefHeight="100.0" prefWidth="150.0" style="-fx-graphic: url(https://cdn0.iconfinder.com/data/icons/trio-miscellaneous/32/tardis-4-64.png);" text="PROCESAR" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="5.0" />
-            <Label fx:id="lbClasificacion" alignment="CENTER" contentDisplay="CENTER" layoutX="557.0" layoutY="454.0" prefHeight="17.0" prefWidth="276.0" text="INSERTANDO 5 DE 200" AnchorPane.bottomAnchor="60.0" />
-            <ProgressBar fx:id="pbClasificacion" layoutX="557.0" layoutY="491.0" prefHeight="40.0" prefWidth="276.0" progress="0.0" AnchorPane.bottomAnchor="15.0" />
-            <TitledPane fx:id="tpDescartados" collapsible="false" layoutX="10.0" layoutY="322.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="189.0" prefWidth="262.0" text="Boletines Descartados" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="5.0">
-               <content>
-                  <AnchorPane layoutX="7.0" layoutY="1.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="163.0" prefWidth="260.0">
-                     <children>
-                        <ListView fx:id="lvDiscard" layoutX="57.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="144.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                        <Button fx:id="btRecoverD" layoutX="219.6" layoutY="19.6" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pdfRecoverD" prefHeight="30.0" prefWidth="40.0" style="-fx-graphic: url(https://cdn3.iconfinder.com/data/icons/google-material-design-icons/48/ic_input_48px-32.png);" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="200.0" AnchorPane.topAnchor="0.0" GridPane.rowIndex="1" />
-                     </children>
-                  </AnchorPane>
-               </content>
-            </TitledPane>
-            <TitledPane fx:id="tpSeleccionados" collapsible="false" layoutX="279.0" layoutY="322.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="189.0" prefWidth="262.0" text="Boletines Seleccionados" AnchorPane.bottomAnchor="15.0">
-               <content>
-                  <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="163.0" prefWidth="260.0">
-                     <children>
-                        <Button fx:id="btRecoverS" layoutX="6.0" layoutY="26.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pdfRecoverS" prefHeight="30.0" prefWidth="40.0" style="-fx-graphic: url(https://cdn3.iconfinder.com/data/icons/google-material-design-icons/48/ic_input_48px-32.png);" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="200.0" AnchorPane.topAnchor="0.0" />
-                        <Label layoutX="5.76953125" text="Boletines seleccionados:" AnchorPane.rightAnchor="448.23046875" />
-                        <ListView fx:id="lvSelect" layoutX="141.0" prefHeight="150.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                     </children>
-                  </AnchorPane>
-               </content>
-            </TitledPane>
-            <TableView fx:id="tvBoes" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#keyPressed" prefHeight="337.0" prefWidth="990.0" rotate="-0.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="10.0">
-               <columns>
-                  <TableColumn fx:id="codigoCL" maxWidth="160.0" minWidth="160.0" prefWidth="160.0" resizable="false" text="CODIGO" />
-                  <TableColumn fx:id="origenCL" maxWidth="205.0" minWidth="205.0" prefWidth="205.0" resizable="false" text="ORIGEN" />
-                  <TableColumn fx:id="descripcionCL" maxWidth="608.0" minWidth="608.0" prefWidth="608.0" resizable="false" text="DESCRIPCION" />
-               </columns>
-               <opaqueInsets>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-               </opaqueInsets>
-            </TableView>
-            <Label fx:id="lbContadorT" alignment="CENTER_RIGHT" layoutX="945.0" layoutY="356.0" prefHeight="17.0" prefWidth="50.0" text="..." AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="356.0" />
-            <Label layoutX="854.0" layoutY="356.0" prefHeight="17.0" prefWidth="81.0" text="Total: " AnchorPane.rightAnchor="80.0" AnchorPane.topAnchor="356.0" />
-            <CheckBox fx:id="cbAutoScroll" layoutX="727.0" layoutY="356.0" mnemonicParsing="false" onAction="#xLisCheckBox" prefHeight="17.0" prefWidth="81.0" selected="true" text="AutoScroll" AnchorPane.rightAnchor="192.0" />
-            <Button fx:id="btVerWebC" contentDisplay="RIGHT" layoutX="557.0" layoutY="356.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pdfShowOnWeb" prefHeight="50.0" prefWidth="150.0" style="-fx-graphic: url(https://cdn1.iconfinder.com/data/icons/smallicons-logotypes/32/chrome-32.png);" text="Ver Boletin        ">
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets></Button>
-            <Button fx:id="btDescartaOrigen" contentDisplay="RIGHT" layoutX="557.0" layoutY="414.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pdfDiscardSource" prefHeight="50.0" prefWidth="150.0" style="-fx-graphic: url(https://cdn0.iconfinder.com/data/icons/star-wars/512/death_star-32.png);" text="Descartar Origen" />
+            <ToolBar prefHeight="40.0" prefWidth="1000.0">
+               <items>
+                  <Button contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="30.0" prefWidth="40.0" style="-fx-graphic: url(https://cdn3.iconfinder.com/data/icons/google-material-design-icons/48/ic_reply_all_48px-32.png);" visible="false" />
+                  <Separator orientation="VERTICAL" prefHeight="30.0" prefWidth="300.0" visible="false" />
+                  <DatePicker fx:id="dpFechaC" onAction="#xLisDatePicker" prefHeight="30.0" prefWidth="150.0" />
+                  <Button fx:id="btSelect" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pdfSelect" prefHeight="30.0" prefWidth="40.0" style="-fx-graphic: url(https://cdn3.iconfinder.com/data/icons/google-material-design-icons/48/ic_done_48px-32.png);" />
+                  <Button fx:id="btDiscard" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pdfDiscard" prefHeight="30.0" prefWidth="40.0" style="-fx-graphic: url(https://cdn3.iconfinder.com/data/icons/google-material-design-icons/48/ic_close_48px-32.png);" />
+                  <Separator orientation="VERTICAL" prefHeight="30.0" prefWidth="310.0" visible="false" />
+                  <Button fx:id="btSelectAll" contentDisplay="GRAPHIC_ONLY" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pdfSelectAll" prefHeight="30.0" prefWidth="40.0" style="-fx-graphic: url(https://cdn3.iconfinder.com/data/icons/google-material-design-icons/48/ic_format_line_spacing_48px-32.png);" text="Seleccionar TODO" />
+                  <Button fx:id="btRecargarClasificacion" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#xLisDatePicker" prefHeight="30.0" prefWidth="40.0" style="-fx-graphic: url(https://cdn3.iconfinder.com/data/icons/google-material-design-icons/48/ic_refresh_48px-32.png);" />
+               </items>
+            </ToolBar>
+            <AnchorPane layoutX="7.0" layoutY="54.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
+               <children>
+                  <Button fx:id="btFinClas" contentDisplay="TOP" layoutX="844.0" layoutY="471.0" mnemonicParsing="false" onAction="#procesar" prefHeight="100.0" prefWidth="150.0" style="-fx-graphic: url(https://cdn0.iconfinder.com/data/icons/trio-miscellaneous/32/tardis-4-64.png);" text="PROCESAR" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="5.0" />
+                  <Label fx:id="lbClasificacion" alignment="CENTER" contentDisplay="CENTER" layoutX="557.0" layoutY="454.0" prefHeight="17.0" prefWidth="276.0" text="INSERTANDO 5 DE 200" AnchorPane.bottomAnchor="60.0" />
+                  <ProgressBar fx:id="pbClasificacion" layoutX="557.0" layoutY="491.0" prefHeight="40.0" prefWidth="276.0" progress="0.0" AnchorPane.bottomAnchor="15.0" />
+                  <TitledPane fx:id="tpDescartados" collapsible="false" layoutX="10.0" layoutY="322.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="189.0" prefWidth="262.0" text="Boletines Descartados" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="5.0">
+                     <content>
+                        <AnchorPane layoutX="7.0" layoutY="1.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="163.0" prefWidth="260.0">
+                           <children>
+                              <ListView fx:id="lvDiscard" layoutX="57.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="144.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                              <Button fx:id="btRecoverD" layoutX="219.6" layoutY="19.6" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pdfRecoverD" prefHeight="30.0" prefWidth="40.0" style="-fx-graphic: url(https://cdn3.iconfinder.com/data/icons/google-material-design-icons/48/ic_input_48px-32.png);" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="200.0" AnchorPane.topAnchor="0.0" GridPane.rowIndex="1" />
+                           </children>
+                        </AnchorPane>
+                     </content>
+                  </TitledPane>
+                  <TitledPane fx:id="tpSeleccionados" collapsible="false" layoutX="279.0" layoutY="322.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="189.0" prefWidth="262.0" text="Boletines Seleccionados" AnchorPane.bottomAnchor="15.0">
+                     <content>
+                        <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="163.0" prefWidth="260.0">
+                           <children>
+                              <Button fx:id="btRecoverS" layoutX="6.0" layoutY="26.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pdfRecoverS" prefHeight="30.0" prefWidth="40.0" style="-fx-graphic: url(https://cdn3.iconfinder.com/data/icons/google-material-design-icons/48/ic_input_48px-32.png);" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="200.0" AnchorPane.topAnchor="0.0" />
+                              <Label layoutX="5.76953125" text="Boletines seleccionados:" AnchorPane.rightAnchor="448.23046875" />
+                              <ListView fx:id="lvSelect" layoutX="141.0" prefHeight="150.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                           </children>
+                        </AnchorPane>
+                     </content>
+                  </TitledPane>
+                  <TableView fx:id="tvBoes" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#keyPressed" prefHeight="337.0" prefWidth="990.0" rotate="-0.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="10.0">
+                     <columns>
+                        <TableColumn fx:id="codigoCL" maxWidth="160.0" minWidth="160.0" prefWidth="160.0" resizable="false" text="CODIGO" />
+                        <TableColumn fx:id="origenCL" maxWidth="205.0" minWidth="205.0" prefWidth="205.0" resizable="false" text="ORIGEN" />
+                        <TableColumn fx:id="descripcionCL" maxWidth="608.0" minWidth="608.0" prefWidth="608.0" resizable="false" text="DESCRIPCION" />
+                     </columns>
+                     <opaqueInsets>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </opaqueInsets>
+                  </TableView>
+                  <Label fx:id="lbContadorT" alignment="CENTER_RIGHT" layoutX="945.0" layoutY="356.0" prefHeight="17.0" prefWidth="50.0" text="..." AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="356.0" />
+                  <Label layoutX="854.0" layoutY="356.0" prefHeight="17.0" prefWidth="81.0" text="Total: " AnchorPane.rightAnchor="80.0" AnchorPane.topAnchor="356.0" />
+                  <CheckBox fx:id="cbAutoScroll" layoutX="727.0" layoutY="356.0" mnemonicParsing="false" onAction="#xLisCheckBox" prefHeight="17.0" prefWidth="81.0" selected="true" text="AutoScroll" AnchorPane.rightAnchor="192.0" />
+                  <Button fx:id="btVerWebC" contentDisplay="RIGHT" layoutX="557.0" layoutY="356.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pdfShowOnWeb" prefHeight="50.0" prefWidth="150.0" style="-fx-graphic: url(https://cdn1.iconfinder.com/data/icons/smallicons-logotypes/32/chrome-32.png);" text="Ver Boletin        ">
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                  </Button>
+                  <Button fx:id="btDescartaOrigen" contentDisplay="RIGHT" layoutX="557.0" layoutY="414.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pdfDiscardSource" prefHeight="50.0" prefWidth="150.0" style="-fx-graphic: url(https://cdn0.iconfinder.com/data/icons/star-wars/512/death_star-32.png);" text="Descartar Origen" />
+               </children>
+            </AnchorPane>
          </children>
       </AnchorPane>
    </children>
-</AnchorPane>
+</VBox>

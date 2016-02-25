@@ -1,19 +1,19 @@
 package datamer.ctrl.boes.boe;
 
-import enty.Boletin;
-import enty.Boletines_publicados;
-import enty.Descarga;
-import enty.Entidad;
-import enty.Origen;
+import datamer.model.boes.ModeloBoes;
+import datamer.Var;
+import datamer.ctrl.boes.Query;
+import datamer.model.boes.enty.Boletin;
+import datamer.model.boes.enty.Descarga;
+import datamer.model.boes.enty.Entidad;
+import datamer.model.boes.enty.Origen;
+import datamer.model.boes.enty.Stats;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import main.SqlBoe;
-import main.Var;
-import model.ModeloBoes;
 import util.Sql;
 import util.Varios;
 
@@ -24,12 +24,12 @@ import util.Varios;
 public class Insercion {
 
     private Sql bd;
-    private List alreadySelected;
-    private List alreadyDiscarted;
+    private final List alreadySelected;
+    private final List alreadyDiscarted;
 
     public Insercion() {
-        this.alreadySelected = SqlBoe.listaAlreadySelected();
-        this.alreadyDiscarted = SqlBoe.listaAlreadyDuplicated();
+        this.alreadySelected = Query.listaAlreadySelected();
+        this.alreadyDiscarted = Query.listaAlreadyDiscarted();
 
     }
 
@@ -122,11 +122,11 @@ public class Insercion {
     }
 
     private int getIdBoe(String fecha) throws SQLException {
-        return bd.getInt("SELECT * FROM boes.boe where fecha=" + Varios.entrecomillar(fecha));
+        return bd.getInt("SELECT * FROM " + Var.dbNameBoes + ".boe where fecha=" + Varios.entrecomillar(fecha));
     }
 
     private int getIdioma(int idOrigen) throws SQLException {
-        return bd.getInt("SELECT idioma FROM " + Var.nombreBD + ".origen where id=" + idOrigen);
+        return bd.getInt("SELECT idioma FROM " + Var.dbNameBoes + ".origen where id=" + idOrigen);
     }
 
     private int getIdDescarga(String codigo, String link) throws SQLException {
@@ -146,12 +146,8 @@ public class Insercion {
     }
 //</editor-fold>
 
-//    public void marcarClasificado(Date fecha) throws SQLException {
-//        Boe boe = new Boe(fecha);
-//        bd.ejecutar(boe.SQLSetClas());
-//    }
     public void guardaStatsD(List lista) {
-        Boletines_publicados bp;
+        Stats bp;
         ModeloBoes aux;
         Iterator it = lista.iterator();
 
@@ -160,7 +156,7 @@ public class Insercion {
 
             while (it.hasNext()) {
                 aux = (ModeloBoes) it.next();
-                bp = new Boletines_publicados();
+                bp = new Stats();
                 bp.setFecha(aux.getFecha());
                 bp.setCodigo(aux.getCodigo());
                 bp.setIsSelected(false);
@@ -181,7 +177,7 @@ public class Insercion {
     }
 
     public void guardaStatsS(List lista) {
-        Boletines_publicados bp;
+        Stats bp;
         ModeloBoes aux;
         Iterator it = lista.iterator();
 
@@ -190,7 +186,7 @@ public class Insercion {
 
             while (it.hasNext()) {
                 aux = (ModeloBoes) it.next();
-                bp = new Boletines_publicados();
+                bp = new Stats();
                 bp.setFecha(aux.getFecha());
                 bp.setCodigo(aux.getCodigo());
                 bp.setIsSelected(true);

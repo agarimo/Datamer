@@ -7,23 +7,23 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 /**
- * 
+ *
  * @author Agarimo
  */
 public class Datamer extends Application {
-    
+
     @Override
-    public void init(){
+    public void init() {
         Var.initVar();
     }
-    
+
     @Override
     public void start(Stage stage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("/datamer/view/Win.fxml"));
-        
+
         Scene scene = new Scene(root);
-        
         stage.setScene(scene);
+        stage.setMaximized(true);
         stage.show();
     }
 
@@ -33,5 +33,5 @@ public class Datamer extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-    
+
 }

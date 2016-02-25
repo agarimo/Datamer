@@ -31,8 +31,8 @@ import util.Sql;
  */
 public class Download extends Thread {
 
-    int modo;
-    List list;
+    private int modo;
+    private List list;
 
     public Download() {
         this.list = new ArrayList();

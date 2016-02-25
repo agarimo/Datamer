@@ -17,7 +17,7 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import main.Var;
+import datamer.Var;
 import util.Dates;
 import util.Files;
 
@@ -27,20 +27,20 @@ import util.Files;
  */
 public class Pdf {
 
-    int id;
-    String codigo;
-    Date fecha;
-    String entidad;
-    String origen;
-    String descripcion;
-    String link;
-    File ficheroPDF;
-    File ficheroTXT;
-    String preLink = "http://www.boe.es";
+    private int id;
+    private String codigo;
+    private Date fecha;
+    private String entidad;
+    private String origen;
+    private String descripcion;
+    private String link;
+    private File ficheroPDF;
+    private File ficheroTXT;
+    private final String preLink = "http://www.boe.es";
 
-    public Pdf(String datos,String entidad, String origen, Date fecha) {
+    public Pdf(String datos, String entidad, String origen, Date fecha) {
         this.fecha = fecha;
-        this.entidad=entidad;
+        this.entidad = entidad;
         this.origen = origen;
 
         String[] split = datos.split(System.getProperty("line.separator"));
@@ -164,16 +164,16 @@ public class Pdf {
 
         try {
             FileWriter fw = new FileWriter(fileD.getAbsolutePath());
-            BufferedWriter bw = new BufferedWriter(fw);
-            PdfReader pr = new PdfReader(fileO.getAbsolutePath());
-            int pNum = pr.getNumberOfPages();
-            for (int page = 1; page <= pNum; page++) {
-                String text = PdfTextExtractor.getTextFromPage(pr, page);
-                bw.write(text);
-                bw.newLine();
+            try (BufferedWriter bw = new BufferedWriter(fw)) {
+                PdfReader pr = new PdfReader(fileO.getAbsolutePath());
+                int pNum = pr.getNumberOfPages();
+                for (int page = 1; page <= pNum; page++) {
+                    String text = PdfTextExtractor.getTextFromPage(pr, page);
+                    bw.write(text);
+                    bw.newLine();
+                }
+                bw.flush();
             }
-            bw.flush();
-            bw.close();
             fixTxt(fileD);
 
         } catch (Exception ex) {

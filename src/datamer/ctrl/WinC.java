@@ -37,7 +37,7 @@ public class WinC implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
+        
     }
 
     private void addPane(Tab tab) {
@@ -51,6 +51,7 @@ public class WinC implements Initializable {
             Tab tab = new Tab();
             tab.setText("TESTRA");
             tab.setContent(node);
+            
 
             return tab;
         } catch (IOException ex) {
@@ -62,6 +63,12 @@ public class WinC implements Initializable {
     @FXML
     void initTestra(ActionEvent event) {
         System.out.println("initTestra");
+//        addPane(loadPane(Nav.BOES_CLASIFICACION));
+    }
+    
+    @FXML
+    void initBoesClasificacion(ActionEvent event){
+        System.out.println("initBoesClasificacion");
         addPane(loadPane(Nav.BOES_CLASIFICACION));
     }
 

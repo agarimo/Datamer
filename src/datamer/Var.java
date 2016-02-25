@@ -54,7 +54,7 @@ public class Var {
     public static String configFile = "config.xml";
     public static String defaultFile = "/resources/default.xml";
     public static String dbName = "idbl";
-    public static String dbNameBoes = "boes";
+
     public static String dbNameStats = "idbl_stats";
 
     public static boolean modoAdmin;
@@ -63,15 +63,26 @@ public class Var {
 
     public static File runtimeData;
     public static boolean isRunning;
-    
+
     /**
      * BOES
      */
-    
+    public static String dbNameBoes = "boes";
+    public static String dbNameBoesStats = "boes_stats";
+
+    public static File ficheroPdf;
+    public static File ficheroTxt;
+    public static File ficheroEx;
+
     public static boolean boesIsDownloading;
+    public static boolean boesIsClasificando;
 
     public static void initVar() {
         initVarDriver();
+        initVarLoadConfig();
+        initVarFiles();
+        boesIsClasificando = false;
+        boesIsDownloading = false;
     }
 
     private static void initVarDriver() {
@@ -82,10 +93,25 @@ public class Var {
         }
     }
 
+    private static void initVarFiles() {
+        ficheroPdf = new File(new File("data"), "pdfData");
+        ficheroTxt = new File(new File("data"), "txtData");
+        ficheroEx = new File(new File("data"), "exData");
+
+        if (!ficheroPdf.exists()) {
+            ficheroPdf.mkdirs();
+        }
+        if (!ficheroTxt.exists()) {
+            ficheroTxt.mkdirs();
+        }
+        
+        if (!ficheroEx.exists()) {
+            ficheroEx.mkdirs();
+        }
+    }
+
     private static void initVarLoadConfig() {
         XMLLoad(configFile);
-        runtimeData = new File("tempData");
-        runtimeData.mkdirs();
     }
 
     public static void xit() {
@@ -108,14 +134,6 @@ public class Var {
             con.setPuerto(conexion.getChildText("db-port"));
             con.setUsuario(conexion.getChildText("db-username"));
             con.setPass(conexion.getChildText("db-password"));
-
-            Element admin = config.getChild("modoAdmin");
-            String activo = admin.getChildText("activo");
-            modoAdmin = activo.equals("true");
-            String pass = admin.getChildText("password");
-            passwordAdmin = pass;
-            String limit = admin.getChildText("query-limit");
-            queryLimit = limit;
 
         } catch (JDOMException | IOException ex) {
             Logger.getLogger(Var.class.getName()).log(Level.SEVERE, null, ex);
@@ -140,18 +158,6 @@ public class Var {
             ele.setText(con.getUsuario());
             ele = conexion.getChild("db-password");
             ele.setText(con.getPass());
-
-            Element admin = config.getChild("modoAdmin");
-            ele = admin.getChild("activo");
-            if (modoAdmin) {
-                ele.setText("true");
-            } else {
-                ele.setText("false");
-            }
-            ele = admin.getChild("password");
-            ele.setText(passwordAdmin);
-            ele = admin.getChild("query-limit");
-            ele.setText(queryLimit);
 
             XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
             try {

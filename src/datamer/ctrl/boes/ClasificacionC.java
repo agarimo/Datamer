@@ -1,13 +1,16 @@
 package datamer.ctrl.boes;
 
-import boe.Boe;
-import boe.Download;
-import boe.Insercion;
-import boe.Pdf;
-import boe.Publicacion;
-import boletines.Limpieza;
-import enty.Boletin;
-import enty.Descarga;
+import datamer.Var;
+import datamer.ctrl.boes.boe.Boe;
+import datamer.ctrl.boes.boe.Download;
+import datamer.ctrl.boes.boe.Insercion;
+import datamer.ctrl.boes.boe.Pdf;
+import datamer.ctrl.boes.boe.Publicacion;
+import datamer.ctrl.boes.boletines.Limpieza;
+import datamer.model.boes.ModeloBoes;
+import datamer.model.boes.enty.Descarga;
+import datamer.model.boes.enty.Boletin;
+import datamer.model.boes.Status;
 import java.awt.Desktop;
 import java.io.IOException;
 import java.net.URI;
@@ -20,8 +23,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -41,6 +42,7 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -48,14 +50,8 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
-import javafx.util.Callback;
-import main.Boes;
-import main.ControlledScreen;
-import main.ScreensController;
-import main.SqlBoe;
-import main.Var;
-import main.Var.Status;
-import model.ModeloBoes;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import util.Dates;
 import util.Sql;
 import util.Varios;
@@ -65,9 +61,10 @@ import util.Varios;
  *
  * @author Agarimo
  */
-public class ClasificacionC implements Initializable, ControlledScreen {
+public class ClasificacionC implements Initializable {
+    
+    private static final Logger LOG = LogManager.getLogger(ClasificacionC.class);
 
-    ScreensController myController;
     Sql bd;
     boolean autoScroll;
 
@@ -142,13 +139,13 @@ public class ClasificacionC implements Initializable, ControlledScreen {
     }
 
     void initializeBoesData(Boe boe) {
-        discardSource = SqlBoe.listaOrigenDescartado();
-        discardText = SqlBoe.listaTextoDescartado();
-        selectText = SqlBoe.listaTextoSeleccionado();
-        selectAlready = SqlBoe.listaAlreadySelected();
+        discardSource = Query.listaOrigenDescartado();
+        discardText = Query.listaTextoDescartado();
+        selectText = Query.listaTextoSeleccionado();
+        selectAlready = Query.listaAlreadySelected();
 
         List bol = new ArrayList();
-        boe.getBoletines();
+        boe.getItems();
 
         Iterator it;
         Iterator it2;
@@ -178,50 +175,40 @@ public class ClasificacionC implements Initializable, ControlledScreen {
 
     void initializeTable() {
         origenCL.setCellValueFactory(new PropertyValueFactory<>("origen"));
-        origenCL.setCellFactory(new Callback<TableColumn<ModeloBoes, String>, TableCell<ModeloBoes, String>>() {
-            @Override
-            public TableCell<ModeloBoes, String> call(TableColumn<ModeloBoes, String> arg0) {
-                return new TableCell<ModeloBoes, String>() {
-                    private Text text;
+        origenCL.setCellFactory((TableColumn<ModeloBoes, String> arg0) -> new TableCell<ModeloBoes, String>() {
+            private Text text;
 
-                    @Override
-                    public void updateItem(String item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (!isEmpty()) {
-                            text = new Text(item);
-                            text.setWrappingWidth(origenCL.getWidth() - 10);
-                            this.setWrapText(true);
-                            setGraphic(text);
-                        } else {
-                            text = new Text("");
-                            setGraphic(text);
-                        }
-                    }
-                };
+            @Override
+            public void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (!isEmpty()) {
+                    text = new Text(item);
+                    text.setWrappingWidth(origenCL.getWidth() - 10);
+                    this.setWrapText(true);
+                    setGraphic(text);
+                } else {
+                    text = new Text("");
+                    setGraphic(text);
+                }
             }
         });
         codigoCL.setCellValueFactory(new PropertyValueFactory<>("codigo"));
         descripcionCL.setCellValueFactory(new PropertyValueFactory<>("descripcion"));
-        descripcionCL.setCellFactory(new Callback<TableColumn<ModeloBoes, String>, TableCell<ModeloBoes, String>>() {
-            @Override
-            public TableCell<ModeloBoes, String> call(TableColumn<ModeloBoes, String> arg0) {
-                return new TableCell<ModeloBoes, String>() {
-                    private Text text;
+        descripcionCL.setCellFactory((TableColumn<ModeloBoes, String> arg0) -> new TableCell<ModeloBoes, String>() {
+            private Text text;
 
-                    @Override
-                    public void updateItem(String item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (!isEmpty()) {
-                            text = new Text(item);
-                            text.setWrappingWidth(descripcionCL.getWidth() - 30);
-                            this.setWrapText(true);
-                            setGraphic(text);
-                        } else {
-                            text = new Text("");
-                            setGraphic(text);
-                        }
-                    }
-                };
+            @Override
+            public void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (!isEmpty()) {
+                    text = new Text(item);
+                    text.setWrappingWidth(descripcionCL.getWidth() - 30);
+                    this.setWrapText(true);
+                    setGraphic(text);
+                } else {
+                    text = new Text("");
+                    setGraphic(text);
+                }
             }
         });
 
@@ -308,14 +295,14 @@ public class ClasificacionC implements Initializable, ControlledScreen {
             if (result.get() == ButtonType.OK) {
                 try {
                     bd = new Sql(Var.con);
-                    bd.ejecutar("INSERT into " + Var.nombreBD + ".origen_descartado (nombre) values("
+                    bd.ejecutar("INSERT into " + Var.dbNameBoes + ".origen_descartado (nombre) values("
                             + Varios.entrecomillar(aux.getOrigen())
                             + ");");
                     bd.close();
                     discardSource.add(aux.getOrigen());
                     tableUpdate();
                 } catch (SQLException ex) {
-                    Logger.getLogger(WinC.class.getName()).log(Level.SEVERE, null, ex);
+                    LOG.error("[pdfDiscardSource]"+ex);
                 }
             }
         } else {
@@ -409,14 +396,14 @@ public class ClasificacionC implements Initializable, ControlledScreen {
         try {
             Desktop.getDesktop().browse(new URI(aux.getLink()));
         } catch (IOException | URISyntaxException ex) {
-            Logger.getLogger(WinC.class.getName()).log(Level.SEVERE, null, ex);
+            LOG.error("[pdfShowOnWeb]"+ex);
         }
     }
 
     @FXML
     void procesar(ActionEvent event) {
         if (publicacion.isEmpty()) {
-            Var.isClasificando = false;
+            Var.boesIsClasificando = false;
             procesarTask();
         } else {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -427,7 +414,7 @@ public class ClasificacionC implements Initializable, ControlledScreen {
             Optional<ButtonType> result = alert.showAndWait();
 
             if (result.get() == ButtonType.OK) {
-                Var.isClasificando = false;
+                Var.boesIsClasificando = false;
                 procesarTask();
             }
         }
@@ -523,7 +510,7 @@ public class ClasificacionC implements Initializable, ControlledScreen {
             if (fecha != null) {
                 Boletin bol;
                 Limpieza li;
-                List listLi = SqlBoe.listaBoletin("SELECT * FROM boes.boletin where idBoe="
+                List listLi = Query.listaBoletin("SELECT * FROM boes.boletin where idBoe="
                         + "(SELECT id FROM boes.boe where fecha=" + Varios.entrecomillar(Dates.imprimeFecha(fecha)) + ")");
 
                 for (int i = 0; i < listLi.size(); i++) {
@@ -579,11 +566,6 @@ public class ClasificacionC implements Initializable, ControlledScreen {
         btRecoverD.setDisable(aux);
         btRecoverS.setDisable(aux);
         btSelectAll.setDisable(aux);
-    }
-
-    @Override
-    public void setScreenParent(ScreensController screenPage) {
-        myController = screenPage;
     }
 
     void tableFocus() {
@@ -672,13 +654,6 @@ public class ClasificacionC implements Initializable, ControlledScreen {
     }
 
     @FXML
-    public void volverInicio(ActionEvent event) {
-        myController.setScreen(Boes.screen1ID);
-        initializeClear();
-
-    }
-
-    @FXML
     void xLisCheckBox(ActionEvent event) {
         autoScroll = cbAutoScroll.isSelected();
     }
@@ -692,22 +667,51 @@ public class ClasificacionC implements Initializable, ControlledScreen {
         selectedList.clear();
         discartedList.clear();
 
+        Date aux = Dates.asDate(dpFechaC.getValue());
+
+        if (aux != null) {
+            Boe boe = Query.getBoe(aux);
+
+            if (boe != null) {
+                xLisDatePickerRun(boe);
+            } else {
+                TextInputDialog dialog = new TextInputDialog();
+                dialog.setTitle("Añadir Link");
+                dialog.setHeaderText("Introduzca el link para continuar");
+                dialog.setContentText("Link:");
+
+                Optional<String> result = dialog.showAndWait();
+                result.ifPresent(name -> xLisDatePickerCreateBoe(aux, name));
+            }
+        }
+    }
+
+    private void xLisDatePickerCreateBoe(Date fecha, String link) {
+        Boe boe = new Boe(fecha, link);
+
+        Thread a = new Thread(() -> {
+            try {
+                bd = new Sql(Var.con);
+                bd.ejecutar(boe.SQLCrear());
+                bd.close();
+            } catch (SQLException ex) {
+                LOG.error("[xLisDatePickerCreateBoe]"+ex);
+            }
+        });
+        a.start();
+
+        xLisDatePickerRun(boe);
+    }
+
+    private void xLisDatePickerRun(Boe aux) {
         Thread a = new Thread(() -> {
 
             Platform.runLater(() -> {
                 rootPane.getScene().setCursor(Cursor.WAIT);
             });
 
-            try {
-                Date aux = Dates.asDate(dpFechaC.getValue());
-
-                if (aux != null) {
-                    initializeBoesData(SqlBoe.getBoe(aux));
-                    Var.isClasificando = true;
-                }
-            } catch (Exception ex) {
-                //
-            }
+            initializeBoesData(aux);
+            Var.boesIsClasificando = true;
 
             Platform.runLater(() -> {
                 rootPane.getScene().setCursor(Cursor.DEFAULT);

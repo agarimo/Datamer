@@ -1,19 +1,21 @@
 package datamer.ctrl.boes;
 
-import boe.Download;
-import enty.Estado;
-import enty.Multa;
-import enty.Procesar;
-import extraccion.BB0;
-import extraccion.BB1;
-import extraccion.Extraccion;
-import extraccion.ReqObs;
-import extraccion.ScriptArticulo;
-import extraccion.ScriptExp;
-import extraccion.ScriptFase;
-import extraccion.ScriptOrigen;
-import extraccion.ScriptReq;
-import extraccion.XLSXProcess;
+import datamer.Var;
+import datamer.ctrl.boes.boe.Download;
+import datamer.ctrl.ext.BB0;
+import datamer.ctrl.ext.BB1;
+import datamer.ctrl.ext.Extraccion;
+import datamer.ctrl.ext.script.ScriptArticulo;
+import datamer.ctrl.ext.script.ScriptExp;
+import datamer.ctrl.ext.script.ScriptFase;
+import datamer.ctrl.ext.script.ScriptOrigen;
+import datamer.ctrl.ext.script.ScriptReq;
+import datamer.ctrl.ext.XLSXProcess;
+import datamer.model.boes.Estado;
+import datamer.model.boes.ModeloPreview;
+import datamer.model.boes.ModeloProcesar;
+import datamer.model.boes.enty.Multa;
+import datamer.model.boes.enty.Procesar;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
@@ -48,15 +50,9 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
-import main.Boes;
-import main.ControlledScreen;
-import main.ScreensController;
-import main.SqlBoe;
-import main.Var;
-import model.ModeloPreview;
-import model.ModeloProcesar;
 import util.Dates;
 import util.Sql;
 import util.Varios;
@@ -65,9 +61,8 @@ import util.Varios;
  *
  * @author Agarimo
  */
-public class ExtC implements Initializable, ControlledScreen {
+public class ExtC implements Initializable {
 
-    ScreensController myController;
     int PanelPreview = 1;
     int PanelProcesar = 2;
     boolean isPreview;
@@ -81,13 +76,13 @@ public class ExtC implements Initializable, ControlledScreen {
     private final int preview_to_wait = 6;
     //<editor-fold defaultstate="collapsed" desc="FXML VAR">
     @FXML
-    private AnchorPane rootPane;
+    private VBox rootPane;
     @FXML
-    private AnchorPane panelProcesar;
+    private VBox panelProcesar;
     @FXML
-    private AnchorPane panelPreview;
+    private VBox panelPreview;
     @FXML
-    private AnchorPane panelEspera;
+    private VBox panelEspera;
     @FXML
     private DatePicker dpFecha;
     @FXML
@@ -183,17 +178,11 @@ public class ExtC implements Initializable, ControlledScreen {
 
             if (fecha != null) {
                 String query = "SELECT * FROM boes.procesar where fecha=" + Varios.entrecomillar(Dates.imprimeFecha(fecha));
-                cargarDatosProcesar(SqlBoe.listaProcesar(query));
+                cargarDatosProcesar(Query.listaProcesar(query));
             }
         } catch (NullPointerException ex) {
             //
         }
-    }
-
-    @FXML
-    public void cargaMain(ActionEvent event) {
-        clearWindow();
-        myController.setScreen(Boes.screen1ID);
     }
 
     void cargarDatosPreview(List<Multa> list) {
@@ -226,8 +215,8 @@ public class ExtC implements Initializable, ControlledScreen {
     }
 
     void cargarDatosProcesar(List<Procesar> list) {
-        listaEstructurasCreadas = SqlBoe.listaEstructurasCreadas();
-        listaEstructurasManual = SqlBoe.listaEstructurasManual();
+        listaEstructurasCreadas = Query.listaEstructurasCreadas();
+        listaEstructurasManual = Query.listaEstructurasManual();
         procesarList.clear();
         ModeloProcesar modelo;
         Procesar procesar;
@@ -283,15 +272,15 @@ public class ExtC implements Initializable, ControlledScreen {
 
             Procesar pr;
             ModeloProcesar aux = (ModeloProcesar) tvProcesar.getSelectionModel().getSelectedItem();
-            pr = SqlBoe.getProcesar(aux.getCodigo());
+            pr = Query.getProcesar(aux.getCodigo());
 
             try {
-                SqlBoe.eliminarMultasBoletin(aux.getCodigo());
+                Query.eliminarMultasBoletin(aux.getCodigo());
                 XLSXProcess.insertMultas(list);
                 pr.SQLSetEstado(Estado.PROCESADO_XLSX.getValue());
             } catch (Exception e) {
                 pr.SQLSetEstado(Estado.ERROR_PROCESAR.getValue());
-                e.printStackTrace();
+//                e.printStackTrace();
             }
 
             Platform.runLater(() -> {
@@ -347,7 +336,7 @@ public class ExtC implements Initializable, ControlledScreen {
         Date fecha = Dates.asDate(dpFecha.getValue());
 
         if (fecha != null) {
-            String query = "SELECT * FROM " + Var.nombreBD + ".procesar where fecha=" + Varios.entrecomillar(Dates.imprimeFecha(fecha));
+            String query = "SELECT * FROM " + Var.dbNameBoes + ".procesar where fecha=" + Varios.entrecomillar(Dates.imprimeFecha(fecha));
             File fichero = new File(Var.ficheroEx, Dates.imprimeFecha(fecha));
             fichero.mkdirs();
 
@@ -363,7 +352,7 @@ public class ExtC implements Initializable, ControlledScreen {
 
                 File destino;
                 Procesar aux;
-                List list = SqlBoe.listaProcesar(query);
+                List list = Query.listaProcesar(query);
 
                 for (int i = 0; i < list.size(); i++) {
                     final int contador = i;
@@ -547,7 +536,6 @@ public class ExtC implements Initializable, ControlledScreen {
                                     setText("Estructura no creada : " + Integer.toString(item));
                                     setTextFill(Color.RED);
                                 }
-
                                 break;
                         }
                     }
@@ -606,6 +594,10 @@ public class ExtC implements Initializable, ControlledScreen {
             };
         });
 
+        clCodigo.prefWidthProperty().bind(tvProcesar.widthProperty().multiply(0.34));
+        clEstructura.prefWidthProperty().bind(tvProcesar.widthProperty().multiply(0.33));
+        clEstado.prefWidthProperty().bind(tvProcesar.widthProperty().multiply(0.32));
+
         procesarList = FXCollections.observableArrayList();
         tvProcesar.setItems(procesarList);
     }
@@ -642,7 +634,7 @@ public class ExtC implements Initializable, ControlledScreen {
                             });
 
                             try {
-                                procesados = ex.previewXLSX(SqlBoe.getProcesar(aux.getCodigo()));
+                                procesados = ex.previewXLSX(Query.getProcesar(aux.getCodigo()));
 
                                 Platform.runLater(() -> {
                                     cargarDatosPreview(procesados);
@@ -652,7 +644,6 @@ public class ExtC implements Initializable, ControlledScreen {
                                     mostrarPanel(this.wait_to_preview);
                                 });
                             } catch (Exception e) {
-                                e.printStackTrace();
                                 Logger.getLogger(ExtC.class.getName()).log(Level.SEVERE, null, ex);
                                 Platform.runLater(() -> {
                                     piProgreso.setProgress(1);
@@ -746,7 +737,7 @@ public class ExtC implements Initializable, ControlledScreen {
                     });
 
                     aux = (ModeloProcesar) list.get(i);
-                    pr = SqlBoe.getProcesar(aux.getCodigo());
+                    pr = Query.getProcesar(aux.getCodigo());
 
                     try {
                         procesado = ex.previewXLSX(pr);
@@ -764,7 +755,7 @@ public class ExtC implements Initializable, ControlledScreen {
                         System.out.println(e.getMessage());
                         System.out.println(aux.getCodigo());
                         pr.SQLSetEstado(Estado.ERROR_PROCESAR.getValue());
-                        e.printStackTrace();
+//                        e.printStackTrace();
                     }
                 }
 
@@ -952,8 +943,8 @@ public class ExtC implements Initializable, ControlledScreen {
     @FXML
     void resetearEstado(ActionEvent event) {
         ModeloProcesar aux = (ModeloProcesar) tvProcesar.getSelectionModel().getSelectedItem();
-        Procesar pr = SqlBoe.getProcesar(aux.getCodigo());
-        SqlBoe.eliminarMultasBoletin(pr.getCodigo());
+        Procesar pr = Query.getProcesar(aux.getCodigo());
+        Query.eliminarMultasBoletin(pr.getCodigo());
         pr.SQLSetEstado(Estado.LISTO_PROCESAR.getValue());
         cambioEnDatePicker(new ActionEvent());
     }
@@ -961,15 +952,17 @@ public class ExtC implements Initializable, ControlledScreen {
     @FXML
     void eliminarEstructura(ActionEvent event) {
         ModeloProcesar aux = (ModeloProcesar) tvProcesar.getSelectionModel().getSelectedItem();
-        Procesar pr = SqlBoe.getProcesar(aux.getCodigo());
-        SqlBoe.eliminarMultasBoletin(pr.getCodigo());
+        Procesar pr = Query.getProcesar(aux.getCodigo());
+        Query.eliminarMultasBoletin(pr.getCodigo());
         pr.SQLEliminarEstructura();
         cambioEnDatePicker(new ActionEvent());
     }
 
-    @Override
-    public void setScreenParent(ScreensController screenParent) {
-        myController = screenParent;
+    @FXML
+    void eliminarBoletin(ActionEvent event) {
+        ModeloProcesar aux = (ModeloProcesar) tvProcesar.getSelectionModel().getSelectedItem();
+        Query.eliminaBoletin(aux.getCodigo());
+        cambioEnDatePicker(new ActionEvent());
     }
 
     void switchControles(boolean aux) {
@@ -990,12 +983,8 @@ public class ExtC implements Initializable, ControlledScreen {
             try {
                 Desktop.getDesktop().browse(new URI(pr.link.get()));
 
-            } catch (IOException ex) {
-                Logger.getLogger(WinC.class
-                        .getName()).log(Level.SEVERE, null, ex);
-            } catch (URISyntaxException ex) {
-                Logger.getLogger(ExtC.class
-                        .getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException | URISyntaxException ex) {
+                Logger.getLogger(ExtC.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
@@ -1013,10 +1002,8 @@ public class ExtC implements Initializable, ControlledScreen {
                 Desktop.getDesktop().browse(archivo.toURI());
 
             } catch (IOException ex) {
-                Logger.getLogger(WinC.class
-                        .getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ExtC.class.getName()).log(Level.SEVERE, null, ex);
             }
-
         }
     }
 

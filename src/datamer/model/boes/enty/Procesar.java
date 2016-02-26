@@ -17,12 +17,12 @@ import util.Varios;
  */
 public class Procesar {
 
-    int id;
-    Date fecha;
-    String codigo;
-    String link;
-    int estructura;
-    Estado estado;
+    private int id;
+    private Date fecha;
+    private String codigo;
+    private String link;
+    private int estructura;
+    private Estado estado;
 
     public Procesar() {
 

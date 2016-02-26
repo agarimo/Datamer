@@ -73,6 +73,7 @@ public class Var {
     public static File ficheroPdf;
     public static File ficheroTxt;
     public static File ficheroEx;
+    public static File ficheroUnion;
 
     public static boolean boesIsDownloading;
     public static boolean boesIsClasificando;
@@ -97,6 +98,7 @@ public class Var {
         ficheroPdf = new File(new File("data"), "pdfData");
         ficheroTxt = new File(new File("data"), "txtData");
         ficheroEx = new File(new File("data"), "exData");
+        ficheroUnion = new File(new File("data"), "unionData");
 
         if (!ficheroPdf.exists()) {
             ficheroPdf.mkdirs();
@@ -107,6 +109,10 @@ public class Var {
         
         if (!ficheroEx.exists()) {
             ficheroEx.mkdirs();
+        }
+        
+        if (!ficheroUnion.exists()) {
+            ficheroUnion.mkdirs();
         }
     }
 

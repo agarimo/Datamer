@@ -20,7 +20,7 @@
           <Menu mnemonicParsing="false" text="Boes">
             <items>
               <MenuItem mnemonicParsing="false" onAction="#initBoesClasificacion" text="Clasificacion" />
-                  <MenuItem mnemonicParsing="false" text="Unspecified Action" />
+                  <MenuItem mnemonicParsing="false" onAction="#initBoesExt" text="Extracción" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Testra">

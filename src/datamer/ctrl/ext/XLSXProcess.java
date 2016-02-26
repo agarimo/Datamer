@@ -1,9 +1,9 @@
 package datamer.ctrl.ext;
 
-import enty.Multa;
-import enty.Procesar;
-import enty.StrucData;
-import enty.VistaExtraccion;
+import datamer.model.boes.enty.Multa;
+import datamer.model.boes.enty.Procesar;
+import datamer.model.boes.enty.StrucData;
+import datamer.model.boes.enty.VistaExtraccion;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -12,11 +12,9 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import main.Regex;
-import main.SqlBoe;
-import main.Var;
+import datamer.Regex;
+import datamer.Var;
+import datamer.ctrl.boes.Query;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import util.CalculaNif;
@@ -28,13 +26,17 @@ import util.Sql;
  */
 public class XLSXProcess {
 
-    List<Row> rows;
-    Procesar pr;
-    VistaExtraccion ve;
-    StrucData sd;
-    List<String> strucFecha;
-    List<String> header;
+    private List<Row> rows;
+    private Procesar pr;
+    private VistaExtraccion ve;
+    private StrucData sd;
+    private List<String> strucFecha;
+    private List<String> header;
     private int contador;
+
+    public XLSXProcess() {
+
+    }
 
     public XLSXProcess(List<Row> rows, Procesar pr, VistaExtraccion ve, StrucData sd) {
         this.rows = rows;
@@ -42,14 +44,14 @@ public class XLSXProcess {
         this.ve = ve;
         this.sd = sd;
         contador = 1;
-        strucFecha = SqlBoe.listaEstructurasFechas();
-        header = SqlBoe.listaEstructurasHeader();
+        strucFecha = Query.listaEstructurasFechas();
+        header = Query.listaEstructurasHeader();
     }
 
     public List<Multa> splitXLSX() {
         Regex rx = new Regex();
         List<Multa> multas = new ArrayList();
-        String estructura = SqlBoe.getEstructura(pr.getEstructura());
+        String estructura = Query.getEstructura(pr.getEstructura());
         Multa multa;
         Row linea;
         Iterator<Row> it = rows.iterator();
@@ -77,7 +79,7 @@ public class XLSXProcess {
                 } catch (IndexOutOfBoundsException ex) {
                     multa = new Multa();
                     multas.add(multa);
-                    ex.printStackTrace();
+//                    ex.printStackTrace();
                 }
             }
         }

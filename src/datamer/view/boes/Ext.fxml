@@ -10,112 +10,139 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" fx:id="rootPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="600.0" prefWidth="1000.0" style="-fx-background-color: #f2f2f2;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.ExtC">
+<VBox fx:id="rootPane" alignment="TOP_CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="560.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="datamer.ctrl.boes.ExtC">
    <children>
-      <ToolBar prefHeight="40.0" prefWidth="1000.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <SplitPane dividerPositions="0.18" minHeight="-Infinity" minWidth="-Infinity" prefHeight="560.0" prefWidth="1000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" VBox.vgrow="ALWAYS">
         <items>
-          <Button mnemonicParsing="false" onAction="#cargaMain" text="Volver" />
-        </items>
-      </ToolBar>
-      <StackPane layoutY="40.0" prefHeight="560.0" prefWidth="1000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
-         <children>
-            <AnchorPane prefHeight="200.0" prefWidth="200.0">
+            <VBox alignment="TOP_CENTER" fillWidth="false" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="560.0" prefWidth="170.0" spacing="10.0" SplitPane.resizableWithParent="false">
                <children>
-                  <SplitPane dividerPositions="0.18" prefHeight="560.0" prefWidth="1000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                    <items>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" SplitPane.resizableWithParent="false">
-                           <children>
-                              <DatePicker fx:id="dpFecha" layoutX="14.0" layoutY="14.0" onAction="#cambioEnDatePicker" prefHeight="30.0" prefWidth="150.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="13.0" AnchorPane.topAnchor="14.0" />
-                              <Button fx:id="btGenerarPdf" layoutX="14.0" layoutY="60.0" mnemonicParsing="false" onAction="#generarPdf" prefHeight="30.0" prefWidth="150.0" text="Generar PDFs" />
-                              <Button fx:id="btPreview" layoutX="14.0" layoutY="264.0" mnemonicParsing="false" onAction="#previsualizar" prefHeight="30.0" prefWidth="150.0" text="Previsualizar Extracción" />
-                              <Button fx:id="btReqObs" layoutX="14.0" layoutY="405.0" mnemonicParsing="false" onAction="#reqObs" prefHeight="30.0" prefWidth="150.0" text="Req/Obs" />
-                              <Button fx:id="btProcesar" layoutX="14.0" layoutY="365.0" mnemonicParsing="false" onAction="#procesar" prefHeight="30.0" prefWidth="150.0" text="Procesar" />
-                              <Separator layoutX="14.0" layoutY="335.0" prefHeight="30.0" prefWidth="150.0" />
-                              <Button fx:id="btAbrirCarpeta" layoutX="14.0" layoutY="100.0" mnemonicParsing="false" onAction="#abrirCarpeta" prefHeight="30.0" prefWidth="150.0" text="Abrir Carpeta PDF" />
-                              <Separator layoutX="14.0" layoutY="514.0" prefHeight="30.0" prefWidth="150.0" />
-                              <Button fx:id="btGenerarArchivos" layoutX="14.0" layoutY="445.0" mnemonicParsing="false" onAction="#generarArchivos" prefHeight="30.0" prefWidth="150.0" text="Generar Archivos" />
-                              <Button fx:id="btAbrirCarpetaAr" layoutX="14.0" layoutY="484.0" mnemonicParsing="false" onAction="#abrirCarpetaAr" prefHeight="30.0" prefWidth="150.0" text="Abrir Carpeta Generados" />
-                           </children>
-                        </AnchorPane>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="435.0" prefWidth="443.0">
-                           <children>
-                              <StackPane fx:id="spTablas" prefHeight="560.0" prefWidth="815.0" AnchorPane.bottomAnchor="-2.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                 <children>
-                                    <AnchorPane fx:id="panelProcesar" opacity="0.0" prefHeight="200.0" prefWidth="200.0" visible="false">
-                                       <children>
-                                          <TableView fx:id="tvProcesar" layoutX="14.0" layoutY="14.0" prefHeight="460.0" prefWidth="787.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
-                                            <columns>
-                                              <TableColumn fx:id="clCodigo" prefWidth="262.0" resizable="false" text="CÓDIGO" />
-                                              <TableColumn fx:id="clEstructura" prefWidth="262.0" resizable="false" text="ESTRUCTURA" />
-                                                <TableColumn fx:id="clEstado" prefWidth="261.0" resizable="false" text="ESTADO" />
-                                            </columns>
-                                             <contextMenu>
-                                                <ContextMenu>
-                                                  <items>
-                                                      <Menu mnemonicParsing="false" text="VER">
-                                                        <items>
-                                                            <MenuItem mnemonicParsing="false" onAction="#verPdf" text="Ver PDF" />
-                                                          <MenuItem mnemonicParsing="false" onAction="#verXLSX" text="Ver XLSX" />
-                                                        </items>
-                                                      </Menu>
-                                                      <Menu mnemonicParsing="false" text="GENERAR">
-                                                        <items>
-                                                            <MenuItem mnemonicParsing="false" onAction="#generarPdfI" text="Generar PDF" />
-                                                        </items>
-                                                      </Menu>
-                                                      <MenuItem mnemonicParsing="false" onAction="#resetearEstado" text="Resetear Estado" />
-                                                      <MenuItem mnemonicParsing="false" onAction="#eliminarEstructura" text="Eliminar estructura" />
-                                                  </items>
-                                                </ContextMenu>
-                                             </contextMenu>
-                                          </TableView>
-                                          <Button layoutX="14.0" layoutY="474.0" mnemonicParsing="false" onAction="#cambioEnDatePicker" prefHeight="25.0" prefWidth="787.0" text="Refrescar" />
-                                       </children>
-                                    </AnchorPane>
-                                    <AnchorPane fx:id="panelPreview" prefHeight="200.0" prefWidth="200.0">
-                                       <children>
-                                          <TableView fx:id="tvPreview" layoutX="14.0" layoutY="14.0" prefHeight="460.0" prefWidth="782.0" tableMenuButtonVisible="true" AnchorPane.bottomAnchor="86.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
-                                             <columns>
-                                                <TableColumn fx:id="clExpediente" maxWidth="120.0" minWidth="-Infinity" prefWidth="120.0" text="Expediente" />
-                                                <TableColumn fx:id="clSancionado" maxWidth="200.0" minWidth="-Infinity" prefWidth="200.0" text="Sancionado" />
-                                                <TableColumn fx:id="clNif" maxWidth="100.0" minWidth="-Infinity" prefWidth="100.0" text="NIF" />
-                                                <TableColumn fx:id="clLocalidad" maxWidth="200.0" minWidth="-Infinity" prefWidth="200.0" text="Localidad" />
-                                                <TableColumn fx:id="clFecha" maxWidth="80.0" minWidth="-Infinity" text="Fecha" />
-                                                <TableColumn fx:id="clMatricula" maxWidth="80.0" minWidth="-Infinity" text="Matricula" />
-                                                <TableColumn fx:id="clCuantia" maxWidth="50.0" minWidth="-Infinity" prefWidth="50.0" text="Cuantia" />
-                                                <TableColumn fx:id="clArticulo" maxWidth="100.0" minWidth="-Infinity" prefWidth="100.0" text="Artículo" />
-                                                <TableColumn fx:id="clPuntos" maxWidth="50.0" minWidth="-Infinity" prefWidth="50.0" text="Puntos" />
-                                                <TableColumn fx:id="clReqObs" maxWidth="50.0" minWidth="-Infinity" prefWidth="50.0" text="Req/Obs" />
-                                             </columns>
-                                             <contextMenu>
-                                                <ContextMenu>
-                                                  <items>
-                                                    <MenuItem mnemonicParsing="false" text="Eliminar linea" />
-                                                  </items>
-                                                </ContextMenu>
-                                             </contextMenu>
-                                          </TableView>
-                                          <Button fx:id="btForzarProcesar" layoutX="646.0" layoutY="483.0" mnemonicParsing="false" onAction="#forzarProcesado" prefHeight="30.0" prefWidth="150.0" text="Procesar" AnchorPane.bottomAnchor="47.0" AnchorPane.rightAnchor="14.0" />
-                                          <Label layoutX="14.0" layoutY="483.0" prefHeight="17.0" prefWidth="109.0" text="Número de multas: " />
-                                          <Label fx:id="lbMultasPreview" layoutX="123.0" layoutY="483.0" prefHeight="17.0" prefWidth="109.0" />
-                                       </children>
-                                    </AnchorPane>
-                                    <AnchorPane fx:id="panelEspera" prefHeight="200.0" prefWidth="200.0" visible="false">
-                                       <children>
-                                          <ProgressIndicator fx:id="piProgreso" layoutX="14.0" layoutY="211.0" prefHeight="139.0" prefWidth="787.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" />
-                                          <Label fx:id="lbProgreso" alignment="CENTER" layoutX="333.0" layoutY="380.0" prefHeight="46.0" prefWidth="150.0" text="PROGRESO" textAlignment="CENTER" AnchorPane.bottomAnchor="150.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" />
-                                          <Label fx:id="lbProceso" alignment="CENTER" layoutX="333.0" layoutY="140.0" prefHeight="46.0" prefWidth="150.0" text="PROCESO" textAlignment="CENTER" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="150.0" />
-                                       </children>
-                                    </AnchorPane>
-                                 </children>
-                              </StackPane>
-                           </children>
-                        </AnchorPane>
-                    </items>
-                  </SplitPane>
+                  <DatePicker fx:id="dpFecha" layoutX="14.0" layoutY="14.0" onAction="#cambioEnDatePicker" prefHeight="30.0" prefWidth="150.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="13.0" AnchorPane.topAnchor="14.0">
+                     <VBox.margin>
+                        <Insets top="20.0" />
+                     </VBox.margin>
+                  </DatePicker>
+                  <Separator prefWidth="200.0" />
+                  <Label text="FUNCIONES">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <Button fx:id="btProcesar" layoutX="14.0" layoutY="365.0" mnemonicParsing="false" onAction="#procesar" prefHeight="30.0" prefWidth="150.0" text="Procesar" />
+                  <Button fx:id="btReqObs" layoutX="14.0" layoutY="405.0" mnemonicParsing="false" onAction="#reqObs" prefHeight="30.0" prefWidth="150.0" text="Req/Obs" />
+                  <Separator prefWidth="200.0" />
+                  <Button fx:id="btPreview" layoutX="14.0" layoutY="264.0" mnemonicParsing="false" onAction="#previsualizar" prefHeight="30.0" prefWidth="150.0" text="Previsualizar Extracción" />
+                  <Separator layoutX="14.0" layoutY="335.0" prefWidth="200.0" />
+                  <Label text="PDF">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <Button fx:id="btGenerarPdf" layoutX="14.0" layoutY="60.0" mnemonicParsing="false" onAction="#generarPdf" prefHeight="30.0" prefWidth="150.0" text="Generar PDFs" />
+                  <Button fx:id="btAbrirCarpeta" layoutX="14.0" layoutY="100.0" mnemonicParsing="false" onAction="#abrirCarpeta" prefHeight="30.0" prefWidth="150.0" text="Abrir Carpeta PDF" />
+                  <Separator layoutX="14.0" layoutY="514.0" prefWidth="200.0" />
+                  <Label text="ARCHIVOS">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <Button fx:id="btGenerarArchivos" layoutX="14.0" layoutY="445.0" mnemonicParsing="false" onAction="#generarArchivos" prefHeight="30.0" prefWidth="150.0" text="Generar Archivos" />
+                  <Button fx:id="btAbrirCarpetaAr" layoutX="14.0" layoutY="484.0" mnemonicParsing="false" onAction="#abrirCarpetaAr" prefHeight="30.0" prefWidth="150.0" text="Abrir Carpeta Generados" />
                </children>
-            </AnchorPane>
-         </children>
-      </StackPane>
+            </VBox>
+            <StackPane fx:id="spTablas" minHeight="-Infinity" minWidth="-Infinity" prefHeight="560.0" prefWidth="815.0" AnchorPane.bottomAnchor="-2.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <VBox fx:id="panelProcesar" alignment="TOP_CENTER" visible="false">
+                     <children>
+                        <TableView fx:id="tvProcesar" layoutX="14.0" layoutY="14.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="750.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0" VBox.vgrow="ALWAYS">
+                          <columns>
+                            <TableColumn fx:id="clCodigo" maxWidth="400.0" minWidth="250.0" prefWidth="-1.0" resizable="false" text="CÓDIGO" />
+                            <TableColumn fx:id="clEstructura" maxWidth="400.0" minWidth="250.0" prefWidth="-1.0" resizable="false" text="ESTRUCTURA" />
+                              <TableColumn fx:id="clEstado" maxWidth="400.0" minWidth="250.0" prefWidth="-1.0" resizable="false" text="ESTADO" />
+                          </columns>
+                           <contextMenu>
+                              <ContextMenu>
+                                <items>
+                                    <Menu mnemonicParsing="false" text="VER">
+                                      <items>
+                                          <MenuItem mnemonicParsing="false" onAction="#verPdf" text="Ver PDF" />
+                                        <MenuItem mnemonicParsing="false" onAction="#verXLSX" text="Ver XLSX" />
+                                      </items>
+                                    </Menu>
+                                    <Menu mnemonicParsing="false" text="GENERAR">
+                                      <items>
+                                          <MenuItem mnemonicParsing="false" onAction="#generarPdfI" text="Generar PDF" />
+                                      </items>
+                                    </Menu>
+                                    <MenuItem mnemonicParsing="false" onAction="#resetearEstado" text="Resetear Estado" />
+                                    <MenuItem mnemonicParsing="false" onAction="#eliminarEstructura" text="Eliminar estructura" />
+                                    <SeparatorMenuItem mnemonicParsing="false" />
+                                    <MenuItem mnemonicParsing="false" onAction="#eliminarBoletin" text="Eliminar Boletín" />
+                                </items>
+                              </ContextMenu>
+                           </contextMenu>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                           <columnResizePolicy>
+                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
+                        </TableView>
+                        <AnchorPane>
+                           <children>
+                              <Button mnemonicParsing="false" onAction="#cambioEnDatePicker" prefHeight="25.0" text="Refrescar" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" HBox.hgrow="ALWAYS" />
+                           </children>
+                        </AnchorPane>
+                     </children>
+                  </VBox>
+                  <VBox fx:id="panelPreview" alignment="TOP_CENTER">
+                     <children>
+                        <TableView fx:id="tvPreview" layoutX="14.0" layoutY="14.0" prefHeight="460.0" prefWidth="782.0" tableMenuButtonVisible="true" AnchorPane.bottomAnchor="86.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0" VBox.vgrow="ALWAYS">
+                           <columns>
+                              <TableColumn fx:id="clExpediente" maxWidth="120.0" minWidth="-Infinity" prefWidth="120.0" text="Expediente" />
+                              <TableColumn fx:id="clSancionado" maxWidth="200.0" minWidth="-Infinity" prefWidth="200.0" text="Sancionado" />
+                              <TableColumn fx:id="clNif" maxWidth="100.0" minWidth="-Infinity" prefWidth="100.0" text="NIF" />
+                              <TableColumn fx:id="clLocalidad" maxWidth="200.0" minWidth="-Infinity" prefWidth="200.0" text="Localidad" />
+                              <TableColumn fx:id="clFecha" maxWidth="80.0" minWidth="-Infinity" text="Fecha" />
+                              <TableColumn fx:id="clMatricula" maxWidth="80.0" minWidth="-Infinity" text="Matricula" />
+                              <TableColumn fx:id="clCuantia" maxWidth="50.0" minWidth="-Infinity" prefWidth="50.0" text="Cuantia" />
+                              <TableColumn fx:id="clArticulo" maxWidth="100.0" minWidth="-Infinity" prefWidth="100.0" text="Artículo" />
+                              <TableColumn fx:id="clPuntos" maxWidth="50.0" minWidth="-Infinity" prefWidth="50.0" text="Puntos" />
+                              <TableColumn fx:id="clReqObs" maxWidth="50.0" minWidth="-Infinity" prefWidth="50.0" text="Req/Obs" />
+                           </columns>
+                           <contextMenu>
+                              <ContextMenu>
+                                <items>
+                                  <MenuItem mnemonicParsing="false" text="Eliminar linea" />
+                                </items>
+                              </ContextMenu>
+                           </contextMenu>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </TableView>
+                        <HBox alignment="CENTER_LEFT">
+                           <children>
+                              <Label layoutX="14.0" layoutY="483.0" prefHeight="30.0" prefWidth="109.0" text="Número de multas: " HBox.hgrow="NEVER" />
+                              <Label fx:id="lbMultasPreview" layoutX="123.0" layoutY="483.0" prefHeight="30.0" prefWidth="109.0" HBox.hgrow="NEVER" />
+                              <Pane prefHeight="30.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+                              <Button fx:id="btForzarProcesar" layoutX="646.0" layoutY="483.0" mnemonicParsing="false" onAction="#forzarProcesado" prefHeight="30.0" prefWidth="150.0" text="Procesar" AnchorPane.bottomAnchor="47.0" AnchorPane.rightAnchor="14.0" HBox.hgrow="NEVER" />
+                           </children>
+                           <padding>
+                              <Insets left="10.0" />
+                           </padding>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  <VBox fx:id="panelEspera" alignment="CENTER" visible="false">
+                     <children>
+                        <Label fx:id="lbProceso" alignment="CENTER" layoutX="333.0" layoutY="140.0" prefHeight="46.0" prefWidth="150.0" text="PROCESO" textAlignment="CENTER" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="150.0" />
+                        <ProgressIndicator fx:id="piProgreso" layoutX="14.0" layoutY="211.0" prefHeight="139.0" prefWidth="787.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" />
+                        <Label fx:id="lbProgreso" alignment="CENTER" layoutX="333.0" layoutY="380.0" prefHeight="46.0" prefWidth="150.0" text="PROGRESO" textAlignment="CENTER" AnchorPane.bottomAnchor="150.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" />
+                     </children>
+                  </VBox>
+               </children>
+            </StackPane>
+        </items>
+      </SplitPane>
    </children>
-</AnchorPane>
+</VBox>

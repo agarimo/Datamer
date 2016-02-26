@@ -1,14 +1,15 @@
 package datamer.ctrl.ext;
 
-import enty.Multa;
-import enty.Procesar;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import main.SqlBoe;
-import main.Var;
+import datamer.Var;
+import datamer.ctrl.boes.Query;
+import datamer.model.boes.enty.Multa;
+import datamer.model.boes.enty.Procesar;
 import util.Dates;
 import util.Files;
 import util.Varios;
@@ -30,12 +31,12 @@ public class BB1 {
         this.fecha = fecha;
         data = new ArrayList();
         docData = new ArrayList();
-        this.boletines = SqlBoe
-                .listaProcesar("SELECT * FROM " + Var.nombreBD + ".procesar "
+        this.boletines = Query
+                .listaProcesar("SELECT * FROM " + Var.dbNameBoes + ".procesar "
                         + "WHERE fecha=" + Varios.entrecomillar(Dates.imprimeFecha(this.fecha))
                         + " AND estado!=1");
-        this.doc = SqlBoe
-                .listaProcesar("SELECT * FROM " + Var.nombreBD + ".procesar "
+        this.doc = Query
+                .listaProcesar("SELECT * FROM " + Var.dbNameBoes + ".procesar "
                         + "WHERE fecha=" + Varios.entrecomillar(Dates.imprimeFecha(this.fecha)));
         fichero = new File(Var.ficheroTxt, Dates.imprimeFecha(fecha));
         fichero.mkdirs();
@@ -64,7 +65,7 @@ public class BB1 {
     private void getDatos(Procesar pr) {
         String[] linea;
         Multa multa;
-        List<Multa> multas = SqlBoe.listaMultas("SELECT * FROM " + Var.nombreBD + ".multa WHERE idBoletin=" + pr.getId());
+        List<Multa> multas = Query.listaMultas("SELECT * FROM " + Var.dbNameBoes + ".multa WHERE idBoletin=" + pr.getId());
 
         Iterator<Multa> it = multas.iterator();
 

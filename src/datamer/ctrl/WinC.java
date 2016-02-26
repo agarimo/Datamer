@@ -44,12 +44,12 @@ public class WinC implements Initializable {
         tabPane.getTabs().add(tab);
     }
 
-    private Tab loadPane(String pane) {
+    private Tab loadPane(String pane,String nombre) {
         try {
             Node node = FXMLLoader.load(getClass().getResource(pane));
 
             Tab tab = new Tab();
-            tab.setText("TESTRA");
+            tab.setText(nombre);
             tab.setContent(node);
             
 
@@ -62,14 +62,16 @@ public class WinC implements Initializable {
 
     @FXML
     void initTestra(ActionEvent event) {
-        System.out.println("initTestra");
 //        addPane(loadPane(Nav.BOES_CLASIFICACION));
     }
     
     @FXML
     void initBoesClasificacion(ActionEvent event){
-        System.out.println("initBoesClasificacion");
-        addPane(loadPane(Nav.BOES_CLASIFICACION));
+        addPane(loadPane(Nav.BOES_CLASIFICACION,"CLASIFICACIÓN"));
     }
-
+    
+   @FXML
+   void initBoesExt(ActionEvent event){
+       addPane(loadPane(Nav.BOES_EXTRACCION,"EXTRACCIÓN"));
+   }
 }

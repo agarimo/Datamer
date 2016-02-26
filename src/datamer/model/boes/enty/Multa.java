@@ -16,27 +16,27 @@ import util.Varios;
  */
 public class Multa {
 
-    int id;
-    int idBoletin;
-    String codigoSancion;
-    Date fechaPublicacion;
-    int idOrganismo;
-    String organismo;
-    String boe;
-    String fase;
-    String tipoJuridico;
-    int plazo;
-    String expediente;
-    Date fechaMulta;
-    String articulo;
-    String nif;
-    String sancionado;
-    String localidad;
-    String matricula;
-    String cuantia;
-    String puntos;
-    String reqObs;
-    String linea;
+    private int id;
+    private int idBoletin;
+    private String codigoSancion;
+    private Date fechaPublicacion;
+    private int idOrganismo;
+    private String organismo;
+    private String boe;
+    private String fase;
+    private String tipoJuridico;
+    private int plazo;
+    private String expediente;
+    private Date fechaMulta;
+    private String articulo;
+    private String nif;
+    private String sancionado;
+    private String localidad;
+    private String matricula;
+    private String cuantia;
+    private String puntos;
+    private String reqObs;
+    private String linea;
 
     public Multa() {
 

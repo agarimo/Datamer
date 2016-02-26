@@ -1,9 +1,9 @@
 package datamer.ctrl.ext;
 
-import enty.Multa;
-import enty.Procesar;
-import enty.StrucData;
-import enty.VistaExtraccion;
+import datamer.model.boes.enty.Multa;
+import datamer.model.boes.enty.Procesar;
+import datamer.model.boes.enty.StrucData;
+import datamer.model.boes.enty.VistaExtraccion;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -12,8 +12,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import main.SqlBoe;
-import main.Var;
+import datamer.Var;
+import datamer.ctrl.boes.Query;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -26,9 +26,13 @@ import util.Varios;
  */
 public class Extraccion {
 
-    Date fecha;
-    List<Procesar> lista;
-    File fichero;
+    private Date fecha;
+    private List<Procesar> lista;
+    private File fichero;
+    
+    public Extraccion(){
+        
+    }
 
     public Extraccion(Date fecha) {
         this.fecha = fecha;
@@ -42,7 +46,7 @@ public class Extraccion {
     }
 
     private List<Procesar> cargaBoletines() {
-        return SqlBoe.listaProcesar("SELECT * FROM " + Var.nombreBD + ".procesar "
+        return Query.listaProcesar("SELECT * FROM " + Var.dbNameBoes + ".procesar "
                 + "where fecha=" + Varios.entrecomillar(Dates.imprimeFecha(fecha)) + " "
                 + "and estado=1");
     }
@@ -53,8 +57,8 @@ public class Extraccion {
 
     public List<Multa> previewXLSX(Procesar aux) {
         File file = new File(this.fichero, aux.getCodigo() + ".xlsx");
-        VistaExtraccion ve = SqlBoe.getVistaExtraccion(VistaExtraccion.SQLBuscar(aux.getCodigo()));
-        StrucData sd = SqlBoe.getStrucData(StrucData.SQLBuscar(aux.getEstructura()));
+        VistaExtraccion ve = Query.getVistaExtraccion(VistaExtraccion.SQLBuscar(aux.getCodigo()));
+        StrucData sd = Query.getStrucData(StrucData.SQLBuscar(aux.getEstructura()));
         XLSXProcess process = new XLSXProcess(getRows(file), aux, ve, sd);
 
         return process.splitXLSX();

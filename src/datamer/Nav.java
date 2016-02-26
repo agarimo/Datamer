@@ -8,7 +8,7 @@ public class Nav {
 
     public static final String BOES_BOLETINES = "/view/Multa.fxml";
     public static final String BOES_CLASIFICACION = "/datamer/view/boes/Clasificacion.fxml";
-    public static final String BOES_EXTRACCION = "";
+    public static final String BOES_EXTRACCION = "/datamer/view/boes/Ext.fxml";
     public static final String BOES_FASES = "/view/Detalle.fxml";
 
     public static final String TESTRA = "/view/Config.fxml";

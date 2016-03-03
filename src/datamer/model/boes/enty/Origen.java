@@ -102,7 +102,7 @@ public class Origen {
     
     @Override
     public String toString() {
-        return codigo;
+        return nombre;
     }
 
     public String SQLCrear() {

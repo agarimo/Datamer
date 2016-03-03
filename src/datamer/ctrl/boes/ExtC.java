@@ -49,7 +49,6 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
@@ -279,8 +278,9 @@ public class ExtC implements Initializable {
                 XLSXProcess.insertMultas(list);
                 pr.SQLSetEstado(Estado.PROCESADO_XLSX.getValue());
             } catch (Exception e) {
+                System.out.println(e.getMessage());
+                System.out.println(aux.getCodigo());
                 pr.SQLSetEstado(Estado.ERROR_PROCESAR.getValue());
-//                e.printStackTrace();
             }
 
             Platform.runLater(() -> {
@@ -485,6 +485,17 @@ public class ExtC implements Initializable {
         clArticulo.setCellValueFactory(new PropertyValueFactory<>("articulo"));
         clPuntos.setCellValueFactory(new PropertyValueFactory<>("puntos"));
         clReqObs.setCellValueFactory(new PropertyValueFactory<>("reqObs"));
+
+        clExpediente.prefWidthProperty().bind(tvPreview.widthProperty().multiply(0.1165));
+        clSancionado.prefWidthProperty().bind(tvPreview.widthProperty().multiply(0.1940));
+        clNif.prefWidthProperty().bind(tvPreview.widthProperty().multiply(0.09));
+        clLocalidad.prefWidthProperty().bind(tvPreview.widthProperty().multiply(0.1940));
+        clFecha.prefWidthProperty().bind(tvPreview.widthProperty().multiply(0.0775));
+        clMatricula.prefWidthProperty().bind(tvPreview.widthProperty().multiply(0.07));
+        clCuantia.prefWidthProperty().bind(tvPreview.widthProperty().multiply(0.0485));
+        clArticulo.prefWidthProperty().bind(tvPreview.widthProperty().multiply(0.0970));
+        clPuntos.prefWidthProperty().bind(tvPreview.widthProperty().multiply(0.0485));
+        clReqObs.prefWidthProperty().bind(tvPreview.widthProperty().multiply(0.0485));
 
         previewList = FXCollections.observableArrayList();
         tvPreview.setItems(previewList);

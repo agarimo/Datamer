@@ -4,6 +4,7 @@ import datamer.Var;
 import datamer.ctrl.boes.boe.Boe;
 import datamer.model.boes.enty.ReqObs;
 import datamer.model.boes.ModeloBoletines;
+import datamer.model.boes.ModeloFases;
 import datamer.model.boes.ModeloUnion;
 import datamer.model.boes.enty.Boletin;
 import java.sql.SQLException;
@@ -13,13 +14,17 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import util.Sql;
 import datamer.model.boes.enty.Descarga;
+import datamer.model.boes.enty.Entidad;
 import datamer.model.boes.enty.Multa;
+import datamer.model.boes.enty.Origen;
 import datamer.model.boes.enty.OrigenArticulo;
 import datamer.model.boes.enty.OrigenExpediente;
 import datamer.model.boes.enty.OrigenFase;
 import datamer.model.boes.enty.Procesar;
 import datamer.model.boes.enty.StrucData;
+import datamer.model.boes.enty.Tipo;
 import datamer.model.boes.enty.VistaExtraccion;
+import java.sql.ResultSet;
 import java.util.Date;
 import util.Dates;
 import util.Varios;
@@ -734,6 +739,108 @@ public class Query extends util.Query {
                 aux.codigoUn.set(rs.getString("codigoUn"));
                 aux.estructura.set(rs.getString("isEstructura"));
                 aux.codigoProv.set(rs.getString("codigoProv"));
+                list.add(aux);
+            }
+            rs.close();
+            bd.close();
+        } catch (SQLException ex) {
+            error(ex.getMessage());
+            Logger.getLogger(Query.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return list;
+    }
+    
+    public static List<Origen> listaOrigenFases(int id) {
+        String query = "SELECT * FROM " + Var.dbNameBoes + ".origen where idEntidad=" + id + " order by nombre";
+        List list = new ArrayList();
+        Origen aux;
+
+        try {
+            bd = new Sql(Var.con);
+            rs = bd.ejecutarQueryRs(query);
+
+            while (rs.next()) {
+                aux = new Origen();
+                aux.setId(rs.getInt("id"));
+                aux.setNombre(rs.getString("nombre"));
+                list.add(aux);
+            }
+            rs.close();
+            bd.close();
+        } catch (SQLException ex) {
+            error(ex.getMessage());
+            Logger.getLogger(Query.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return list;
+    }
+    
+    public static List<Entidad> listaEntidadFases(){
+        String query = "SELECT * FROM " + Var.dbNameBoes + ".entidad order by nombre";
+        List list = new ArrayList();
+        Entidad aux;
+
+        try {
+            bd = new Sql(Var.con);
+            rs = bd.ejecutarQueryRs(query);
+
+            while (rs.next()) {
+                aux = new Entidad();
+                aux.setId(rs.getInt("id"));
+                aux.setNombre(rs.getString("nombre"));
+                list.add(aux);
+            }
+            rs.close();
+            bd.close();
+        } catch (SQLException ex) {
+            error(ex.getMessage());
+            Logger.getLogger(Query.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return list;
+    }
+    
+    public static List<Tipo> listaTipoFases(){
+        String query = "SELECT * FROM " + Var.dbNameBoes + ".tipo where tipo=0";
+        List list = new ArrayList();
+        Tipo aux;
+
+        try {
+            bd = new Sql(Var.con);
+            rs = bd.ejecutarQueryRs(query);
+
+            while (rs.next()) {
+                aux = new Tipo();
+                aux.setId(rs.getString("id"));
+                aux.setNombre(rs.getString("nombre"));
+                list.add(aux);
+            }
+            rs.close();
+            bd.close();
+        } catch (SQLException ex) {
+            error(ex.getMessage());
+            Logger.getLogger(Query.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return list;
+    }
+    
+    public static List<ModeloFases> listaModeloFases(int id) {
+        String query = "SELECT * FROM " + Var.dbNameBoes + ".fase where idOrigen=" + id;
+        List list = new ArrayList();
+        ModeloFases aux;
+
+        try {
+            bd = new Sql(Var.con);
+            rs = bd.ejecutarQueryRs(query);
+
+            while (rs.next()) {
+                aux = new ModeloFases();
+                aux.id.set(rs.getInt("id"));
+                aux.idOrigen.set(rs.getInt("idOrigen"));
+                aux.codigo.set(rs.getString("codigo"));
+                aux.tipo.set(rs.getInt("tipo"));
+                aux.texto1.set(rs.getString("texto1"));
+                aux.texto2.set(rs.getString("texto2"));
+                aux.texto3.set(rs.getString("texto3"));
+                aux.dias.set(rs.getInt("dias"));
                 list.add(aux);
             }
             rs.close();

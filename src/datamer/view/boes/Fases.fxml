@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<VBox prefWidth="1050.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="datamer.ctrl.boes.FasesC">
+   <children>
+      <SplitPane dividerPositions="0.2" prefHeight="575.0" prefWidth="1000.0" VBox.vgrow="ALWAYS">
+         <items>
+            <VBox maxWidth="-Infinity" minWidth="-Infinity" prefWidth="200.0" spacing="10.0">
+               <children>
+                  <Label layoutY="6.0" prefHeight="17.0" prefWidth="197.0" text="Entidad :">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </Label>
+                  <ComboBox fx:id="cbEntidad" layoutY="33.0" onAction="#cargaOrigenFase" prefHeight="25.0" prefWidth="197.0">
+                     <VBox.margin>
+                        <Insets left="5.0" right="5.0" />
+                     </VBox.margin>
+                  </ComboBox>
+                  <Label layoutY="76.0" prefHeight="17.0" prefWidth="197.0" text="Origen:">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </Label>
+                  <ListView fx:id="lvOrigen" layoutX="-1.0" layoutY="101.0" prefHeight="455.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+               </children>
+               <padding>
+                  <Insets top="10.0" />
+               </padding>
+            </VBox>
+            <VBox prefWidth="800.0" spacing="10.0">
+               <children>
+                  <HBox>
+                     <children>
+                        <TextField fx:id="tfOrigen" alignment="CENTER" editable="false" layoutX="109.0" layoutY="10.0" prefHeight="25.0" prefWidth="676.0" promptText="...ORIGEN..." HBox.hgrow="ALWAYS" />
+                     </children>
+                  </HBox>
+                  <Label layoutX="14.0" layoutY="64.0" prefHeight="17.0" prefWidth="95.0" text="FASES: ">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <HBox spacing="10.0" VBox.vgrow="ALWAYS">
+                     <children>
+                        <TableView fx:id="tvFases" layoutX="14.0" layoutY="89.0" prefHeight="122.0" prefWidth="773.0" HBox.hgrow="ALWAYS">
+                           <columns>
+                              <TableColumn fx:id="faseCLF" maxWidth="300.0" prefWidth="300.0" resizable="false" text="FASE" />
+                              <TableColumn fx:id="codigoCLF" maxWidth="110.0" prefWidth="110.0" resizable="false" text="CODIGO" />
+                              <TableColumn fx:id="tipoCLF" maxWidth="300.0" prefWidth="300.0" resizable="false" text="TIPO" />
+                              <TableColumn fx:id="diasCLF" maxWidth="60.0" prefWidth="60.0" resizable="false" text="DIAS" />
+                           </columns>
+                        </TableView>
+                        <VBox prefHeight="200.0" prefWidth="100.0" spacing="10.0" HBox.hgrow="NEVER">
+                           <children>
+                              <Button fx:id="btNuevaFase" mnemonicParsing="false" onAction="#nuevaFase" prefHeight="50.0" prefWidth="95.0" text="Nuevo" />
+                              <Button fx:id="btEditarFase" mnemonicParsing="false" onAction="#editaFase" prefHeight="50.0" prefWidth="95.0" text="Editar" />
+                              <Button fx:id="btBorrarFase" mnemonicParsing="false" onAction="#borraFase" prefHeight="50.0" prefWidth="95.0" text="Borrar" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <StackPane>
+                     <children>
+                        <VBox spacing="10.0">
+                           <children>
+                              <HBox alignment="CENTER_LEFT" layoutX="14.0" layoutY="12.0" spacing="10.0">
+                                 <children>
+                                    <Label layoutX="14.0" layoutY="14.0" prefHeight="25.0" prefWidth="50.0" text="Codigo: " HBox.hgrow="ALWAYS" />
+                                    <ComboBox fx:id="cbCodigo" layoutX="64.0" layoutY="12.0" prefWidth="150.0">
+                                       <HBox.margin>
+                                          <Insets right="10.0" />
+                                       </HBox.margin>
+                                    </ComboBox>
+                                    <Label layoutX="236.0" layoutY="14.0" prefHeight="25.0" prefWidth="50.0" text="Tipo: " HBox.hgrow="ALWAYS" />
+                                    <ComboBox fx:id="cbTipo" layoutX="286.0" layoutY="12.0" prefWidth="150.0">
+                                       <HBox.margin>
+                                          <Insets right="10.0" />
+                                       </HBox.margin>
+                                    </ComboBox>
+                                    <Label layoutX="455.0" layoutY="15.0" prefHeight="25.0" prefWidth="50.0" text="Dias: " HBox.hgrow="ALWAYS" />
+                                    <TextField fx:id="tfDias" alignment="CENTER" layoutX="505.0" layoutY="12.0">
+                                       <HBox.margin>
+                                          <Insets right="10.0" />
+                                       </HBox.margin>
+                                    </TextField>
+                                 </children>
+                              </HBox>
+                              <VBox layoutX="14.0" layoutY="65.0">
+                                 <children>
+                                    <Label layoutX="14.0" layoutY="65.0" prefHeight="20.0" prefWidth="50.0" text="Texto 1: " />
+                                    <TextArea fx:id="taTexto1" layoutX="64.0" layoutY="65.0" prefHeight="50.0" prefWidth="591.0" />
+                                    <Label layoutX="14.0" layoutY="153.0" prefHeight="20.0" prefWidth="50.0" text="Texto 2: " />
+                                    <TextArea fx:id="taTexto2" layoutX="64.0" layoutY="153.0" prefHeight="50.0" prefWidth="591.0" />
+                                    <Label layoutX="14.0" layoutY="238.0" prefHeight="20.0" prefWidth="50.0" text="Texto 3: " />
+                                    <TextArea fx:id="taTexto3" layoutX="64.0" layoutY="238.0" prefHeight="50.0" prefWidth="591.0" />
+                                    <HBox alignment="CENTER_RIGHT">
+                                       <children>
+                                          <Button fx:id="btGuardarFase" mnemonicParsing="false" onAction="#guardaFase" prefHeight="25.0" prefWidth="95.0" text="Guardar" />
+                                       </children>
+                                       <VBox.margin>
+                                          <Insets top="10.0" />
+                                       </VBox.margin>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </VBox>
+                     </children>
+                     <padding>
+                        <Insets bottom="10.0" />
+                     </padding>
+                  </StackPane>
+               </children>
+               <padding>
+                  <Insets left="10.0" right="10.0" top="10.0" />
+               </padding>
+            </VBox>
+         </items>
+      </SplitPane>
+   </children>
+</VBox>

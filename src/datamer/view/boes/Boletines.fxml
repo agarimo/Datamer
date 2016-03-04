@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<SplitPane dividerPositions="0.5" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="datamer.ctrl.boes.BoletinesC">
+   <items>
+      <VBox maxWidth="190.0" prefWidth="190.0">
+         <children>
+            <DatePicker fx:id="dpFechaB" onAction="#cambioEnDatePickerBoletines" prefHeight="30.0" prefWidth="150.0" />
+            <SplitMenuButton fx:id="btProcesar" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#procesarBoletines" popupSide="RIGHT" prefHeight="30.0" prefWidth="150.0" text="PROCESAR">
+               <items>
+                  <MenuItem fx:id="miEstructuras" mnemonicParsing="false" onAction="#comprobarEstructuras" text="Procesar Estructuras" />
+                  <MenuItem fx:id="miEstructurasP" mnemonicParsing="false" onAction="#comprobarEstructurasP" text="Procesar Estructuras Pendientes" />
+                  <MenuItem fx:id="miFases" mnemonicParsing="false" onAction="#comprobarFases" text="Procesar Fases" />
+               </items>
+            </SplitMenuButton>
+            <Button fx:id="btEliminarDSC" mnemonicParsing="false" onAction="#eliminarDSC" prefHeight="30.0" prefWidth="150.0" text="Eliminar DSC" />
+            <Button fx:id="btUnion" mnemonicParsing="false" onAction="#generarArchivosUnion" prefHeight="30.0" prefWidth="150.0" text="UNION" />
+            <Button fx:id="btAbrirCarpetaBoletines" mnemonicParsing="false" onAction="#abrirCarpetaBoletines" prefHeight="30.0" prefWidth="150.0" text="Abrir Carpeta" />
+            <Button fx:id="btVerBoletin" mnemonicParsing="false" onAction="#verBoletin" prefHeight="30.0" prefWidth="150.0" text="VER BOLETÍN" />
+            <Button fx:id="btVerBoletinWeb" mnemonicParsing="false" onAction="#verBoletinWeb" prefHeight="30.0" prefWidth="150.0" text="VER EN WEB" />
+            <Button fx:id="btEliminarBoletin" mnemonicParsing="false" onAction="#eliminarBoletin" prefHeight="30.0" prefWidth="150.0" text="ELIMINAR" />
+            <Button fx:id="btRecargarBoletines" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="5.0" mnemonicParsing="false" onAction="#recargarBoletines" prefHeight="30.0" prefWidth="150.0" text="Recargar">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </Button>
+         </children>
+      </VBox>
+      <VBox>
+         <children>
+            <TableView fx:id="tvBoletines" layoutY="51.0" prefHeight="483.0" prefWidth="1000.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" VBox.vgrow="ALWAYS">
+               <columns>
+                  <TableColumn fx:id="codigoCLB" maxWidth="-1.0" minWidth="130.0" prefWidth="130.0" resizable="false" text="CODIGO" />
+                  <TableColumn fx:id="origenCLB" maxWidth="-1.0" minWidth="558.0" prefWidth="558.0" resizable="false" text="ORIGEN" />
+                  <TableColumn fx:id="fechaCLB" maxWidth="-1.0" minWidth="92.0" prefWidth="92.0" resizable="false" text="FECHA" />
+                  <TableColumn fx:id="tipoCLB" maxWidth="-1.0" minWidth="65.0" prefWidth="65.0" resizable="false" text="TIPO" />
+                  <TableColumn fx:id="faseCLB" maxWidth="153.0" minWidth="30.0" prefWidth="36.0" resizable="false" text="FASE" />
+                  <TableColumn fx:id="estructuraCLB" prefWidth="116.0" text="ESTRUCTURA" />
+               </columns>
+            </TableView>
+            <Label fx:id="lbContador" text="Label" />
+            <ProgressBar fx:id="pbEstado" layoutX="1.0" layoutY="534.0" prefHeight="17.0" prefWidth="1000.0" progress="0.0" visible="false" />
+            <Label fx:id="lbEstado" alignment="CENTER" layoutX="15.0" layoutY="552.0" prefHeight="25.0" prefWidth="971.0" text="..." />
+         </children>
+      </VBox>
+   </items>
+</SplitPane>

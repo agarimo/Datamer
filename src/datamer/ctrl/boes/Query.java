@@ -15,6 +15,8 @@ import java.util.logging.Logger;
 import util.Sql;
 import datamer.model.boes.enty.Descarga;
 import datamer.model.boes.enty.Entidad;
+import datamer.model.boes.enty.Estructura;
+import datamer.model.boes.enty.Fase;
 import datamer.model.boes.enty.Multa;
 import datamer.model.boes.enty.Origen;
 import datamer.model.boes.enty.OrigenArticulo;
@@ -24,7 +26,6 @@ import datamer.model.boes.enty.Procesar;
 import datamer.model.boes.enty.StrucData;
 import datamer.model.boes.enty.Tipo;
 import datamer.model.boes.enty.VistaExtraccion;
-import java.sql.ResultSet;
 import java.util.Date;
 import util.Dates;
 import util.Varios;
@@ -850,5 +851,155 @@ public class Query extends util.Query {
             Logger.getLogger(Query.class.getName()).log(Level.SEVERE, null, ex);
         }
         return list;
+    }
+    
+    public static List listaProcesarPendiente(Date fecha) {
+        List list = new ArrayList();
+        String query = "select a.id,a.codigo,b.link,a.isEstructura from boes.boletin a "
+                + "left join boes.descarga b on a.idDescarga=b.id "
+                + "where a.idBoe=(select id from boes.boe where fecha=" + Varios.entrecomillar(Dates.imprimeFecha(fecha)) + ") "
+                + "and a.id not in (select id from boes.procesar)";
+        Procesar aux;
+        
+        try {
+            bd = new Sql(Var.con);
+            rs = bd.ejecutarQueryRs(query);
+
+            while (rs.next()) {
+                aux = new Procesar();
+                aux.setId(rs.getInt("id"));
+                aux.setFecha(fecha);
+                aux.setCodigo(rs.getString("codigo"));
+                aux.setLink(rs.getString("link"));
+                aux.setEstructura(rs.getInt("isEstructura"));
+                aux.setEstado(0);
+                list.add(aux);
+            }
+            rs.close();
+            bd.close();
+        } catch (SQLException ex) {
+            error(ex.getMessage());
+            Logger.getLogger(Query.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return list;
+    }
+    
+    public static List<Estructura> listaEstructuras(String query) {
+        List<Estructura> list = new ArrayList();
+        Estructura aux;
+        
+        try {
+            bd = new Sql(Var.con);
+            rs = bd.ejecutarQueryRs(query);
+
+            while (rs.next()) {
+                aux = new Estructura(rs.getInt("id"), rs.getString("nombre"), rs.getString("estructura"));
+                list.add(aux);
+            }
+            rs.close();
+            bd.close();
+        } catch (SQLException ex) {
+            error(ex.getMessage());
+            Logger.getLogger(Query.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return list;
+    }
+    
+    public static Origen getOrigen(int id) {
+        Origen aux = null;
+        String query = "SELECT * from " + Var.dbNameBoes + ".origen where id=" + id;
+        
+        try {
+            bd = new Sql(Var.con);
+            rs = bd.ejecutarQueryRs(query);
+            
+            if (rs.next()) {
+                aux = new Origen();
+                aux.setId(rs.getInt("id"));
+                aux.setIdEntidad(rs.getInt("idEntidad"));
+                aux.setNombre(rs.getString("nombre"));
+                aux.setCodigo(rs.getString("codigo"));
+                aux.setCodigoAy(rs.getString("codigoAy"));
+                aux.setCodigoUn(rs.getString("codigoUn"));
+                aux.setCodigoTes(rs.getString("codigoTes"));
+                aux.setNombreMostrar(rs.getString("nombreMostrar"));
+            }
+            rs.close();
+            bd.close();
+        } catch (SQLException ex) {
+            error(ex.getMessage());
+            Logger.getLogger(Query.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return aux;
+    }
+    
+     public static List<Fase> listaFase(String query) {
+        List list = new ArrayList();
+        Fase aux;
+        
+        try {
+            bd = new Sql(Var.con);
+            rs = bd.ejecutarQueryRs(query);
+
+            while (rs.next()) {
+                aux = new Fase();
+                aux.setId(rs.getInt("id"));
+                aux.setIdOrigen(rs.getInt("idOrigen"));
+                aux.setCodigo(rs.getString("codigo"));
+                aux.setTipo(rs.getInt("tipo"));
+                aux.setTexto1(rs.getString("texto1"));
+                aux.setTexto2(rs.getString("texto2"));
+                aux.setTexto3(rs.getString("texto3"));
+                aux.setDias(rs.getInt("dias"));
+                list.add(aux);
+            }
+            rs.close();
+            bd.close();
+        } catch (SQLException ex) {
+            error(ex.getMessage());
+            Logger.getLogger(Query.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return list;
+    }
+
+    public static List<Fase> listaFaseTestra(String query) {
+        List list = new ArrayList();
+        Fase aux;
+        
+        try {
+            bd = new Sql(Var.con);
+            rs = bd.ejecutarQueryRs(query);
+
+            while (rs.next()) {
+                aux = new Fase();
+                aux.setId(rs.getInt("idfase"));
+                aux.setIdOrigen(rs.getInt("origen"));
+                aux.setCodigo(rs.getString("codigo"));
+                aux.setTipo(rs.getInt("tipo"));
+                aux.setTexto1(rs.getString("texto1"));
+                aux.setTexto2(rs.getString("texto2"));
+                aux.setTexto3(rs.getString("texto3"));
+                aux.setDias(rs.getInt("dias"));
+                list.add(aux);
+            }
+            rs.close();
+            bd.close();
+        } catch (SQLException ex) {
+            error(ex.getMessage());
+            Logger.getLogger(Query.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return list;
+    }
+    
+    public static void eliminaBoletinFase(String codigo) {
+        try {
+            bd = new Sql(Var.con);
+            bd.ejecutar("DELETE FROM " + Var.dbNameBoes + ".boletin where codigo=" + Varios.entrecomillar(codigo));
+            bd.ejecutar("UPDATE " + Var.dbNameBoesStats + ".boletines set status='FASE',isSelected=false where codigo=" + Varios.entrecomillar(codigo));
+            bd.close();
+        } catch (SQLException ex) {
+            error(ex.getMessage());
+            Logger.getLogger(Query.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

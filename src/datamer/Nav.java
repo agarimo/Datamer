@@ -6,10 +6,10 @@ package datamer;
  */
 public class Nav {
 
-    public static final String BOES_BOLETINES = "/view/Multa.fxml";
+    public static final String BOES_BOLETINES = "/datamer/view/boes/Boletines.fxml";
     public static final String BOES_CLASIFICACION = "/datamer/view/boes/Clasificacion.fxml";
     public static final String BOES_EXTRACCION = "/datamer/view/boes/Ext.fxml";
-    public static final String BOES_FASES = "/view/Detalle.fxml";
+    public static final String BOES_FASES = "/datamer/view/boes/Fases.fxml";
 
     public static final String TESTRA = "/view/Config.fxml";
     public static final String TESTRA_CAPTURADOR = "/view/Search.fxml";

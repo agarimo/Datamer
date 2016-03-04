@@ -99,19 +99,52 @@ public class FasesC implements Initializable {
     ObservableList<Origen> listOrigenes;
     ObservableList<ModeloFases> tablaFases;
 
-    /**
-     * Initializes the controller class.
-     *
-     * @param url
-     * @param rb
-     */
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+    @FXML
+    void faseDelete(ActionEvent event) {
+        Sql bd;
+        Fase aux = getDatosFase();
+
+        try {
+            bd = new Sql(Var.con);
+            bd.ejecutar(aux.SQLBorrar());
+            bd.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(FasesC.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        btGuardarFase.setVisible(false);
+        btBorrarFase.setVisible(true);
+        btEditarFase.setVisible(true);
+        btNuevaFase.setDisable(false);
+
+        clear();
+        loadFases();
     }
 
     @FXML
-    void nuevaFase(ActionEvent event) {
+    void faseEdit(ActionEvent event) {
+        Sql bd;
+        Fase aux = getDatosFase();
+
+        try {
+            bd = new Sql(Var.con);
+            bd.ejecutar(aux.SQLEditar());
+            bd.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(FasesC.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        btGuardarFase.setVisible(false);
+        btBorrarFase.setVisible(true);
+        btEditarFase.setVisible(true);
+        btNuevaFase.setDisable(false);
+
+        clear();
+        loadFases();
+    }
+
+    @FXML
+    void faseNew(ActionEvent event) {
         btNuevaFase.setDisable(true);
         Origen origen = (Origen) lvOrigen.getSelectionModel().getSelectedItem();
         btGuardarFase.setVisible(true);
@@ -132,51 +165,7 @@ public class FasesC implements Initializable {
     }
 
     @FXML
-    void editaFase(ActionEvent event) {
-        Sql bd;
-        Fase aux = getDatosFase();
-
-        try {
-            bd = new Sql(Var.con);
-            bd.ejecutar(aux.SQLEditar());
-            bd.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(FasesC.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        btGuardarFase.setVisible(false);
-        btBorrarFase.setVisible(true);
-        btEditarFase.setVisible(true);
-        btNuevaFase.setDisable(false);
-
-        limpiarFases();
-        cargaFasesOrigen();
-    }
-
-    @FXML
-    void borraFase(ActionEvent event) {
-        Sql bd;
-        Fase aux = getDatosFase();
-
-        try {
-            bd = new Sql(Var.con);
-            bd.ejecutar(aux.SQLBorrar());
-            bd.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(FasesC.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        btGuardarFase.setVisible(false);
-        btBorrarFase.setVisible(true);
-        btEditarFase.setVisible(true);
-        btNuevaFase.setDisable(false);
-
-        limpiarFases();
-        cargaFasesOrigen();
-    }
-
-    @FXML
-    void guardaFase(ActionEvent event) {
+    void faseSave(ActionEvent event) {
         Sql bd;
         Fase aux = getDatosFase();
 
@@ -193,28 +182,51 @@ public class FasesC implements Initializable {
         btEditarFase.setVisible(true);
         btNuevaFase.setDisable(false);
 
-        limpiarFases();
-        cargaFasesOrigen();
+        clear();
+        loadFases();
     }
 
-    @FXML
-    void cargaOrigenFase(ActionEvent event) {
-        limpiarFases();
-        listOrigenes.clear();
-        Entidad entidad = (Entidad) cbEntidad.getSelectionModel().getSelectedItem();
-        Origen origen;
-        Iterator<Origen> it = Query.listaOrigenFases(entidad.getId()).iterator();
-
-        while (it.hasNext()) {
-            origen = it.next();
-            listOrigenes.add(origen);
-        }
-        lvOrigen.setItems(listOrigenes);
-        lvOrigen.setVisible(false);
-        lvOrigen.setVisible(true);
+    void clear() {
+        cbCodigo.getSelectionModel().select(null);
+        cbTipo.getSelectionModel().select(null);
+        tfDias.setText(null);
+        taTexto1.setText(null);
+        taTexto2.setText(null);
+        taTexto3.setText(null);
+        tfOrigen.setText(null);
     }
 
-    private void inicializaDatosFases() {
+    Fase getDatosFase() {
+        ModeloFases mf = (ModeloFases) tvFases.getSelectionModel().getSelectedItem();
+        Tipo tipo = (Tipo) cbCodigo.getSelectionModel().getSelectedItem();
+        Kind kind = (Kind) cbTipo.getSelectionModel().getSelectedItem();
+
+        Fase fase = new Fase();
+        fase.setId(mf.getId());
+        fase.setCodigo(tipo.getId());
+        fase.setIdOrigen(mf.getIdOrigen());
+        fase.setTipo(kind.getValue());
+        fase.setTexto1(taTexto1.getText().trim());
+        fase.setTexto2(taTexto2.getText().trim());
+        fase.setTexto3(taTexto3.getText().trim());
+        fase.setDias(Integer.parseInt(tfDias.getText()));
+
+        return fase;
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        initializeTabla();
+        initializeItems();
+
+        final ObservableList<Origen> ls2 = lvOrigen.getSelectionModel().getSelectedItems();
+        ls2.addListener(selectorListaOrigen);
+
+        final ObservableList<ModeloFases> ls3 = tvFases.getSelectionModel().getSelectedItems();
+        ls3.addListener(selectorTablaFases);
+    }
+    
+    private void initializeItems(){
         comboEntidades = FXCollections.observableArrayList();
         cbEntidad.setItems(comboEntidades);
         comboCodigo = FXCollections.observableArrayList();
@@ -235,7 +247,7 @@ public class FasesC implements Initializable {
                         super.updateItem(item, empty);
                         if (!isEmpty()) {
                             text = new Text(item.toString());
-                            text.setWrappingWidth(lvOrigen.getPrefWidth() - 30);
+                            text.setWrappingWidth(lvOrigen.getWidth() - 20);
                             setGraphic(text);
                         } else {
                             text = new Text("");
@@ -269,17 +281,41 @@ public class FasesC implements Initializable {
         comboTipo.add(Kind.RR);
     }
 
-    private void inicializaTablaFases() {
+    private void initializeTabla() {
         faseCLF.setCellValueFactory(new PropertyValueFactory<>("fase"));
         codigoCLF.setCellValueFactory(new PropertyValueFactory<>("codigo"));
         tipoCLF.setCellValueFactory(new PropertyValueFactory<>("tipo"));
         diasCLF.setCellValueFactory(new PropertyValueFactory<>("dias"));
 
+        faseCLF.prefWidthProperty().bind(tvFases.widthProperty().multiply(0.30));
+        codigoCLF.prefWidthProperty().bind(tvFases.widthProperty().multiply(0.30));
+        tipoCLF.prefWidthProperty().bind(tvFases.widthProperty().multiply(0.29));
+        diasCLF.prefWidthProperty().bind(tvFases.widthProperty().multiply(0.10));
+
         tablaFases = FXCollections.observableArrayList();
         tvFases.setItems(tablaFases);
     }
+    
+    void loadData() {
+        ModeloFases aux = (ModeloFases) tvFases.getSelectionModel().getSelectedItem();
 
-    void cargaFasesOrigen() {
+        if (aux != null) {
+            Tipo tipo = new Tipo();
+            tipo.setId(aux.getCodigo());
+            tipo.setNombre("");
+            cbCodigo.getSelectionModel().select(tipo);
+            cbTipo.getSelectionModel().select(aux.getIdTipo() - 1);
+            tfDias.setText(Integer.toString(aux.getDias()));
+            taTexto1.setText(aux.getTexto1());
+            taTexto2.setText(aux.getTexto2());
+            taTexto3.setText(aux.getTexto3());
+        }
+
+        btBorrarFase.setDisable(false);
+        btEditarFase.setDisable(false);
+    }
+
+    void loadFases() {
         tablaFases.clear();
         ModeloFases mf;
         Origen aux = (Origen) lvOrigen.getSelectionModel().getSelectedItem();
@@ -295,63 +331,21 @@ public class FasesC implements Initializable {
         btEditarFase.setDisable(true);
     }
 
-    void cargaDatosFase() {
-        ModeloFases aux = (ModeloFases) tvFases.getSelectionModel().getSelectedItem();
+    @FXML
+    void loadOrigen(ActionEvent event) {
+        clear();
+        listOrigenes.clear();
+        Entidad entidad = (Entidad) cbEntidad.getSelectionModel().getSelectedItem();
+        Origen origen;
+        Iterator<Origen> it = Query.listaOrigenFases(entidad.getId()).iterator();
 
-        if (aux != null) {
-            ModeloComboBox cb = new ModeloComboBox();
-            cb.id.set(1);
-            cb.nombre.set(aux.codigo.get());
-            cbCodigo.getSelectionModel().select(cb);
-            cbTipo.getSelectionModel().select(aux.getIdTipo() - 1);
-            tfDias.setText(Integer.toString(aux.getDias()));
-            taTexto1.setText(aux.getTexto1());
-            taTexto2.setText(aux.getTexto2());
-            taTexto3.setText(aux.getTexto3());
+        while (it.hasNext()) {
+            origen = it.next();
+            listOrigenes.add(origen);
         }
-
-        btBorrarFase.setDisable(false);
-        btEditarFase.setDisable(false);
-    }
-
-    void limpiarFases() {
-        cbCodigo.getSelectionModel().select(null);
-        cbTipo.getSelectionModel().select(null);
-        tfDias.setText(null);
-        taTexto1.setText(null);
-        taTexto2.setText(null);
-        taTexto3.setText(null);
-        tfOrigen.setText(null);
-    }
-
-    Fase getDatosFase() {
-        ModeloFases aux = new ModeloFases();
-        ModeloFases mf;
-        ModeloComboBox mc;
-
-        mf = (ModeloFases) tvFases.getSelectionModel().getSelectedItem();
-        aux.id.set(mf.getId());
-        aux.idOrigen.set(mf.getIdOrigen());
-        mc = (ModeloComboBox) cbCodigo.getSelectionModel().getSelectedItem();
-        aux.codigo.set(mc.getNombre());
-        mc = (ModeloComboBox) cbTipo.getSelectionModel().getSelectedItem();
-        aux.tipo.set(mc.getId());
-        aux.texto1.set(taTexto1.getText().trim());
-        aux.texto2.set(taTexto2.getText().trim());
-        aux.texto3.set(taTexto3.getText().trim());
-        aux.dias.set(Integer.parseInt(tfDias.getText()));
-
-        Fase fase = new Fase();
-        fase.setId(aux.getId());
-        fase.setCodigo(aux.getCodigo());
-        fase.setIdOrigen(aux.getIdOrigen());
-        fase.setTipo(aux.getIdTipo());
-        fase.setTexto1(aux.getTexto1());
-        fase.setTexto2(aux.getTexto2());
-        fase.setTexto3(aux.getTexto3());
-        fase.setDias(aux.getDias());
-
-        return fase;
+        lvOrigen.setItems(listOrigenes);
+        lvOrigen.setVisible(false);
+        lvOrigen.setVisible(true);
     }
 
     /**
@@ -359,7 +353,7 @@ public class FasesC implements Initializable {
      */
     private final ListChangeListener<Origen> selectorListaOrigen
             = (ListChangeListener.Change<? extends Origen> c) -> {
-                cargaFasesOrigen();
+                loadFases();
             };
 
     /**
@@ -367,6 +361,6 @@ public class FasesC implements Initializable {
      */
     private final ListChangeListener<ModeloFases> selectorTablaFases
             = (ListChangeListener.Change<? extends ModeloFases> c) -> {
-                cargaDatosFase();
+                loadData();
             };
 }

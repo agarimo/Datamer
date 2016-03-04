@@ -37,6 +37,7 @@ public class WinC implements Initializable {
 
     private void addPane(Tab tab) {
         tabPane.getTabs().add(tab);
+        tabPane.getSelectionModel().select(tab);
     }
 
     private Tab loadPane(String pane,String nombre) {
@@ -46,7 +47,6 @@ public class WinC implements Initializable {
             Tab tab = new Tab();
             tab.setText(nombre);
             tab.setContent(node);
-            
 
             return tab;
         } catch (IOException ex) {
@@ -61,6 +61,11 @@ public class WinC implements Initializable {
     }
     
     @FXML
+    void initBoesBoletines(ActionEvent event){
+        addPane(loadPane(Nav.BOES_BOLETINES,"BOLETINES"));
+    }
+    
+    @FXML
     void initBoesClasificacion(ActionEvent event){
         addPane(loadPane(Nav.BOES_CLASIFICACION,"CLASIFICACIÓN"));
     }
@@ -68,5 +73,10 @@ public class WinC implements Initializable {
    @FXML
    void initBoesExt(ActionEvent event){
        addPane(loadPane(Nav.BOES_EXTRACCION,"EXTRACCIÓN"));
+   }
+   
+   @FXML
+   void initBoesFases(ActionEvent event){
+       addPane(loadPane(Nav.BOES_FASES,"FASES"));
    }
 }

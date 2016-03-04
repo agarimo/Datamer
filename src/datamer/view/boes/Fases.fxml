@@ -8,12 +8,11 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
 <VBox prefWidth="1050.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="datamer.ctrl.boes.FasesC">
    <children>
       <SplitPane dividerPositions="0.2" prefHeight="575.0" prefWidth="1000.0" VBox.vgrow="ALWAYS">
          <items>
-            <VBox maxWidth="-Infinity" minWidth="-Infinity" prefWidth="200.0" spacing="10.0">
+            <VBox maxWidth="250.0" minWidth="250.0" prefWidth="250.0" spacing="10.0">
                <children>
                   <Label layoutY="6.0" prefHeight="17.0" prefWidth="197.0" text="Entidad :">
                      <font>
@@ -23,7 +22,7 @@
                         <Insets left="10.0" />
                      </padding>
                   </Label>
-                  <ComboBox fx:id="cbEntidad" layoutY="33.0" onAction="#cargaOrigenFase" prefHeight="25.0" prefWidth="197.0">
+                  <ComboBox fx:id="cbEntidad" layoutY="33.0" onAction="#loadOrigen" prefHeight="25.0" prefWidth="300.0">
                      <VBox.margin>
                         <Insets left="5.0" right="5.0" />
                      </VBox.margin>
@@ -36,7 +35,7 @@
                         <Insets left="10.0" />
                      </padding>
                   </Label>
-                  <ListView fx:id="lvOrigen" layoutX="-1.0" layoutY="101.0" prefHeight="455.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+                  <ListView fx:id="lvOrigen" layoutX="-1.0" layoutY="101.0" prefHeight="455.0" prefWidth="300.0" VBox.vgrow="ALWAYS" />
                </children>
                <padding>
                   <Insets top="10.0" />
@@ -56,19 +55,22 @@
                   </Label>
                   <HBox spacing="10.0" VBox.vgrow="ALWAYS">
                      <children>
-                        <TableView fx:id="tvFases" layoutX="14.0" layoutY="89.0" prefHeight="122.0" prefWidth="773.0" HBox.hgrow="ALWAYS">
+                        <TableView fx:id="tvFases" layoutX="14.0" layoutY="89.0" prefHeight="200.0" prefWidth="605.0" HBox.hgrow="ALWAYS">
                            <columns>
-                              <TableColumn fx:id="faseCLF" maxWidth="300.0" prefWidth="300.0" resizable="false" text="FASE" />
-                              <TableColumn fx:id="codigoCLF" maxWidth="110.0" prefWidth="110.0" resizable="false" text="CODIGO" />
-                              <TableColumn fx:id="tipoCLF" maxWidth="300.0" prefWidth="300.0" resizable="false" text="TIPO" />
-                              <TableColumn fx:id="diasCLF" maxWidth="60.0" prefWidth="60.0" resizable="false" text="DIAS" />
+                              <TableColumn fx:id="faseCLF" maxWidth="300.0" minWidth="50.0" prefWidth="-1.0" resizable="false" text="FASE" />
+                              <TableColumn fx:id="codigoCLF" maxWidth="300.0" minWidth="50.0" prefWidth="-1.0" resizable="false" text="CODIGO" />
+                              <TableColumn fx:id="tipoCLF" maxWidth="300.0" minWidth="50.0" prefWidth="-1.0" resizable="false" text="TIPO" />
+                              <TableColumn fx:id="diasCLF" maxWidth="300.0" minWidth="50.0" prefWidth="-1.0" resizable="false" text="DIAS" />
                            </columns>
+                           <columnResizePolicy>
+                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
                         </TableView>
                         <VBox prefHeight="200.0" prefWidth="100.0" spacing="10.0" HBox.hgrow="NEVER">
                            <children>
-                              <Button fx:id="btNuevaFase" mnemonicParsing="false" onAction="#nuevaFase" prefHeight="50.0" prefWidth="95.0" text="Nuevo" />
-                              <Button fx:id="btEditarFase" mnemonicParsing="false" onAction="#editaFase" prefHeight="50.0" prefWidth="95.0" text="Editar" />
-                              <Button fx:id="btBorrarFase" mnemonicParsing="false" onAction="#borraFase" prefHeight="50.0" prefWidth="95.0" text="Borrar" />
+                              <Button fx:id="btNuevaFase" mnemonicParsing="false" onAction="#faseNew" prefHeight="50.0" prefWidth="95.0" text="Nuevo" />
+                              <Button fx:id="btEditarFase" mnemonicParsing="false" onAction="#faseEdit" prefHeight="50.0" prefWidth="95.0" text="Editar" />
+                              <Button fx:id="btBorrarFase" mnemonicParsing="false" onAction="#faseDelete" prefHeight="50.0" prefWidth="95.0" text="Borrar" />
                            </children>
                         </VBox>
                      </children>
@@ -109,7 +111,7 @@
                                     <TextArea fx:id="taTexto3" layoutX="64.0" layoutY="238.0" prefHeight="50.0" prefWidth="591.0" />
                                     <HBox alignment="CENTER_RIGHT">
                                        <children>
-                                          <Button fx:id="btGuardarFase" mnemonicParsing="false" onAction="#guardaFase" prefHeight="25.0" prefWidth="95.0" text="Guardar" />
+                                          <Button fx:id="btGuardarFase" mnemonicParsing="false" onAction="#faseSave" prefHeight="25.0" prefWidth="95.0" text="Guardar" />
                                        </children>
                                        <VBox.margin>
                                           <Insets top="10.0" />

@@ -1,4 +1,4 @@
-package datamer.ctrl.ext.script;
+package datamer.ctrl.boes.ext.script;
 
 import java.sql.SQLException;
 import java.util.Date;

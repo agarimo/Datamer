@@ -4,7 +4,6 @@ import datamer.Var;
 import datamer.ctrl.boes.boletines.Archivos;
 import datamer.ctrl.boes.boletines.Estructuras;
 import datamer.ctrl.boes.boletines.Fases;
-import datamer.ctrl.boes.boletines.Limpieza;
 import datamer.ctrl.boes.boletines.Union;
 import datamer.model.boes.ModeloBoletines;
 import datamer.model.boes.enty.Boletin;
@@ -62,18 +61,6 @@ public class BoletinesC implements Initializable {
 
     @FXML
     ProgressBar pbEstado;
-
-    @FXML
-    Button btEliminarBoletin;
-
-    @FXML
-    Button btVerBoletin;
-
-    @FXML
-    Button btVerBoletinWeb;
-
-    @FXML
-    Button btLimpiar;
 
     @FXML
     Button btEstructuras;
@@ -136,10 +123,10 @@ public class BoletinesC implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        initializeTable();
     }
 
-    void iniciaTablaBoletines() {
+    void initializeTable() {
         codigoCLB.setCellValueFactory(new PropertyValueFactory<>("codigo"));
         codigoCLB.setCellFactory(column -> {
             return new TableCell<ModeloBoletines, String>() {
@@ -218,6 +205,14 @@ public class BoletinesC implements Initializable {
                 }
             };
         });
+        
+        codigoCLB.prefWidthProperty().bind(tvBoletines.widthProperty().multiply(0.13));
+        origenCLB.prefWidthProperty().bind(tvBoletines.widthProperty().multiply(0.56));
+        fechaCLB.prefWidthProperty().bind(tvBoletines.widthProperty().multiply(0.1));
+        tipoCLB.prefWidthProperty().bind(tvBoletines.widthProperty().multiply(0.07));
+        faseCLB.prefWidthProperty().bind(tvBoletines.widthProperty().multiply(0.04));
+        estructuraCLB.prefWidthProperty().bind(tvBoletines.widthProperty().multiply(0.116));
+        
 
         boletinesList = FXCollections.observableArrayList();
         tvBoletines.setItems(boletinesList);
@@ -232,6 +227,8 @@ public class BoletinesC implements Initializable {
             aux = (ModeloBoletines) it.next();
             boletinesList.add(aux);
         }
+        
+        lbContador.setText(Integer.toString(boletinesList.size()));
     }
 
     @FXML

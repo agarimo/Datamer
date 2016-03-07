@@ -23,6 +23,7 @@
               <MenuItem mnemonicParsing="false" onAction="#initBoesClasificacion" text="Clasificacion" />
                   <MenuItem mnemonicParsing="false" onAction="#initBoesExt" text="Extracción" />
                   <MenuItem mnemonicParsing="false" onAction="#initBoesFases" text="Fases" />
+                  <MenuItem mnemonicParsing="false" onAction="#initBoesPattern" text="Patrones" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Testra">
@@ -38,7 +39,7 @@
         </menus>
       </MenuBar>
       <TabPane fx:id="tabPane" VBox.vgrow="ALWAYS" />
-      <HBox prefHeight="22.0" prefWidth="1000.0" VBox.vgrow="NEVER">
+      <HBox prefHeight="22.0" prefWidth="1000.0" style="-fx-background-color: linear-gradient(to bottom, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%);" VBox.vgrow="NEVER">
          <children>
             <Label fx:id="leftStatus" alignment="CENTER" prefHeight="20.0" text="Left Status">
                <HBox.margin>
@@ -52,6 +53,9 @@
                </HBox.margin>
             </Label>
          </children>
+         <padding>
+            <Insets top="1.0" />
+         </padding>
       </HBox>
    </children>
 </VBox>

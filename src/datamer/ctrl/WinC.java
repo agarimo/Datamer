@@ -79,4 +79,9 @@ public class WinC implements Initializable {
    void initBoesFases(ActionEvent event){
        addPane(loadPane(Nav.BOES_FASES,"FASES"));
    }
+   
+   @FXML
+   void initBoesPattern(ActionEvent event){
+       addPane(loadPane(Nav.BOES_PATTERN,"PATRONES"));
+   }
 }

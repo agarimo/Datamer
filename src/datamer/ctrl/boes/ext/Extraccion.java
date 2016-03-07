@@ -1,4 +1,4 @@
-package datamer.ctrl.ext;
+package datamer.ctrl.boes.ext;
 
 import datamer.model.boes.enty.Multa;
 import datamer.model.boes.enty.Procesar;

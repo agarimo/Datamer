@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox fx:id="rootPane" alignment="TOP_CENTER" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="datamer.ctrl.boes.PatternC">
+   <children>
+      <DatePicker fx:id="dpFecha" layoutX="413.0" layoutY="14.0" onAction="#cambioEnDatePicker" />
+      <Label fx:id="lbCount" alignment="CENTER" layoutX="30.0" layoutY="47.0" prefHeight="25.0" prefWidth="940.0" text="Se han cargado 15000 multas" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="47.0" />
+      <GridPane layoutX="30.0" layoutY="58.0" prefHeight="450.0" prefWidth="940.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="80.0">
+         <children>
+            <TableView fx:id="tvNif" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
+               <columnResizePolicy>
+                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+               </columnResizePolicy>
+               <columns>
+                  <TableColumn fx:id="idNifCL" prefWidth="75.0" text="BOLETIN" />
+                  <TableColumn fx:id="nifCL" prefWidth="75.0" text="NIF" />
+               </columns>
+               <contextMenu>
+                  <ContextMenu>
+                     <items>
+                        <MenuItem mnemonicParsing="false" onAction="#verBoletinNif" text="Ver Boletin" />
+                     </items>
+                  </ContextMenu>
+               </contextMenu>
+            </TableView>
+            <TableView fx:id="tvMat" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <columnResizePolicy>
+                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+               </columnResizePolicy>
+               <columns>
+                  <TableColumn fx:id="idMatCL" prefWidth="75.0" text="BOLETIN" />
+                  <TableColumn fx:id="matCL" prefWidth="75.0" text="MATRICULA" />
+               </columns>
+               <contextMenu>
+                  <ContextMenu>
+                     <items>
+                        <MenuItem mnemonicParsing="false" onAction="#verBoletinMat" text="Ver Boletin" />
+                     </items>
+                  </ContextMenu>
+               </contextMenu>
+            </TableView>
+            <Label alignment="CENTER" prefHeight="17.0" prefWidth="800.0" text="NIF">
+               <font>
+                  <Font name="System Bold" size="17.0" />
+               </font>
+            </Label>
+            <Label alignment="CENTER" prefHeight="17.0" prefWidth="800.0" text="MATRICULA" GridPane.columnIndex="1">
+               <font>
+                  <Font name="System Bold" size="17.0" />
+               </font>
+            </Label>
+            <Label fx:id="lbConPatronNif" text="Cumplen el patrón: " GridPane.rowIndex="2" />
+            <Label fx:id="lbSinPatronNif" text="Sin patrón: " GridPane.rowIndex="3" />
+            <Label fx:id="lbPorcentajeNif" text="Porcentaje con patrón: " GridPane.rowIndex="4" />
+            <Label fx:id="lbConPatronMat" text="Cumplen el patrón: " GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Label fx:id="lbSinPatronMat" text="Sin patrón: " GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <Label fx:id="lbPorcentajeMat" text="Porcentaje con patrón: " GridPane.columnIndex="1" GridPane.rowIndex="4" />
+         </children>
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints maxHeight="337.0" minHeight="0.0" prefHeight="41.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="370.0" minHeight="10.0" prefHeight="324.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="202.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="202.0" minHeight="10.0" prefHeight="34.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="202.0" minHeight="10.0" prefHeight="33.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+      </GridPane>
+   </children>
+   <padding>
+      <Insets bottom="10.0" left="10.0" right="10.0" top="20.0" />
+   </padding>
+</VBox>

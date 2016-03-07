@@ -1,4 +1,4 @@
-package datamer.ctrl.ext.script;
+package datamer.ctrl.boes.ext.script;
 
 import java.sql.SQLException;
 import java.util.Iterator;
@@ -7,25 +7,26 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import datamer.Var;
 import datamer.ctrl.boes.Query;
-import datamer.model.boes.enty.OrigenArticulo;
+import datamer.model.boes.enty.OrigenFase;
 import util.Sql;
 
 /**
  *
  * @author Agarimo
  */
-public class ScriptArticulo {
+public final class ScriptFase {
 
-    private List<OrigenArticulo> list;
+    private List<OrigenFase> list;
+    
 
-    public ScriptArticulo() {
-        list = Query.listaOrigenArticulo();
+    public ScriptFase() {
+        list = Query.listaOrigenFase();
     }
 
     public void run() {
-        OrigenArticulo aux;
-        Iterator<OrigenArticulo> it = list.iterator();
         Sql bd;
+        OrigenFase aux;
+        Iterator<OrigenFase> it = list.iterator();
 
         try {
             bd = new Sql(Var.con);
@@ -34,10 +35,10 @@ public class ScriptArticulo {
                 aux = it.next();
                 bd.ejecutar(aux.SQLScript());
             }
-
+            
             bd.close();
         } catch (SQLException ex) {
-            Logger.getLogger(ScriptArticulo.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ScriptFase.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

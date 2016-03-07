@@ -22,6 +22,7 @@ import datamer.model.boes.enty.Origen;
 import datamer.model.boes.enty.OrigenArticulo;
 import datamer.model.boes.enty.OrigenExpediente;
 import datamer.model.boes.enty.OrigenFase;
+import datamer.model.boes.enty.Pattern;
 import datamer.model.boes.enty.Procesar;
 import datamer.model.boes.enty.StrucData;
 import datamer.model.boes.enty.Tipo;
@@ -35,7 +36,7 @@ import util.Varios;
  * @author Agarimo
  */
 public class Query extends util.Query {
-    
+
     public static void eliminaBoletin(String codigo) {
         try {
             bd = new Sql(Var.con);
@@ -750,7 +751,7 @@ public class Query extends util.Query {
         }
         return list;
     }
-    
+
     public static List<Origen> listaOrigenFases(int id) {
         String query = "SELECT * FROM " + Var.dbNameBoes + ".origen where idEntidad=" + id + " order by nombre";
         List list = new ArrayList();
@@ -774,8 +775,8 @@ public class Query extends util.Query {
         }
         return list;
     }
-    
-    public static List<Entidad> listaEntidadFases(){
+
+    public static List<Entidad> listaEntidadFases() {
         String query = "SELECT * FROM " + Var.dbNameBoes + ".entidad order by nombre";
         List list = new ArrayList();
         Entidad aux;
@@ -798,8 +799,8 @@ public class Query extends util.Query {
         }
         return list;
     }
-    
-    public static List<Tipo> listaTipoFases(){
+
+    public static List<Tipo> listaTipoFases() {
         String query = "SELECT * FROM " + Var.dbNameBoes + ".tipo where tipo=0";
         List list = new ArrayList();
         Tipo aux;
@@ -822,7 +823,7 @@ public class Query extends util.Query {
         }
         return list;
     }
-    
+
     public static List<ModeloFases> listaModeloFases(int id) {
         String query = "SELECT * FROM " + Var.dbNameBoes + ".fase where idOrigen=" + id;
         List list = new ArrayList();
@@ -852,7 +853,7 @@ public class Query extends util.Query {
         }
         return list;
     }
-    
+
     public static List listaProcesarPendiente(Date fecha) {
         List list = new ArrayList();
         String query = "select a.id,a.codigo,b.link,a.isEstructura from boes.boletin a "
@@ -860,7 +861,7 @@ public class Query extends util.Query {
                 + "where a.idBoe=(select id from boes.boe where fecha=" + Varios.entrecomillar(Dates.imprimeFecha(fecha)) + ") "
                 + "and a.id not in (select id from boes.procesar)";
         Procesar aux;
-        
+
         try {
             bd = new Sql(Var.con);
             rs = bd.ejecutarQueryRs(query);
@@ -883,11 +884,11 @@ public class Query extends util.Query {
         }
         return list;
     }
-    
+
     public static List<Estructura> listaEstructuras(String query) {
         List<Estructura> list = new ArrayList();
         Estructura aux;
-        
+
         try {
             bd = new Sql(Var.con);
             rs = bd.ejecutarQueryRs(query);
@@ -904,15 +905,15 @@ public class Query extends util.Query {
         }
         return list;
     }
-    
+
     public static Origen getOrigen(int id) {
         Origen aux = null;
         String query = "SELECT * from " + Var.dbNameBoes + ".origen where id=" + id;
-        
+
         try {
             bd = new Sql(Var.con);
             rs = bd.ejecutarQueryRs(query);
-            
+
             if (rs.next()) {
                 aux = new Origen();
                 aux.setId(rs.getInt("id"));
@@ -932,11 +933,11 @@ public class Query extends util.Query {
         }
         return aux;
     }
-    
-     public static List<Fase> listaFase(String query) {
+
+    public static List<Fase> listaFase(String query) {
         List list = new ArrayList();
         Fase aux;
-        
+
         try {
             bd = new Sql(Var.con);
             rs = bd.ejecutarQueryRs(query);
@@ -965,7 +966,7 @@ public class Query extends util.Query {
     public static List<Fase> listaFaseTestra(String query) {
         List list = new ArrayList();
         Fase aux;
-        
+
         try {
             bd = new Sql(Var.con);
             rs = bd.ejecutarQueryRs(query);
@@ -990,7 +991,7 @@ public class Query extends util.Query {
         }
         return list;
     }
-    
+
     public static void eliminaBoletinFase(String codigo) {
         try {
             bd = new Sql(Var.con);
@@ -1001,5 +1002,51 @@ public class Query extends util.Query {
             error(ex.getMessage());
             Logger.getLogger(Query.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    public static List<Pattern> listaPattern(Date fecha) {
+        String query = "SELECT * FROM " + Var.dbNameBoes + ".vista_pattern where fechaPublicacion=" + Varios.entrecomillar(Dates.imprimeFecha(fecha));
+        List list = new ArrayList();
+        Pattern aux;
+
+        try {
+            bd = new Sql(Var.con);
+            rs = bd.ejecutarQueryRs(query);
+
+            while (rs.next()) {
+                aux = new Pattern();
+                aux.setCodigo(rs.getString("codigo"));
+                aux.setNif(rs.getString("nif"));
+                aux.setMatricula(rs.getString("matricula"));
+                list.add(aux);
+            }
+            rs.close();
+            bd.close();
+        } catch (SQLException ex) {
+            error(ex.getMessage());
+            Logger.getLogger(Query.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return list;
+    }
+    
+     public static String getLink(String codigo) {
+        String query = "SELECT link FROM "+Var.dbNameBoes+".descarga where codigo=" + Varios.entrecomillar(codigo);
+        String aux = null;
+        
+        try {
+            bd = new Sql(Var.con);
+            rs = bd.ejecutarQueryRs(query);
+            
+            while (rs.next()) {
+                aux = rs.getString("link");
+            }
+            
+            rs.close();
+            bd.close();
+        } catch (SQLException ex) {
+            error(ex.getMessage());
+            Logger.getLogger(Query.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return aux;
     }
 }

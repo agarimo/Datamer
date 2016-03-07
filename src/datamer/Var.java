@@ -79,6 +79,12 @@ public class Var {
     public static boolean boesIsClasificando;
     
     /**
+     * TKM
+     */
+    
+    public static String dbNameTkm = "tkm";
+    
+    /**
      * TESTRA
      */
     

@@ -220,7 +220,7 @@ public class BoletinesC implements Initializable {
     
     void cargaDatosTablaBoletines(Date fecha) {
         ModeloBoletines aux;
-        String query = "SELECT * FROM " + Var.dbNameBoes + ".vista_boletines where fecha=" + Varios.entrecomillar(Dates.imprimeFecha(fecha));
+        String query = "SELECT * FROM " + Var.dbNameBoes + ".vista_boletines where fecha=" + Varios.entrecomillar(Dates.imprimeFecha(fecha))+" order by codigo";
         Iterator it = Query.listaModeloBoletines(query).iterator();
 
         while (it.hasNext()) {

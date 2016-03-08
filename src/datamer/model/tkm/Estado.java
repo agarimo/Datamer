@@ -6,21 +6,22 @@ package datamer.model.tkm;
  */
 public enum Estado {
 
-    CONTRATO(0),
-    INTERESADO(1),
-    NO_INTERESADO(2),
-    ENVIADA_INFO(3),
-    VOLVER_LLAMAR(4),
-    DEJADO_MSG(5),
-    SOCIO_OTRA_DELEGACION(6),
-    NO_CONTESTA(7),
-    NO_LLAMAR(8),
-    EMPRESA_CERRADA(9),
-    OTRA_CIA(10),
-    BAJA_CONTRATO(11),
-    TELF_ERROR(12),
-    INFORMADO(13),
-    TELF_NO_LOCALIZADO(14);
+    SIN_ASIGNAR(0),
+    CONTRATO(1),
+    INTERESADO(2),
+    NO_INTERESADO(3),
+    ENVIADA_INFO(4),
+    VOLVER_LLAMAR(5),
+    DEJADO_MSG(6),
+    SOCIO_OTRA_DELEGACION(7),
+    NO_CONTESTA(8),
+    NO_LLAMAR(9),
+    EMPRESA_CERRADA(10),
+    OTRA_CIA(11),
+    BAJA_CONTRATO(12),
+    TELF_ERROR(13),
+    INFORMADO(14),
+    TELF_NO_LOCALIZADO(15);
 
     private final int value;
 
@@ -35,6 +36,8 @@ public enum Estado {
     @Override
     public String toString() {
         switch (this) {
+            case SIN_ASIGNAR:
+                return "Sin asignar";
             case CONTRATO:
                 return "Contrato";
             case INTERESADO:

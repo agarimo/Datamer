@@ -84,4 +84,9 @@ public class WinC implements Initializable {
    void initBoesPattern(ActionEvent event){
        addPane(loadPane(Nav.BOES_PATTERN,"PATRONES"));
    }
+   
+   @FXML
+   void initTelemark (ActionEvent event){
+       addPane(loadPane(Nav.TELEMARK,"TELEMÁRKETING"));
+   }
 }

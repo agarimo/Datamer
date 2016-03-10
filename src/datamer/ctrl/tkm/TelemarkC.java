@@ -1,13 +1,17 @@
 package datamer.ctrl.tkm;
 
+import datamer.model.tkm.Estado;
 import datamer.model.tkm.enty.Cliente;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
@@ -41,6 +45,9 @@ public class TelemarkC implements Initializable {
     private Button btNewCliente;
 
     @FXML
+    private Button btEditCliente;
+
+    @FXML
     private Button btDeleteCliente;
 
     /**
@@ -49,6 +56,8 @@ public class TelemarkC implements Initializable {
     private int tipoBusqueda;
     private final int VIEW_PANE = 1;
     private final int NEW_PANE = 2;
+
+    ObservableList<Estado> comboEstado;
 
     /**
      * Initializes the controller class.
@@ -62,15 +71,23 @@ public class TelemarkC implements Initializable {
         newPane.setVisible(false);
         rbCif.setSelected(true);
         tipoBusqueda = 0;
+        btEditCliente.setDisable(true);
+        btDeleteCliente.setDisable(true);
+        comboEstado = FXCollections.observableArrayList();
+        comboEstado.addAll(Estado.values());
+
         initializeNew();
         initializeView();
+
     }
 
     private void showPane(int pane) {
+        System.out.println("Showing pane: " + pane);
         switch (pane) {
             case 0:
                 vistaPane.setVisible(false);
                 newPane.setVisible(false);
+                break;
             case 1:
                 vistaPane.setVisible(true);
                 newPane.setVisible(false);
@@ -85,11 +102,17 @@ public class TelemarkC implements Initializable {
     @FXML
     void showPaneView(ActionEvent event) {
         showPane(VIEW_PANE);
+        btNewCliente.setDisable(false);
+        btEditCliente.setDisable(false);
+        btDeleteCliente.setDisable(false);
     }
 
     @FXML
     void showPaneNew(ActionEvent event) {
         showPane(NEW_PANE);
+        btNewCliente.setDisable(true);
+        btEditCliente.setDisable(true);
+        btDeleteCliente.setDisable(true);
     }
 
     @FXML
@@ -105,8 +128,50 @@ public class TelemarkC implements Initializable {
     //<editor-fold defaultstate="collapsed" desc="VIEW_PANE">
     @FXML
     private VBox vistaPane;
-    
+
+    @FXML
+    private TextField tfNombre;
+
+    @FXML
+    private TextField tfCif;
+
+    @FXML
+    private ComboBox cbEstado;
+
+    @FXML
+    private TextField tfTelf;
+
+    @FXML
+    private TextField tfContacto;
+
+    @FXML
+    private TextField tfMail;
+
+    @FXML
+    private ListView lvNotas;
+
+    @FXML
+    private TextField tfNewNota;
+
+    @FXML
+    private Button btAgregar;
+
     private void initializeView() {
+        cbEstado.setItems(comboEstado);
+        setViewEditable(false);
+    }
+
+    private void setViewEditable(boolean aux) {
+        tfNombre.setEditable(aux);
+        tfCif.setEditable(aux);
+        cbEstado.setEditable(aux);
+        tfTelf.setEditable(aux);
+        tfContacto.setEditable(aux);
+        tfMail.setEditable(aux);
+    }
+
+    @FXML
+    void newNota(ActionEvent event) {
 
     }
 
@@ -140,30 +205,37 @@ public class TelemarkC implements Initializable {
     private Button btNewGuardar;
 
     private void initializeNew() {
-
+        cbNewEstado.setItems(comboEstado);
+        cbNewEstado.getSelectionModel().select(0);
     }
 
     @FXML
     void cancelarNew(ActionEvent event) {
         clearNewData();
         showPane(0);
+        btNewCliente.setDisable(false);
     }
 
     @FXML
     void guardarNew(ActionEvent event) {
-         
+        getNewData().SQLGuardar();
+        clearNewData();
+        showPane(0);
+        btNewCliente.setDisable(false);
     }
 
     private Cliente getNewData() {
+        Estado estado;
         Cliente aux = new Cliente();
-        
+
         aux.setCif(tfNewCif.getText().trim().toUpperCase());
         aux.setNombre(tfNewNombre.getText().trim().toUpperCase());
-//        aux.setEstado(cbNewEstado.getSelectionModel().getSelectedItem());
+        estado = (Estado) cbNewEstado.getSelectionModel().getSelectedItem();
+        aux.setEstado(estado.getValue());
         aux.setTelefono(tfNewTelf.getText().trim().toUpperCase());
         aux.setContacto(tfNewContacto.getText().trim().toUpperCase());
         aux.setMail(tfNewMail.getText().trim().toUpperCase());
-        
+
         return aux;
     }
 
@@ -176,5 +248,4 @@ public class TelemarkC implements Initializable {
         tfNewMail.setText("");
     }
 //</editor-fold>
-
 }

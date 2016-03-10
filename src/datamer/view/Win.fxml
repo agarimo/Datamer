@@ -31,10 +31,10 @@
               <MenuItem mnemonicParsing="false" onAction="#initTestra" text="Inicia Testra" />
             </items>
           </Menu>
-            <Menu mnemonicParsing="false" text="Sanciones">
+            <Menu mnemonicParsing="false" text="Telemarketing">
               <items>
                 <MenuItem mnemonicParsing="false" text="Consulta IDBL" />
-                  <MenuItem mnemonicParsing="false" onAction="#initTelemark" text="Telemarketing" />
+                  <MenuItem mnemonicParsing="false" onAction="#initTelemark" text="Clientes" />
               </items>
             </Menu>
         </menus>

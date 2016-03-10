@@ -1,6 +1,12 @@
 package datamer.model.tkm.enty;
 
+import datamer.Var;
+import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import util.Sql;
+import util.Varios;
 
 /**
  *
@@ -16,9 +22,9 @@ public class Cliente {
     private String contacto;
     private String mail;
     private List comentarios;
-    
-    public Cliente(){
-        
+
+    public Cliente() {
+
     }
 
     public int getId() {
@@ -83,5 +89,26 @@ public class Cliente {
 
     public void setComentarios(List comentarios) {
         this.comentarios = comentarios;
+    }
+
+    public String SQLCrear() {
+        return "INSERT into " + Var.dbNameTkm + ".cliente (estado,cif,nombre,telefono,contacto,mail) values("
+                + this.estado + ","
+                + Varios.entrecomillar(this.cif) + ","
+                + Varios.entrecomillar(this.nombre) + ","
+                + Varios.entrecomillar(this.telefono) + ","
+                + Varios.entrecomillar(this.contacto) + ","
+                + Varios.entrecomillar(this.mail)
+                + ");";
+    }
+
+    public void SQLGuardar() {
+        try {
+            Sql bd = new Sql(Var.con);
+            bd.ejecutar(this.SQLCrear());
+            bd.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

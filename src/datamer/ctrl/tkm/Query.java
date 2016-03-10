@@ -43,7 +43,7 @@ public class Query extends util.Query{
     }
     
     public static List<String> listaComentarios(int id) {
-        String query = "SELECT * FROM " + Var.dbNameTkm + ".comentario where id_cliente="+id;
+        String query = "SELECT * FROM " + Var.dbNameTkm + ".comentario where id_cliente="+id+" group by fecha";
         List<String> list = new ArrayList();
         String aux;
 

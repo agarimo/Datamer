@@ -2,7 +2,10 @@ package datamer.ctrl.tkm;
 
 import datamer.model.tkm.Estado;
 import datamer.model.tkm.enty.Cliente;
+import datamer.model.tkm.enty.Comentario;
+import java.io.File;
 import java.net.URL;
+import java.util.Iterator;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,6 +18,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+import util.LoadFile;
 
 /**
  * FXML Controller class
@@ -174,8 +178,8 @@ public class TelemarkC implements Initializable {
     void newNota(ActionEvent event) {
 
     }
-
 //</editor-fold>
+
     //<editor-fold defaultstate="collapsed" desc="NEW_PANE">
     @FXML
     private VBox newPane;

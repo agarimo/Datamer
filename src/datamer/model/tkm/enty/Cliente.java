@@ -21,7 +21,7 @@ public class Cliente {
     private String telefono;
     private String contacto;
     private String mail;
-    private List comentarios;
+    private List<Comentario> comentarios;
 
     public Cliente() {
 
@@ -102,13 +102,18 @@ public class Cliente {
                 + ");";
     }
 
-    public void SQLGuardar() {
+    public int SQLGuardar() {
         try {
+            int idBd;
             Sql bd = new Sql(Var.con);
             bd.ejecutar(this.SQLCrear());
+            idBd=bd.ultimoRegistro();
             bd.close();
+            
+            return idBd;
         } catch (SQLException ex) {
             Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
+            return -1;
         }
     }
 }

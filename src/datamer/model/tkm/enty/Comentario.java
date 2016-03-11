@@ -1,6 +1,10 @@
 package datamer.model.tkm.enty;
 
 import datamer.Var;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import util.Sql;
 import util.Varios;
 
 /**
@@ -47,5 +51,15 @@ public class Comentario {
                 + Varios.entrecomillar(this.comentario) + ","
                 + "CURDATE()"
                 + ");";
+    }
+    
+    public void SQLGuardar() {
+        try {
+            Sql bd = new Sql(Var.con);
+            bd.ejecutar(this.SQLCrear());
+            bd.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

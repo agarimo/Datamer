@@ -72,5 +72,4 @@ public enum Estado {
                 throw new IllegalArgumentException();
         }
     }
-
 }

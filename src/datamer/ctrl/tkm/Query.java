@@ -15,6 +15,17 @@ import util.Sql;
  */
 public class Query extends util.Query{
     
+    public static void ejecutar(String query){
+        try {
+            bd = new Sql(Var.con);
+            bd.ejecutar(query);
+            bd.close();
+        } catch (SQLException ex) {
+            error(ex.getMessage());
+            Logger.getLogger(Query.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     public static Cliente getCliente(String query) {
         Cliente aux = null;
 
@@ -41,9 +52,9 @@ public class Query extends util.Query{
         }
         return aux;
     }
-    
+
     public static List<String> listaComentarios(int id) {
-        String query = "SELECT * FROM " + Var.dbNameTkm + ".comentario where id_cliente="+id+" group by fecha";
+        String query = "SELECT * FROM " + Var.dbNameTkm + ".comentario where id_cliente="+id+" order by fecha";
         List<String> list = new ArrayList();
         String aux;
 

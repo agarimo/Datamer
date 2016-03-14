@@ -87,6 +87,6 @@ public class WinC implements Initializable {
    
    @FXML
    void initTelemark (ActionEvent event){
-       addPane(loadPane(Nav.TELEMARK,"TELEMÁRKETING"));
+       addPane(loadPane(Nav.TELEMARK,"CLIENTES"));
    }
 }

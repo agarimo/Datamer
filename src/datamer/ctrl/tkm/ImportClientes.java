@@ -138,7 +138,7 @@ public class ImportClientes {
             Comentario com = new Comentario();
             com.setIdCliente(idCliente);
             com.setComentario(sb.toString());
-            com.SQLGuardar();
+            Query.ejecutar(com.SQLCrear());
         }
     }
 }

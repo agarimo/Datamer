@@ -20,6 +20,11 @@ public class Comentario {
     public Comentario(){
         
     }
+    
+    public Comentario (int idCliente, String comentario){
+        this.idCliente=idCliente;
+        this.comentario=comentario;
+    }
 
     public int getId() {
         return id;
@@ -51,15 +56,5 @@ public class Comentario {
                 + Varios.entrecomillar(this.comentario) + ","
                 + "CURDATE()"
                 + ");";
-    }
-    
-    public void SQLGuardar() {
-        try {
-            Sql bd = new Sql(Var.con);
-            bd.ejecutar(this.SQLCrear());
-            bd.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 }

@@ -91,6 +91,14 @@ public class Cliente {
         this.comentarios = comentarios;
     }
 
+    public static String SQLBuscarCif(String aux) {
+        return "SELECT * FROM " + Var.dbNameTkm + ".cliente WHERE cif=" + Varios.entrecomillar(aux);
+    }
+
+    public static String SQLBuscarTelf(String aux) {
+        return "SELECT * FROM " + Var.dbNameTkm + ".cliente WHERE telefono=" + Varios.entrecomillar(aux);
+    }
+
     public String SQLCrear() {
         return "INSERT into " + Var.dbNameTkm + ".cliente (estado,cif,nombre,telefono,contacto,mail) values("
                 + this.estado + ","
@@ -102,14 +110,28 @@ public class Cliente {
                 + ");";
     }
 
+    public String SQLEditar() {
+        return "UPDATE " + Var.dbNameTkm + ".cliente SET "
+                + "nombre=" + Varios.entrecomillar(this.nombre) + ","
+                + "estado=" + this.estado + ","
+                + "telefono=" + Varios.entrecomillar(this.telefono) + ","
+                + "contacto=" + Varios.entrecomillar(this.contacto) + ","
+                + "mail=" + Varios.entrecomillar(this.mail) + " "
+                + "WHERE id=" + this.id;
+    }
+    
+    public String SQLEliminar(){
+        return "DELETE FROM "+Var.dbNameTkm+".cliente WHERE id="+this.id;
+    }
+
     public int SQLGuardar() {
         try {
             int idBd;
             Sql bd = new Sql(Var.con);
             bd.ejecutar(this.SQLCrear());
-            idBd=bd.ultimoRegistro();
+            idBd = bd.ultimoRegistro();
             bd.close();
-            
+
             return idBd;
         } catch (SQLException ex) {
             Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);

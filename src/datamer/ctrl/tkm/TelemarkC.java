@@ -4,13 +4,13 @@ import datamer.model.tkm.Estado;
 import datamer.model.tkm.enty.Cliente;
 import datamer.model.tkm.enty.Comentario;
 import java.net.URL;
-import java.util.List;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListCell;
@@ -20,6 +20,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
+import util.CalculaNif;
 
 /**
  * FXML Controller class
@@ -117,7 +118,8 @@ public class TelemarkC implements Initializable {
 
     @FXML
     void buscar(ActionEvent event) {
-        String aux = tfBuscar.getText().toUpperCase().trim();
+//        String aux = tfBuscar.getText().toUpperCase().trim();
+        String aux = getBusqueda();
 
         switch (tipoBusqueda) {
             case 0:
@@ -128,18 +130,59 @@ public class TelemarkC implements Initializable {
                 break;
         }
 
-        showCliente(cliente);
-        showNotas(cliente.getId());
+        if (cliente != null) {
+            showCliente(cliente);
+            showNotas(cliente.getId());
 
-        showPane(VIEW_PANE);
-        btNewCliente.setDisable(false);
-        btEditCliente.setDisable(false);
-        btDeleteCliente.setDisable(false);
-        tfBuscar.setText("");
+            showPane(VIEW_PANE);
+            btNewCliente.setDisable(false);
+            btEditCliente.setDisable(false);
+            btDeleteCliente.setDisable(false);
+            tfBuscar.setText("");
+        } else {
+            tfBuscar.setText("");
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("INFORMACIÓN");
+            alert.setHeaderText("ENTRADA SIN REGISTROS.");
+            switch (tipoBusqueda) {
+                case 0:
+                    alert.setContentText("No existe ningún registro para el CIF : " + aux);
+                    break;
+                case 1:
+                    alert.setContentText("No existe ningún registro para el TELÉFONO : " + aux);
+                    break;
+            }
+            alert.showAndWait();
+        }
     }
 
-    private String checkNif(String aux) {
-        return "";
+    private String getBusqueda() {
+        String aux = tfBuscar.getText().toUpperCase().trim();
+
+        if (tipoBusqueda == 0) {
+            return checkNif(aux);
+        } else {
+            return aux;
+        }
+    }
+    
+    private String checkNif(String aux){
+        CalculaNif cn = new CalculaNif();
+
+            if (cn.letrasCif.contains("" + aux.charAt(0))) {
+                if (aux.length() == 8) {
+                    aux = cn.calcular(aux);
+                }
+            } else if (cn.letrasNie.contains("" + aux.charAt(0))) {
+                if (aux.length() <= 8) {
+                    aux = cn.calcular(aux);
+                }
+            } else {
+                if (aux.length() <= 8) {
+                    aux = cn.calcular(aux);
+                }
+            }
+            return aux;
     }
 
     @FXML
@@ -289,6 +332,7 @@ public class TelemarkC implements Initializable {
         String aux = tfNewNota.getText().toUpperCase().trim();
         Comentario com = new Comentario(cliente.getId(), aux);
         Query.ejecutar(com.SQLCrear());
+        tfNewNota.setText("");
         showNotas(cliente.getId());
     }
 
@@ -350,7 +394,7 @@ public class TelemarkC implements Initializable {
         Estado estado;
         Cliente aux = new Cliente();
 
-        aux.setCif(tfNewCif.getText().trim().toUpperCase());
+        aux.setCif(checkNif(tfNewCif.getText().trim().toUpperCase()));
         aux.setNombre(tfNewNombre.getText().trim().toUpperCase());
         estado = (Estado) cbNewEstado.getSelectionModel().getSelectedItem();
         aux.setEstado(estado.getValue());

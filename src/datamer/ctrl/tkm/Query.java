@@ -54,7 +54,7 @@ public class Query extends util.Query{
     }
 
     public static List<String> listaComentarios(int id) {
-        String query = "SELECT * FROM " + Var.dbNameTkm + ".comentario where id_cliente="+id+" order by fecha";
+        String query = "SELECT * FROM " + Var.dbNameTkm + ".comentario where id_cliente="+id+" order by id desc";
         List<String> list = new ArrayList();
         String aux;
 
@@ -63,7 +63,8 @@ public class Query extends util.Query{
             rs = bd.ejecutarQueryRs(query);
 
             while (rs.next()) {
-                aux = rs.getString("comentario");
+                aux= "["+rs.getString("fecha")+"] - ";
+                aux = aux + rs.getString("comentario");
                 list.add(aux);
             }
             rs.close();

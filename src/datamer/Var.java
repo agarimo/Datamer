@@ -27,6 +27,8 @@ import com.sun.javafx.application.HostServicesDelegate;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.stage.Stage;
@@ -56,7 +58,6 @@ public class Var {
 //    public static String dbName = "idbl";
 
 //    public static String dbNameStats = "idbl_stats";
-
     public static boolean modoAdmin;
     public static String passwordAdmin;
     public static String queryLimit;
@@ -77,23 +78,31 @@ public class Var {
 
     public static boolean boesIsDownloading;
     public static boolean boesIsClasificando;
-    
+
     /**
      * TKM
      */
-    
     public static String dbNameTkm = "tkm";
-    
+
     /**
      * TESTRA
      */
-    
     public static String dbNameTestra = "datagest";
+    public static List<String> strucFecha;
+    public static File fichero;
+    public static File temporal;
+    
+    /**
+     * IDBL
+     */
+    
+    public static String dbNameIdbl = "idbl";
 
     public static void initVar() {
         initVarDriver();
         initVarLoadConfig();
         initVarFiles();
+        initVarStrucFecha();
         boesIsClasificando = false;
         boesIsDownloading = false;
     }
@@ -107,6 +116,8 @@ public class Var {
     }
 
     private static void initVarFiles() {
+        fichero = new File(new File("data"), "testraData");
+        temporal = new File(new File("data"), "temp.txt");
         ficheroPdf = new File(new File("data"), "pdfData");
         ficheroTxt = new File(new File("data"), "txtData");
         ficheroEx = new File(new File("data"), "exData");
@@ -118,14 +129,33 @@ public class Var {
         if (!ficheroTxt.exists()) {
             ficheroTxt.mkdirs();
         }
-        
+
         if (!ficheroEx.exists()) {
             ficheroEx.mkdirs();
         }
-        
+
         if (!ficheroUnion.exists()) {
             ficheroUnion.mkdirs();
         }
+
+        if (!fichero.exists()) {
+            fichero.mkdirs();
+        }
+        try {
+            temporal.createNewFile();
+        } catch (IOException ex) {
+            Logger.getLogger(Var.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private static void initVarStrucFecha() {
+        strucFecha = new ArrayList();
+
+        strucFecha.add("dd-MM-yyyy");
+        strucFecha.add("dd/MM/yyyy");
+        strucFecha.add("dd-MM-yy");
+        strucFecha.add("dd/MM/yy");
+
     }
 
     private static void initVarLoadConfig() {

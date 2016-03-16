@@ -56,8 +56,8 @@ public class WinC implements Initializable {
     }
 
     @FXML
-    void initTestra(ActionEvent event) {
-//        addPane(loadPane(Nav.BOES_CLASIFICACION));
+    void initCruceTestra(ActionEvent event) {
+        addPane(loadPane(Nav.TESTRA_CRUCE,"CRUCE TESTRA"));
     }
     
     @FXML

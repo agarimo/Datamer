@@ -27,12 +27,13 @@ public class Datamer extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
+        Var.stage=stage;
         Parent root = FXMLLoader.load(getClass().getResource("/datamer/view/Win.fxml"));
 
         Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.setMaximized(true);
-        stage.show();
+        Var.stage.setScene(scene);
+        Var.stage.setMaximized(true);
+        Var.stage.show();
     }
 
     /**

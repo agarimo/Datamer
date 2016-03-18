@@ -28,9 +28,8 @@
           </Menu>
           <Menu mnemonicParsing="false" text="Testra">
             <items>
-              <MenuItem mnemonicParsing="false" onAction="#initCruceTestra" text="Cruce Testra" />
-                  <MenuItem mnemonicParsing="false" text="Capturador" />
-                  <MenuItem mnemonicParsing="false" text="Descarga Testra" />
+              <MenuItem mnemonicParsing="false" onAction="#initCruceTestra" text="Cruce" />
+                  <MenuItem mnemonicParsing="false" onAction="#initCapturador" text="Captura" />
             </items>
           </Menu>
             <Menu mnemonicParsing="false" text="Telemarketing">

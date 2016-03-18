@@ -10,7 +10,7 @@ import datamer.model.testra.Estado;
 import datamer.model.testra.TipoCruce;
 import datamer.model.testra.enty.Cruce;
 import datamer.model.testra.enty.Descarga;
-import datamer.model.testra.enty.Multa;
+import datamer.model.testra.enty.CruceTestra;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
@@ -231,12 +231,12 @@ public class CruceC implements Initializable {
             });
 
             Sql bd;
-            Multa multa = null;
+            CruceTestra multa = null;
             List<String> lista = procesoManual.getValid();
-            List<Multa> list = new ArrayList();
+            List<CruceTestra> list = new ArrayList();
 
             for (String aux : lista) {
-                multa = new Multa();
+                multa = new CruceTestra();
                 multa.setCodigoBoletin(procesoManual.getCodigo());
                 multa.setFechaPublicacion(procesoManual.getFecha());
                 multa.setLinea(aux);
@@ -501,10 +501,10 @@ public class CruceC implements Initializable {
                 mostrarPanel(this.PANEL_ESPERA);
             });
 
-            Multa multa;
+            CruceTestra multa;
             StringBuilder sb = new StringBuilder();
-            List<Multa> list = Query.listaMulta(Multa.SQLBuscar(fecha));
-            Iterator<Multa> it = list.iterator();
+            List<CruceTestra> list = Query.listaMulta(CruceTestra.SQLBuscar(fecha));
+            Iterator<CruceTestra> it = list.iterator();
 
             while (it.hasNext()) {
                 multa = it.next();
@@ -850,7 +850,7 @@ public class CruceC implements Initializable {
                 if (datos.contains("*error*")) {
                     Query.setEstadoDescarga(mt.getId(), Estado.CON_ERRORES);
                 } else {
-                    List<Multa> listado = splitMultas(mt, datos);
+                    List<CruceTestra> listado = splitMultas(mt, datos);
 
                     if (!listado.isEmpty()) {
 
@@ -1013,16 +1013,16 @@ public class CruceC implements Initializable {
         lbInvalid.setText(Integer.toString(procesoManual.invalidCount()));
     }
 
-    private List<Multa> splitMultas(ModeloTabla aux, String datos) {
-        List<Multa> list = new ArrayList();
-        Multa multa;
+    private List<CruceTestra> splitMultas(ModeloTabla aux, String datos) {
+        List<CruceTestra> list = new ArrayList();
+        CruceTestra multa;
         String[] split = datos.split(System.lineSeparator());
 
         System.out.println(aux.getCodigo());
 
         for (String split1 : split) {
             if (!split1.equals("")) {
-                multa = new Multa();
+                multa = new CruceTestra();
                 multa.setCodigoBoletin(aux.getCodigo());
                 multa.setFechaPublicacion(aux.getFecha());
                 multa.setLinea(split1);

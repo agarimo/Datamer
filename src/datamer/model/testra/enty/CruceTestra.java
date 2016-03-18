@@ -14,7 +14,7 @@ import util.Varios;
  *
  * @author Agarimo
  */
-public class Multa {
+public class CruceTestra {
 
     int id;
     String fechaPublicacion;
@@ -28,7 +28,7 @@ public class Multa {
     String matricula;
     String linea;
 
-    public Multa() {
+    public CruceTestra() {
 
     }
 

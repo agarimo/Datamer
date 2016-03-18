@@ -5,7 +5,7 @@ import datamer.model.testra.Estado;
 import datamer.model.testra.TipoCruce;
 import datamer.model.testra.enty.Cruce;
 import datamer.model.testra.enty.Descarga;
-import datamer.model.testra.enty.Multa;
+import datamer.model.testra.enty.CruceTestra;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -34,9 +34,9 @@ public class Query extends util.Query {
         }
     }
     
-    public static boolean insertMultas(List<Multa> list) {
-        Multa aux;
-        Iterator<Multa> it = list.iterator();
+    public static boolean insertMultas(List<CruceTestra> list) {
+        CruceTestra aux;
+        Iterator<CruceTestra> it = list.iterator();
 
         try {
             bd = new Sql(Var.con);
@@ -109,16 +109,16 @@ public class Query extends util.Query {
         return list;
     }
 
-    public static List<Multa> listaMulta(String query) {
-        List<Multa> list = new ArrayList();
-        Multa aux;
+    public static List<CruceTestra> listaMulta(String query) {
+        List<CruceTestra> list = new ArrayList();
+        CruceTestra aux;
 
         try {
             bd = new Sql(Var.con);
             rs = bd.ejecutarQueryRs(query);
 
             while (rs.next()) {
-                aux = new Multa();
+                aux = new CruceTestra();
                 aux.setId(rs.getInt("id"));
                 aux.setFechaPublicacion(Dates.imprimeFecha(rs.getDate("fechaPublicacion")));
                 aux.setCodigoBoletin(rs.getString("codigoEdicto"));

@@ -16,6 +16,6 @@ public class Nav {
 
     public static final String TESTRA_CAPTURADOR = "/datamer/view/testra/Capturador.fxml";
     public static final String TESTRA_CRUCE = "/datamer/view/testra/Cruce.fxml";
-    public static final String TESTRA_SERVER = "/datamer/view/testra/Server.fxml";
+    public static final String TESTRA_CAPTURA = "/datamer/view/testra/Captura.fxml";
     
 }

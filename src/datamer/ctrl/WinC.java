@@ -64,34 +64,13 @@ public class WinC implements Initializable {
     
     @FXML
     void initCaptura(ActionEvent event){
-        
-    }
-    
-    @FXML
-    void initCapturador(ActionEvent event){
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(Nav.TESTRA_CAPTURADOR));
-            Pane nodo = (Pane) fxmlLoader.load();
-            popup = new Stage();
-            popup.initOwner(Var.stage);
-            popup.setResizable(false);
-            popup.initModality(Modality.APPLICATION_MODAL);
-            popup.initStyle(StageStyle.UTILITY);
-            popup.setTitle("Capturador");
-            popup.setScene(new Scene(nodo));
-            popup.setAlwaysOnTop(true);
-            Var.stage.hide();
-            popup.show();
-        } catch (IOException ex) {
-            Logger.getLogger(WinC.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        addPane(loadPane(Nav.TESTRA_CAPTURA,"CAPTURA TESTRA"));
     }
 
     @FXML
     void initCruceTestra(ActionEvent event) {
         addPane(loadPane(Nav.TESTRA_CRUCE,"CRUCE TESTRA"));
     }
-    
     
     @FXML
     void initBoesBoletines(ActionEvent event){

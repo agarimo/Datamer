@@ -6,6 +6,7 @@
 package datamer.ctrl.testra;
 
 import datamer.Var;
+import datamer.model.testra.enty.Edicto;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
@@ -16,6 +17,9 @@ import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -39,6 +43,9 @@ public class CapturadorC implements Initializable {
     @FXML
     private Button btReset;
 
+    private Date fecha;
+    private List<Edicto> enlaces;
+
     /**
      * Initializes the controller class.
      *
@@ -47,6 +54,7 @@ public class CapturadorC implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        enlaces = new ArrayList();
         initClipboard();
     }
 
@@ -59,6 +67,10 @@ public class CapturadorC implements Initializable {
     @FXML
     void reset(ActionEvent event) {
 
+    }
+    
+    public void setFecha(Date fecha){
+        this.fecha=fecha;
     }
 
     //<editor-fold defaultstate="collapsed" desc="ClipBoard">
@@ -98,6 +110,7 @@ public class CapturadorC implements Initializable {
     //</editor-fold>
 
     void creaDescarga(String aux) {
+
         System.out.println(aux);
     }
 

@@ -28,8 +28,8 @@
           </Menu>
           <Menu mnemonicParsing="false" text="Testra">
             <items>
+                  <MenuItem mnemonicParsing="false" onAction="#initCaptura" text="Captura" />
               <MenuItem mnemonicParsing="false" onAction="#initCruceTestra" text="Cruce" />
-                  <MenuItem mnemonicParsing="false" onAction="#initCapturador" text="Captura" />
             </items>
           </Menu>
             <Menu mnemonicParsing="false" text="Telemarketing">

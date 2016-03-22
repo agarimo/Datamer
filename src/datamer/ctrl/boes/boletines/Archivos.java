@@ -13,8 +13,8 @@ import datamer.model.boes.ModeloBoletines;
 import datamer.Var;
 import datamer.ctrl.boes.Query;
 import util.Dates;
-import util.Files;
-import util.Sql;
+import files.Util;
+import sql.Sql;
 import util.Varios;
 
 /**
@@ -103,7 +103,7 @@ public class Archivos {
 
             buffer.append("-------------------------------------------------");
 
-            Files.escribeArchivo(file, buffer.toString());
+            Util.escribeArchivo(file, buffer.toString());
 
         } catch (IOException ex) {
             Logger.getLogger(Archivos.class.getName()).log(Level.SEVERE, null, ex);
@@ -123,7 +123,7 @@ public class Archivos {
                 aux = it.next();
                 file = new File(dir, getNombreArchivo(aux.getCodigo(), fecha, aux.getEntidad()) + ".txt");
                 file.createNewFile();
-                Files.escribeArchivo(file, getDataArchivo(aux));
+                Util.escribeArchivo(file, getDataArchivo(aux));
             }
 
         } catch (IOException ex) {

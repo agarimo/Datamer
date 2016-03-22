@@ -53,7 +53,7 @@ import javafx.scene.text.Text;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import util.Dates;
-import util.Sql;
+import sql.Sql;
 import util.Varios;
 
 /**

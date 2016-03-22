@@ -8,7 +8,7 @@ import java.util.logging.Logger;
 import datamer.Var;
 import datamer.ctrl.boes.Query;
 import datamer.model.boes.enty.OrigenFase;
-import util.Sql;
+import sql.Sql;
 
 /**
  *

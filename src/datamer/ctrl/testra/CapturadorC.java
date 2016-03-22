@@ -6,7 +6,7 @@
 package datamer.ctrl.testra;
 
 import datamer.Var;
-import datamer.model.testra.enty.Edicto;
+import datamer.model.testra.enty.Captura;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
@@ -44,7 +44,7 @@ public class CapturadorC implements Initializable {
     private Button btReset;
 
     private Date fecha;
-    private List<Edicto> enlaces;
+    private List<Captura> enlaces;
 
     /**
      * Initializes the controller class.

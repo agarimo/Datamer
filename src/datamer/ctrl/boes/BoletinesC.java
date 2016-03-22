@@ -42,8 +42,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
 import util.Dates;
-import util.Files;
-import util.Sql;
+import files.Util;
+import sql.Sql;
 import util.Varios;
 
 /**
@@ -484,7 +484,7 @@ public class BoletinesC implements Initializable {
         Date fecha = Dates.asDate(dpFechaB.getValue());
 
         File dir = new File(Var.ficheroUnion, Dates.imprimeFecha(fecha));
-        Files.borraDirectorio(dir);
+        Util.borraDirectorio(dir);
         dir.mkdirs();
 
         Thread a = new Thread(() -> {
@@ -637,7 +637,7 @@ public class BoletinesC implements Initializable {
                 Logger.getLogger(BoletinesC.class.getName()).log(Level.SEVERE, null, ex);
             }
 
-            Files.escribeArchivo(file, datos);
+            Util.escribeArchivo(file, datos);
 
             try {
                 Desktop.getDesktop().browse(file.toURI());

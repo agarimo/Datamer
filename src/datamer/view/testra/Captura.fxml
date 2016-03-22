@@ -8,7 +8,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="datamer.ctrl.testra.CapturaC">
+<VBox fx:id="rootPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="datamer.ctrl.testra.CapturaC">
    <children>
       <SplitPane dividerPositions="0.5" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
          <items>
@@ -45,12 +45,6 @@
                      <children>
                         <Label minHeight="20.0" prefHeight="20.0" prefWidth="75.0" text="Pendientes :" />
                         <Label fx:id="lbPendientes" minHeight="20.0" prefHeight="20.0" text="9000" />
-                     </children>
-                  </HBox>
-                  <HBox minHeight="20.0" prefHeight="20.0" prefWidth="200.0" spacing="10.0">
-                     <children>
-                        <Label minHeight="20.0" prefHeight="20.0" prefWidth="75.0" text="Descargados :" />
-                        <Label fx:id="lbDescargados" minHeight="20.0" prefHeight="20.0" text="9000" />
                      </children>
                   </HBox>
                </children>

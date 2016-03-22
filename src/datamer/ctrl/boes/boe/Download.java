@@ -22,8 +22,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import util.Files;
-import util.Sql;
+import files.Util;
+import sql.Sql;
 
 /**
  *
@@ -72,7 +72,7 @@ public class Download extends Thread {
             bd = new Sql(Var.con);
             descargaPDF(aux.getLink());
             convertirPDF();
-            datos = Files.leeArchivo(new File("temp.txt"));
+            datos = Util.leeArchivo(new File("temp.txt"));
             datos = datos.replace("'", "´");
             aux.setDatos(datos);
             bd.ejecutar(aux.SQLSetDatos());
@@ -99,7 +99,7 @@ public class Download extends Thread {
 
             descargaPDF(aux.getLink());
             convertirPDF();
-            datos = Files.leeArchivo(new File("temp.txt"));
+            datos = Util.leeArchivo(new File("temp.txt"));
             datos = datos.replace("'", "´");
             aux.setDatos(datos);
             bd.ejecutar(aux.SQLSetDatos());
@@ -185,7 +185,7 @@ public class Download extends Thread {
     }
 
     private void fixTxt(File txt) {
-        String datos = Files.leeArchivo(txt);
-        Files.escribeArchivo(txt, datos);
+        String datos = Util.leeArchivo(txt);
+        Util.escribeArchivo(txt, datos);
     }
 }

@@ -13,7 +13,7 @@ import datamer.ctrl.boes.boletines.Archivos;
 import datamer.ctrl.boes.boletines.Union;
 import datamer.model.boes.ModeloBoletines;
 import util.Dates;
-import util.Files;
+import files.Util;
 import util.Varios;
 
 /**
@@ -182,7 +182,7 @@ public final class BB0 {
         File archivoBB0 = new File(fichero, Dates.imprimeFechaSinFormato(fecha) + ".bb0");
 //        File archivoBB1 = new File(fichero, Dates.imprimeFechaSinFormato(fecha) + ".bb1");
 
-        Files.escribeArchivo(archivoBB0, getDataArchivos(BB0));
+        Util.escribeArchivo(archivoBB0, getDataArchivos(BB0));
 //        Files.escribeArchivo(archivoBB1, getDataArchivos(BB1));
 
         crearArchivosD(fichero);
@@ -222,6 +222,6 @@ public final class BB0 {
         }
 
         File archivo = new File(fichero, struc + codigoUn + ".bb0");
-        Files.escribeArchivo(archivo, getDataArchivos(BB0));
+        Util.escribeArchivo(archivo, getDataArchivos(BB0));
     }
 }

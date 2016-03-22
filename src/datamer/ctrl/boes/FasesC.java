@@ -30,7 +30,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
-import util.Sql;
+import sql.Sql;
 
 /**
  * FXML Controller class

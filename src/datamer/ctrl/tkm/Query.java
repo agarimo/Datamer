@@ -7,13 +7,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import util.Sql;
+import sql.Sql;
 
 /**
  *
  * @author Agarimo
  */
-public class Query extends util.Query{
+public class Query extends sql.Query{
     
     public static void ejecutar(String query){
         try {

@@ -2,10 +2,12 @@ package datamer.ctrl.testra;
 
 import datamer.Var;
 import datamer.model.testra.Estado;
+import datamer.model.testra.ModeloCaptura;
 import datamer.model.testra.TipoCruce;
 import datamer.model.testra.enty.Cruce;
 import datamer.model.testra.enty.Descarga;
 import datamer.model.testra.enty.CruceTestra;
+import datamer.model.testra.enty.Captura;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -14,14 +16,14 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import util.Dates;
-import util.Sql;
+import sql.Sql;
 import util.Varios;
 
 /**
  *
  * @author Agarimo
  */
-public class Query extends util.Query {
+public class Query extends sql.Query {
     
     public static void ejecutar(String query){
         try {
@@ -32,6 +34,10 @@ public class Query extends util.Query {
             error(ex.getMessage());
             Logger.getLogger(datamer.ctrl.tkm.Query.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public static Captura getCaptura (){
+        return new Captura();
     }
     
     public static boolean insertMultas(List<CruceTestra> list) {
@@ -127,6 +133,63 @@ public class Query extends util.Query {
                 aux.setNif(rs.getString("nif"));
                 aux.setMatricula(rs.getString("matricula"));
                 aux.setLineaQuery(rs.getString("linea"));
+
+                list.add(aux);
+            }
+            rs.close();
+            bd.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(Query.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return list;
+    }
+    
+    public static List<Captura> listaCaptura(Date fecha) {
+        String query = "SELECT * FROM "+Var.dbNameTestra+".captura WHERE fecha="+Varios.entrecomillar(Dates.imprimeFecha(fecha));
+        List<Captura> list = new ArrayList();
+        Captura aux;
+
+        try {
+            bd = new Sql(Var.con);
+            rs = bd.ejecutarQueryRs(query);
+
+            while (rs.next()) {
+                aux = new Captura();
+                aux.setId(rs.getInt("id"));
+                aux.setIdEdicto(rs.getString("id_edicto"));
+                aux.setParametros(rs.getString("parametros"));
+                aux.setCsv(rs.getString("csv"));
+                aux.setFecha(fecha);
+                aux.setEstado(rs.getInt("estado"));
+                aux.setDatos(rs.getString("datos"));
+                aux.setEstadoCruce(rs.getInt("estado_cruce"));
+
+                list.add(aux);
+            }
+            rs.close();
+            bd.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(Query.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return list;
+    }
+    
+    public static List<ModeloCaptura> listaModeloCaptura(Date fecha) {
+        String query = "SELECT id,id_edicto,parametros,csv,estado FROM "+Var.dbNameTestra+".captura WHERE fecha="+Varios.entrecomillar(Dates.imprimeFecha(fecha));
+        List<ModeloCaptura> list = new ArrayList();
+        ModeloCaptura aux;
+
+        try {
+            bd = new Sql(Var.con);
+            rs = bd.ejecutarQueryRs(query);
+
+            while (rs.next()) {
+                aux = new ModeloCaptura();
+                aux.setId(rs.getInt("id"));
+                aux.setEdicto(rs.getString("id_edicto"));
+                aux.setParametros(rs.getString("parametros"));
+                aux.setCsv(rs.getString("csv"));
+                aux.setEstado(rs.getInt("estado"));
 
                 list.add(aux);
             }

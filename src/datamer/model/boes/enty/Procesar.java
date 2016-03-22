@@ -8,7 +8,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import datamer.Var;
 import util.Dates;
-import util.Sql;
+import sql.Sql;
 import util.Varios;
 
 /**

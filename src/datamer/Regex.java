@@ -41,7 +41,9 @@ public class Regex {
     public Regex() {
     }
 
-    public String buscar(String patron, String str) {
+    public static String buscar(String patron, String str) {
+        Pattern pt;
+        Matcher mt;
         String aux = null;
         pt = Pattern.compile(patron);
         mt = pt.matcher(str);

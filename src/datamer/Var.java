@@ -38,8 +38,8 @@ import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
-import util.Conexion;
-import util.Files;
+import sql.Conexion;
+import files.Util;
 
 /**
  *
@@ -87,15 +87,18 @@ public class Var {
     /**
      * TESTRA
      */
-    public static String dbNameTestra = "datagest";
+    public static String dbNameTestra = "testra";
     public static List<String> strucFecha;
     public static File fichero;
     public static File temporal;
     
+    public static String testraUrl = "https://sedeapl.dgt.gob.es/WEB_TTRA_CONSULTA/ServletVisualizacion?params=";
+    public static String testraHtml = "&formato=HTML";
+    public static String testraPdf = "%26subidioma%3Des&formato=PDF";
+
     /**
      * IDBL
      */
-    
     public static String dbNameIdbl = "idbl";
 
     public static void initVar() {
@@ -103,6 +106,7 @@ public class Var {
         initVarLoadConfig();
         initVarFiles();
         initVarStrucFecha();
+        initVarKeyStore();
         boesIsClasificando = false;
         boesIsDownloading = false;
     }
@@ -148,6 +152,12 @@ public class Var {
         }
     }
 
+    private static void initVarKeyStore() {
+        System.setProperty("javax.net.ssl.trustStore", "keystore");
+        System.setProperty("javax.net.ssl.trustStorePassword", "Carras-24");
+        System.setProperty("javax.net.ssl.trustStoreType", "JKS");
+    }
+
     private static void initVarStrucFecha() {
         strucFecha = new ArrayList();
 
@@ -163,7 +173,7 @@ public class Var {
     }
 
     public static void xit() {
-        Files.borraDirectorio(runtimeData);
+        Util.borraDirectorio(runtimeData);
         XMLSave(configFile);
     }
 

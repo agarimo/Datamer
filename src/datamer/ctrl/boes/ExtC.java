@@ -53,7 +53,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import util.Dates;
-import util.Sql;
+import sql.Sql;
 import util.Varios;
 
 /**

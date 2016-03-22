@@ -9,14 +9,18 @@ import datamer.Nav;
 import datamer.Var;
 import static datamer.Var.popup;
 import datamer.ctrl.WinC;
+import datamer.ctrl.testra.captura.Download;
 import datamer.model.boes.ModeloBoletines;
 import datamer.model.testra.ModeloCaptura;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Date;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -24,6 +28,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
@@ -34,6 +39,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -46,6 +52,9 @@ import util.Dates;
  * @author Agarimo
  */
 public class CapturaC implements Initializable {
+
+    @FXML
+    private VBox rootPane;
 
     @FXML
     private DatePicker dpFecha;
@@ -64,9 +73,6 @@ public class CapturaC implements Initializable {
 
     @FXML
     private Label lbPendientes;
-
-    @FXML
-    private Label lbDescargados;
 
     @FXML
     private Label lbProgreso;
@@ -91,7 +97,6 @@ public class CapturaC implements Initializable {
 
     private ObservableList<ModeloCaptura> listaCaptura;
     private Date fechaCaptura;
-    
 
     /**
      * Initializes the controller class.
@@ -107,7 +112,6 @@ public class CapturaC implements Initializable {
         btReload.setDisable(true);
         lbTotal.setText("-");
         lbPendientes.setText("-");
-        lbDescargados.setText("-");
         lbProgreso.setVisible(false);
         pgProgreso.setVisible(false);
     }
@@ -209,7 +213,7 @@ public class CapturaC implements Initializable {
 
         edictoCL.prefWidthProperty().bind(tabla.widthProperty().multiply(0.12));
         csvCL.prefWidthProperty().bind(tabla.widthProperty().multiply(0.18));
-        parametrosCL.prefWidthProperty().bind(tabla.widthProperty().multiply(0.60));
+        parametrosCL.prefWidthProperty().bind(tabla.widthProperty().multiply(0.605));
         estadoCL.prefWidthProperty().bind(tabla.widthProperty().multiply(0.08));
 
         listaCaptura = FXCollections.observableArrayList();
@@ -243,6 +247,48 @@ public class CapturaC implements Initializable {
     @FXML
     void initDescarga(ActionEvent event) {
 
+        Thread a = new Thread(() -> {
+            final int x;
+            ModeloCaptura aux;
+            List<ModeloCaptura> list;
+
+            Platform.runLater(() -> {
+                lbProgreso.setVisible(true);
+                pgProgreso.setVisible(true);
+                lbProgreso.setText("INICIANDO DESCARGA");
+                pgProgreso.setProgress(0);
+                dpFecha.setDisable(true);
+                btDescargar.setDisable(true);
+                btReload.setDisable(true);
+            });
+
+            Download dw = new Download();
+            list = listaCaptura.stream().filter(c -> c.getEstado()==0).collect(Collectors.toList());
+                    
+            for (int i = 0; i < list.size(); i++) {
+                aux = list.get(i);
+                dw.descargar(aux);
+
+                Platform.runLater(() -> {
+//                    lbProgreso.setText("PROCESANDO de "+listaCaptura.size());
+                    pgProgreso.setProgress(-1);
+                });
+                
+                loadData();
+            }
+
+            Platform.runLater(() -> {
+                lbProgreso.setVisible(false);
+                pgProgreso.setVisible(false);
+                lbProgreso.setText("");
+                pgProgreso.setProgress(0);
+                dpFecha.setDisable(false);
+                btDescargar.setDisable(false);
+                btReload.setDisable(false);
+            });
+
+        });
+        a.start();
     }
 
     @FXML
@@ -255,7 +301,7 @@ public class CapturaC implements Initializable {
         Date fecha = Dates.asDate(dpFecha.getValue());
 
         if (fecha != null) {
-            fechaCaptura=fecha;
+            fechaCaptura = fecha;
             btDescargar.setDisable(false);
             btCapturador.setDisable(false);
             btReload.setDisable(false);
@@ -264,6 +310,25 @@ public class CapturaC implements Initializable {
     }
 
     void loadData() {
+        Thread a = new Thread(() -> {
 
+            Platform.runLater(() -> {
+                rootPane.setCursor(Cursor.WAIT);
+                btReload.setDisable(true);
+            });
+
+            List<ModeloCaptura> list = Query.listaModeloCaptura(fechaCaptura);
+            listaCaptura.clear();
+            listaCaptura.addAll(list);
+
+            Platform.runLater(() -> {
+                btReload.setDisable(false);
+                lbTotal.setText(Integer.toString(listaCaptura.size()));
+                lbPendientes.setText(Integer.toString((int) list.stream().filter(c -> c.getEstado() == 0).count()));
+                rootPane.setCursor(Cursor.DEFAULT);
+            });
+
+        });
+        a.start();
     }
 }

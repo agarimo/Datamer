@@ -1,13 +1,16 @@
 package datamer.model.testra.enty;
 
+import datamer.Var;
 import java.util.Date;
 import java.util.Objects;
+import util.Varios;
 
 /**
  *
  * @author Agarimo
  */
-public class Edicto {
+public class Captura {
+
     private int id;
     private String idEdicto;
     private String parametros;
@@ -16,16 +19,16 @@ public class Edicto {
     private int estado;
     private String datos;
     private int estadoCruce;
-    
-    public Edicto(){
-        this.id=0;
-        this.idEdicto=null;
-        this.parametros=null;
-        this.csv=null;
-        this.fecha=null;
-        this.estado=0;
-        this.datos=null;
-        this.estadoCruce=0;
+
+    public Captura() {
+        this.id = 0;
+        this.idEdicto = null;
+        this.parametros = null;
+        this.csv = null;
+        this.fecha = null;
+        this.estado = 0;
+        this.datos = null;
+        this.estadoCruce = 0;
     }
 
     public int getId() {
@@ -110,7 +113,7 @@ public class Edicto {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Edicto other = (Edicto) obj;
+        final Captura other = (Captura) obj;
         return Objects.equals(this.parametros, other.parametros);
     }
 
@@ -118,16 +121,32 @@ public class Edicto {
     public String toString() {
         return "Edicto{" + "idEdicto=" + idEdicto + '}';
     }
-    
-    public String SQLBuscar(){
+
+    public String SQLBuscar() {
         return "";
     }
-    
-    public String SQLCrear(){
+
+    public String SQLCrear() {
         return "";
     }
-    
-    public String SQLEditar(){
-        return "";
+
+    public String SQLsetEstado() {
+        return "UPDATE " + Var.dbNameTestra + ".captura SET "
+                + "estado=" + this.estado + " "
+                + "WHERE id=" + this.id;
+    }
+
+    public String SQLsetEstadoCruce() {
+        return "UPDATE " + Var.dbNameTestra + ".captura SET "
+                + "estado_cruce=" + this.estadoCruce + " "
+                + "WHERE id=" + this.id;
+    }
+
+    public String SQLsetDatos() {
+        return "UPDATE " + Var.dbNameTestra + ".captura SET "
+                + "id_edicto=" + Varios.entrecomillar(this.idEdicto) + ","
+                + "csv=" + Varios.entrecomillar(this.csv) + ","
+                + "datos=" + Varios.entrecomillar(this.datos) + " "
+                + "WHERE id=" + this.id;
     }
 }

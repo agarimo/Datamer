@@ -48,8 +48,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.util.Callback;
 import util.Dates;
-import util.Files;
-import util.Sql;
+import files.Util;
+import sql.Sql;
 import util.Varios;
 
 /**
@@ -512,7 +512,7 @@ public class CruceC implements Initializable {
                 sb.append(System.lineSeparator());
             }
 
-            Files.escribeArchivo(aux, sb.toString().trim());
+            Util.escribeArchivo(aux, sb.toString().trim());
 
             Platform.runLater(() -> {
                 piProgreso.setProgress(1);
@@ -1037,7 +1037,7 @@ public class CruceC implements Initializable {
         ModeloTabla mt = (ModeloTabla) tabla.getSelectionModel().getSelectedItem();
 
         if (mt != null) {
-            Files.escribeArchivo(Var.temporal, mt.getDatos());
+            Util.escribeArchivo(Var.temporal, mt.getDatos());
             try {
                 Desktop.getDesktop().browse(Var.temporal.toURI());
             } catch (IOException ex) {

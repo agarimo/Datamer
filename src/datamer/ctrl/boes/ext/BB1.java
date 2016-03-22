@@ -11,7 +11,7 @@ import datamer.ctrl.boes.Query;
 import datamer.model.boes.enty.Multa;
 import datamer.model.boes.enty.Procesar;
 import util.Dates;
-import util.Files;
+import files.Util;
 import util.Varios;
 
 /**
@@ -163,6 +163,6 @@ public class BB1 {
 
     private void crearArchivos() {
         File archivoBB1 = new File(fichero, Dates.imprimeFechaSinFormato(fecha) + ".ins");
-        Files.escribeArchivo(archivoBB1, getDataArchivos());
+        Util.escribeArchivo(archivoBB1, getDataArchivos());
     }
 }

@@ -10,7 +10,7 @@ import datamer.Var;
 import datamer.ctrl.boes.Query;
 import datamer.model.boes.enty.ReqObs;
 import util.Dates;
-import util.Sql;
+import sql.Sql;
 import util.Varios;
 
 /**

@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import util.Sql;
+import sql.Sql;
 import datamer.model.boes.enty.Descarga;
 import datamer.model.boes.enty.Entidad;
 import datamer.model.boes.enty.Estructura;
@@ -35,7 +35,7 @@ import util.Varios;
  *
  * @author Agarimo
  */
-public class Query extends util.Query {
+public class Query extends sql.Query {
 
     public static void eliminaBoletin(String codigo) {
         try {

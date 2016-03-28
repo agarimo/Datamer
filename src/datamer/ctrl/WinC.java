@@ -1,8 +1,6 @@
 package datamer.ctrl;
 
 import datamer.Nav;
-import datamer.Var;
-import static datamer.Var.popup;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -13,14 +11,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.layout.Pane;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 /**
  *

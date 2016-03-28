@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package datamer.ctrl.testra;
 
 import datamer.Var;
@@ -11,21 +6,27 @@ import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.FlavorEvent;
-import java.awt.datatransfer.FlavorListener;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.VBox;
+import sql.Sql;
 
 /**
  * FXML Controller class
@@ -34,6 +35,9 @@ import javafx.scene.control.Label;
  */
 public class CapturadorC implements Initializable {
 
+    @FXML
+    private VBox rootPane;
+    
     @FXML
     private Label lbEnlaces;
 
@@ -44,7 +48,11 @@ public class CapturadorC implements Initializable {
     private Button btReset;
 
     private Date fecha;
+    private List<String> captura;
     private List<Captura> enlaces;
+
+    private final String pre = "https://sedeapl.dgt.gob.es/WEB_TTRA_CONSULTA/VisualizacionEdicto.faces?params=";
+    private final String post = "%26subidioma%3Des";
 
     /**
      * Initializes the controller class.
@@ -55,22 +63,56 @@ public class CapturadorC implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         enlaces = new ArrayList();
+        captura = new ArrayList();
         initClipboard();
     }
 
     @FXML
     void close(ActionEvent event) {
+        insertCapturas();
         Var.stage.show();
         Var.popup.close();
     }
 
+    void insertCapturas() {
+        Platform.runLater(() -> {
+            rootPane.setCursor(Cursor.WAIT);
+        });
+        
+        try {
+            Sql bd = new Sql(Var.con);
+
+            for (Captura enlace : enlaces) {
+                bd.ejecutar(enlace.SQLCrear());
+            }
+
+            bd.close();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(CapturadorC.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        Platform.runLater(() -> {
+            rootPane.setCursor(Cursor.DEFAULT);
+        });
+    }
+
     @FXML
     void reset(ActionEvent event) {
-
+        initClipboard();
     }
-    
-    public void setFecha(Date fecha){
-        this.fecha=fecha;
+
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
+        loadFecha(fecha);
+    }
+
+    private void loadFecha(Date fecha) {
+        captura.addAll(Query.listaCapturaParam(fecha));
+
+        Platform.runLater(() -> {
+            lbEnlaces.setText(Integer.toString(captura.size()));
+        });
     }
 
     //<editor-fold defaultstate="collapsed" desc="ClipBoard">
@@ -80,10 +122,6 @@ public class CapturadorC implements Initializable {
         cb.addFlavorListener((FlavorEvent e) -> {
             processClipboard(cb);
         });
-    }
-
-    public void restartClipboard() {
-        initClipboard();
     }
 
     public void processClipboard(Clipboard cb) {
@@ -96,8 +134,6 @@ public class CapturadorC implements Initializable {
 
                 if (s.contains(cabecera)) {
                     creaDescarga(s);
-                } else {
-                    System.out.println("Link no válido");
                 }
 
                 StringSelection ss = new StringSelection(s);
@@ -110,8 +146,29 @@ public class CapturadorC implements Initializable {
     //</editor-fold>
 
     void creaDescarga(String aux) {
+        Captura cap = new Captura();
+        aux = aux.replace(pre, "");
+        aux = aux.replace(post, "");
 
-        System.out.println(aux);
+        cap.setParametros(aux);
+        cap.setFecha(fecha);
+        cap.setIdEdicto("Sin descargar");
+        cap.setCsv("Sin descargar");
+        cap.setDatos("Sin descargar");
+
+        if (!checkCaptura(cap)) {
+            captura.add(cap.getParametros());
+            enlaces.add(cap);
+        }
+
+        Platform.runLater(() -> {
+            lbEnlaces.setText(Integer.toString(captura.size()));
+        });
+
+    }
+
+    boolean checkCaptura(Captura cap) {
+        return captura.contains(cap.getParametros());
     }
 
 }

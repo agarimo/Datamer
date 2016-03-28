@@ -8,7 +8,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox prefHeight="70.0" prefWidth="170.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="datamer.ctrl.testra.CapturadorC">
+<VBox fx:id="rootPane" prefHeight="70.0" prefWidth="170.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="datamer.ctrl.testra.CapturadorC">
    <children>
       <HBox prefHeight="31.0" prefWidth="170.0" spacing="10.0">
          <children>

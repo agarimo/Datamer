@@ -3,6 +3,7 @@ package datamer.model.testra.enty;
 import datamer.Var;
 import java.util.Date;
 import java.util.Objects;
+import util.Dates;
 import util.Varios;
 
 /**
@@ -127,7 +128,15 @@ public class Captura {
     }
 
     public String SQLCrear() {
-        return "";
+        return "INSERT into " + Var.dbNameTestra + ".captura (id_edicto,parametros,csv,fecha,estado,datos,estado_cruce) values("
+                + Varios.entrecomillar(this.idEdicto) + ","
+                + Varios.entrecomillar(this.parametros) + ","
+                + Varios.entrecomillar(this.csv) + ","
+                + Varios.entrecomillar(Dates.imprimeFecha(fecha)) + ","
+                + this.estado + ","
+                + Varios.entrecomillar(this.datos) + ","
+                + this.estadoCruce
+                + ");";
     }
 
     public String SQLsetEstado() {
@@ -146,6 +155,8 @@ public class Captura {
         return "UPDATE " + Var.dbNameTestra + ".captura SET "
                 + "id_edicto=" + Varios.entrecomillar(this.idEdicto) + ","
                 + "csv=" + Varios.entrecomillar(this.csv) + ","
+                + "estado=" + this.estado + ","
+                + "estado_cruce=" + this.estadoCruce + ","
                 + "datos=" + Varios.entrecomillar(this.datos) + " "
                 + "WHERE id=" + this.id;
     }

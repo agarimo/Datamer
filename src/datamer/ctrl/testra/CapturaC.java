@@ -34,6 +34,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -78,7 +79,7 @@ public class CapturaC implements Initializable {
     private Label lbProgreso;
 
     @FXML
-    private ProgressBar pgProgreso;
+    private ProgressIndicator pgProgreso;
 
     @FXML
     private TableView tabla;
@@ -248,7 +249,7 @@ public class CapturaC implements Initializable {
     void initDescarga(ActionEvent event) {
 
         Thread a = new Thread(() -> {
-            final int x;
+
             ModeloCaptura aux;
             List<ModeloCaptura> list;
 
@@ -256,25 +257,30 @@ public class CapturaC implements Initializable {
                 lbProgreso.setVisible(true);
                 pgProgreso.setVisible(true);
                 lbProgreso.setText("INICIANDO DESCARGA");
-                pgProgreso.setProgress(0);
+                pgProgreso.setProgress(-1);
                 dpFecha.setDisable(true);
                 btDescargar.setDisable(true);
                 btReload.setDisable(true);
             });
 
             Download dw = new Download();
-            list = listaCaptura.stream().filter(c -> c.getEstado()==0).collect(Collectors.toList());
-                    
+            list = listaCaptura.stream().filter(c -> c.getEstado() == 0).collect(Collectors.toList());
+            final int total = list.size();
+
+            Platform.runLater(() -> {
+                lbProgreso.setText("DESCARGANDO 1 DE " + total);
+            });
+
             for (int i = 0; i < list.size(); i++) {
+                final int cont = i + 2;
                 aux = list.get(i);
                 dw.descargar(aux);
 
-                Platform.runLater(() -> {
-//                    lbProgreso.setText("PROCESANDO de "+listaCaptura.size());
-                    pgProgreso.setProgress(-1);
-                });
-                
                 loadData();
+
+                Platform.runLater(() -> {
+                    lbProgreso.setText("DESCARGANDO " + cont + " DE " + total);
+                });
             }
 
             Platform.runLater(() -> {

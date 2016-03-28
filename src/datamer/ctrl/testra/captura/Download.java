@@ -1,6 +1,7 @@
 package datamer.ctrl.testra.captura;
 
 import datamer.Var;
+import datamer.ctrl.tkm.Query;
 import datamer.model.testra.ModeloCaptura;
 import datamer.model.testra.enty.Captura;
 import java.io.File;
@@ -17,26 +18,39 @@ import java.util.regex.Pattern;
  */
 public class Download {
 
+    Captura cap;
+
     public void descargar(ModeloCaptura aux) {
         try {
             File pdf = new File("temp.pdf");
             File file = new File("temp.txt");
-            Captura cap = new Captura();
+            cap = new Captura();
             cap.setId(aux.getId());
             cap.setParametros(aux.getParametros());
-            
+
             String datos = files.Download.downloadURL(generaEnlace(cap.getParametros(), false));
             cap.setIdEdicto(getId(datos));
             cap.setCsv(getCsv(datos));
-            
-            files.Download.downloadFILE(generaEnlace(cap.getParametros(),true), pdf);
+
+            files.Download.downloadFILE(generaEnlace(cap.getParametros(), true), pdf);
             files.Pdf.convertPDF(pdf, file);
-            
-            
+
+            datos = files.Util.leeArchivo(file);
+
+            cap.setDatos(clearData(datos));
+            cap.setEstado(2);
+            cap.setEstadoCruce(0);
         } catch (IOException ex) {
+            cap.setEstado(1);
             Logger.getLogger(Download.class.getName()).log(Level.SEVERE, null, ex);
         }
+        Query.ejecutar(cap.SQLsetDatos());
+    }
 
+    private String clearData(String datos) {
+        datos = datos.replace("'", "\\'");
+
+        return datos;
     }
 
     /**
@@ -59,7 +73,7 @@ public class Download {
         Pattern pt;
         Matcher mt;
         String aux;
-        
+
         pt = Pattern.compile("CSV: [A-Z0-9]{6}-[A-Z0-9]{6}-[A-Z0-9]{6}-[A-Z0-9]{6}");
         mt = pt.matcher(datos);
 

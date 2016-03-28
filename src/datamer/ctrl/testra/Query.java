@@ -144,6 +144,27 @@ public class Query extends sql.Query {
         return list;
     }
     
+    public static List<String> listaCapturaParam(Date fecha) {
+        String query = "SELECT parametros FROM "+Var.dbNameTestra+".captura WHERE fecha="+Varios.entrecomillar(Dates.imprimeFecha(fecha));
+        List<String> list = new ArrayList();
+        String aux;
+
+        try {
+            bd = new Sql(Var.con);
+            rs = bd.ejecutarQueryRs(query);
+
+            while (rs.next()) {
+                aux=rs.getString("parametros");
+                list.add(aux);
+            }
+            rs.close();
+            bd.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(Query.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return list;
+    }
+    
     public static List<Captura> listaCaptura(Date fecha) {
         String query = "SELECT * FROM "+Var.dbNameTestra+".captura WHERE fecha="+Varios.entrecomillar(Dates.imprimeFecha(fecha));
         List<Captura> list = new ArrayList();

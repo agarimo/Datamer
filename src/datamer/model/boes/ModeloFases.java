@@ -16,7 +16,7 @@ public class ModeloFases {
     public SimpleStringProperty texto1 = new SimpleStringProperty();
     public SimpleStringProperty texto2 = new SimpleStringProperty();
     public SimpleStringProperty texto3 = new SimpleStringProperty();
-    public SimpleIntegerProperty dias = new SimpleIntegerProperty();
+    public SimpleStringProperty plazo = new SimpleStringProperty();
 
     public int getId() {
         return id.get();
@@ -59,12 +59,12 @@ public class ModeloFases {
         return texto3.get();
     }
 
-    public int getDias() {
-        return dias.get();
+    public String getPlazo() {
+        return plazo.get();
     }
 
     public String getFase() {
-        return "(" + codigo.get() + ")" + dias.get() + tipoToString();
+        return "(" + codigo.get() + ")" + plazo.get() + tipoToString();
     }
     
     private String tipoToString() {

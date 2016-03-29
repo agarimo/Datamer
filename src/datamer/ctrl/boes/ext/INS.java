@@ -18,7 +18,7 @@ import util.Varios;
  *
  * @author Agarimo
  */
-public class BB1 {
+public class INS {
 
     private final File fichero;
     private final Date fecha;
@@ -27,7 +27,7 @@ public class BB1 {
     private final List<String[]> docData;
     private final List<String[]> data;
 
-    public BB1(Date fecha) {
+    public INS(Date fecha) {
         this.fecha = fecha;
         data = new ArrayList();
         docData = new ArrayList();
@@ -77,7 +77,7 @@ public class BB1 {
             linea[1] = splitNBoe(multa.getCodigoSancion());
             linea[2] = multa.getOrganismo();
             linea[3] = multa.getFase();
-            linea[4] = Integer.toString(multa.getPlazo());
+            linea[4] = multa.getPlazo();
             linea[5] = multa.getCodigoSancion();
             linea[6] = multa.getExpediente();
             linea[7] = Dates.imprimeFecha(multa.getFechaMulta());

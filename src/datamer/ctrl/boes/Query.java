@@ -510,7 +510,7 @@ public class Query extends sql.Query {
                 aux.setBoe(rs.getString("boe"));
                 aux.setFase(rs.getString("fase"));
                 aux.setTipoJuridico(rs.getString("tipoJuridico"));
-                aux.setPlazo(rs.getInt("plazo"));
+                aux.setPlazo(rs.getString("plazo"));
                 aux.setExpediente(rs.getString("expediente"));
                 aux.setFechaMulta(rs.getDate("fechaMulta"));
                 aux.setArticulo(rs.getString("articulo"));
@@ -842,7 +842,7 @@ public class Query extends sql.Query {
                 aux.texto1.set(rs.getString("texto1"));
                 aux.texto2.set(rs.getString("texto2"));
                 aux.texto3.set(rs.getString("texto3"));
-                aux.dias.set(rs.getInt("dias"));
+                aux.plazo.set(rs.getString("plazo"));
                 list.add(aux);
             }
             rs.close();
@@ -951,7 +951,7 @@ public class Query extends sql.Query {
                 aux.setTexto1(rs.getString("texto1"));
                 aux.setTexto2(rs.getString("texto2"));
                 aux.setTexto3(rs.getString("texto3"));
-                aux.setDias(rs.getInt("dias"));
+                aux.setDias(rs.getString("plazo"));
                 list.add(aux);
             }
             rs.close();
@@ -980,7 +980,7 @@ public class Query extends sql.Query {
                 aux.setTexto1(rs.getString("texto1"));
                 aux.setTexto2(rs.getString("texto2"));
                 aux.setTexto3(rs.getString("texto3"));
-                aux.setDias(rs.getInt("dias"));
+                aux.setDias(rs.getString("plazo"));
                 list.add(aux);
             }
             rs.close();

@@ -19,7 +19,7 @@ public class VistaExtraccion {
     private String tipo;
     private String faseCompleta;
     private String fase;
-    private int plazo;
+    private String plazo;
     private String boe;
     
     public VistaExtraccion(){
@@ -66,7 +66,7 @@ public class VistaExtraccion {
         return fase;
     }
 
-    public int getPlazo() {
+    public String getPlazo() {
         return plazo;
     }
 
@@ -80,7 +80,7 @@ public class VistaExtraccion {
         aux = split[1];
 
         fase = aux.substring(1, 4);
-        plazo = Integer.parseInt(aux.substring(5, 7));
+        plazo = aux.substring(5, 7);
     }
 
     private String getBoe(Date fecha,String entidad) {

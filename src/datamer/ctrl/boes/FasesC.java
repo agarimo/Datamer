@@ -3,6 +3,7 @@ package datamer.ctrl.boes;
 import datamer.Var;
 import datamer.model.boes.ModeloFases;
 import datamer.model.boes.Kind;
+import datamer.model.boes.Plazo;
 import datamer.model.boes.enty.Entidad;
 import datamer.model.boes.enty.Fase;
 import datamer.model.boes.enty.Origen;
@@ -58,7 +59,7 @@ public class FasesC implements Initializable {
     ComboBox cbTipo;
 
     @FXML
-    TextField tfDias;
+    ComboBox cbPlazo;
 
     @FXML
     TextArea taTexto1;
@@ -96,6 +97,7 @@ public class FasesC implements Initializable {
     ObservableList<Entidad> comboEntidades;
     ObservableList<Tipo> comboCodigo;
     ObservableList<Kind> comboTipo;
+    ObservableList<Plazo> comboPlazo;
     ObservableList<Origen> listOrigenes;
     ObservableList<ModeloFases> tablaFases;
 
@@ -152,7 +154,7 @@ public class FasesC implements Initializable {
         aux.id.set(0);
         aux.idOrigen.set(origen.getId());
         aux.codigo.set(null);
-        aux.dias.set(0);
+        aux.plazo.set(null);
         aux.tipo.set(1);
 
         tablaFases.add(0, aux);
@@ -189,7 +191,7 @@ public class FasesC implements Initializable {
     void clear() {
         cbCodigo.getSelectionModel().select(null);
         cbTipo.getSelectionModel().select(null);
-        tfDias.setText(null);
+        cbPlazo.getSelectionModel().select(null);
         taTexto1.setText(null);
         taTexto2.setText(null);
         taTexto3.setText(null);
@@ -200,6 +202,7 @@ public class FasesC implements Initializable {
         ModeloFases mf = (ModeloFases) tvFases.getSelectionModel().getSelectedItem();
         Tipo tipo = (Tipo) cbCodigo.getSelectionModel().getSelectedItem();
         Kind kind = (Kind) cbTipo.getSelectionModel().getSelectedItem();
+        Plazo plazo = (Plazo) cbPlazo.getSelectionModel().getSelectedItem();
 
         Fase fase = new Fase();
         fase.setId(mf.getId());
@@ -209,7 +212,7 @@ public class FasesC implements Initializable {
         fase.setTexto1(taTexto1.getText().trim());
         fase.setTexto2(taTexto2.getText().trim());
         fase.setTexto3(taTexto3.getText().trim());
-        fase.setDias(Integer.parseInt(tfDias.getText()));
+        fase.setDias(plazo.getValue());
 
         return fase;
     }
@@ -225,14 +228,16 @@ public class FasesC implements Initializable {
         final ObservableList<ModeloFases> ls3 = tvFases.getSelectionModel().getSelectedItems();
         ls3.addListener(selectorTablaFases);
     }
-    
-    private void initializeItems(){
+
+    private void initializeItems() {
         comboEntidades = FXCollections.observableArrayList();
         cbEntidad.setItems(comboEntidades);
         comboCodigo = FXCollections.observableArrayList();
         cbCodigo.setItems(comboCodigo);
         comboTipo = FXCollections.observableArrayList();
         cbTipo.setItems(comboTipo);
+        comboPlazo = FXCollections.observableArrayList();
+        cbPlazo.setItems(comboPlazo);
         listOrigenes = FXCollections.observableArrayList();
         lvOrigen.setItems(listOrigenes);
 
@@ -279,6 +284,12 @@ public class FasesC implements Initializable {
         comboTipo.add(Kind.ND);
         comboTipo.add(Kind.RS);
         comboTipo.add(Kind.RR);
+
+        comboPlazo.add(Plazo.D10);
+        comboPlazo.add(Plazo.D15);
+        comboPlazo.add(Plazo.D20);
+        comboPlazo.add(Plazo.M1);
+        comboPlazo.add(Plazo.M2);
     }
 
     private void initializeTabla() {
@@ -295,7 +306,7 @@ public class FasesC implements Initializable {
         tablaFases = FXCollections.observableArrayList();
         tvFases.setItems(tablaFases);
     }
-    
+
     void loadData() {
         ModeloFases aux = (ModeloFases) tvFases.getSelectionModel().getSelectedItem();
 
@@ -305,7 +316,7 @@ public class FasesC implements Initializable {
             tipo.setNombre("");
             cbCodigo.getSelectionModel().select(tipo);
             cbTipo.getSelectionModel().select(aux.getIdTipo() - 1);
-            tfDias.setText(Integer.toString(aux.getDias()));
+            cbPlazo.getSelectionModel().select(loadDataGetPlazo(aux.getPlazo()));
             taTexto1.setText(aux.getTexto1());
             taTexto2.setText(aux.getTexto2());
             taTexto3.setText(aux.getTexto3());
@@ -313,6 +324,23 @@ public class FasesC implements Initializable {
 
         btBorrarFase.setDisable(false);
         btEditarFase.setDisable(false);
+    }
+
+    Plazo loadDataGetPlazo(String plazo) {
+        switch (plazo) {
+            case "10D":
+                return Plazo.D10;
+            case "15D":
+                return Plazo.D15;
+            case "20D":
+                return Plazo.D20;
+            case "1M":
+                return Plazo.M1;
+            case "2M":
+                return Plazo.M2;
+            default:
+                return null;
+        }
     }
 
     void loadFases() {

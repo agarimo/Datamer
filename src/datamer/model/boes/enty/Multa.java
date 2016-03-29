@@ -25,7 +25,7 @@ public class Multa {
     private String boe;
     private String fase;
     private String tipoJuridico;
-    private int plazo;
+    private String plazo;
     private String expediente;
     private Date fechaMulta;
     private String articulo;
@@ -46,7 +46,7 @@ public class Multa {
         this.expediente = expediente;
     }
 
-    public Multa(int idBoletin, String codigoSancion, Date fechaPublicacion, int idOrganismo, String organismo, String boe, String fase, String tipoJuridico, int plazo, String expediente, Date fechaMulta, String articulo, String nif, String sancionado, String localidad, String matricula, String cuantia, String puntos, String reqObs, String linea) {
+    public Multa(int idBoletin, String codigoSancion, Date fechaPublicacion, int idOrganismo, String organismo, String boe, String fase, String tipoJuridico, String plazo, String expediente, Date fechaMulta, String articulo, String nif, String sancionado, String localidad, String matricula, String cuantia, String puntos, String reqObs, String linea) {
         this.idBoletin = idBoletin;
         this.codigoSancion = codigoSancion;
         this.fechaPublicacion = fechaPublicacion;
@@ -69,7 +69,7 @@ public class Multa {
         this.linea = linea;
     }
 
-    public Multa(int id, int idBoletin, String codigoSancion, Date fechaPublicacion, int idOrganismo, String organismo, String boe, String fase, String tipoJuridico, int plazo, String expediente, Date fechaMulta, String articulo, String nif, String sancionado, String localidad, String matricula, String cuantia, String puntos, String reqObs, String linea) {
+    public Multa(int id, int idBoletin, String codigoSancion, Date fechaPublicacion, int idOrganismo, String organismo, String boe, String fase, String tipoJuridico, String plazo, String expediente, Date fechaMulta, String articulo, String nif, String sancionado, String localidad, String matricula, String cuantia, String puntos, String reqObs, String linea) {
         this.id = id;
         this.idBoletin = idBoletin;
         this.codigoSancion = codigoSancion;
@@ -165,11 +165,11 @@ public class Multa {
         this.tipoJuridico = tipoJuridico;
     }
 
-    public int getPlazo() {
+    public String getPlazo() {
         return plazo;
     }
 
-    public void setPlazo(int plazo) {
+    public void setPlazo(String plazo) {
         this.plazo = plazo;
     }
 
@@ -392,7 +392,7 @@ public class Multa {
                     + Varios.entrecomillar(this.boe) + ","
                     + Varios.entrecomillar(this.fase) + ","
                     + Varios.entrecomillar(this.tipoJuridico) + ","
-                    + this.plazo + ","
+                    + Varios.entrecomillar(this.plazo) + ","
                     + Varios.entrecomillar(this.expediente) + ","
                     + Varios.entrecomillar(Dates.imprimeFecha(this.fechaMulta)) + ","
                     + Varios.entrecomillar(this.articulo) + ","
@@ -415,7 +415,7 @@ public class Multa {
                     + Varios.entrecomillar(this.boe) + ","
                     + Varios.entrecomillar(this.fase) + ","
                     + Varios.entrecomillar(this.tipoJuridico) + ","
-                    + this.plazo + ","
+                    + Varios.entrecomillar(this.plazo) + ","
                     + Varios.entrecomillar(this.expediente) + ","
                     + null + ","
                     + Varios.entrecomillar(this.articulo) + ","

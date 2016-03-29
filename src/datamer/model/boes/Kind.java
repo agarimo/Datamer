@@ -9,7 +9,6 @@ public enum Kind {
     ND(1),
     RS(2),
     RR(3);
-    
 
     private final int value;
 

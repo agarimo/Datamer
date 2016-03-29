@@ -102,7 +102,7 @@ public final class BB0 {
             linea[2] = multa.getBoe();
             linea[3] = multa.getFase();
             linea[4] = multa.getTipoJuridico();
-            linea[5] = Integer.toString(multa.getPlazo());
+            linea[5] = formatPlazo(multa.getPlazo());
             linea[6] = Integer.toString(multa.getId());
             linea[7] = "ND";
             linea[8] = splitCodigoSancion(multa.getCodigoSancion());
@@ -135,6 +135,23 @@ public final class BB0 {
             }
 
             data.add(linea);
+        }
+    }
+
+    private String formatPlazo(String plazo) {
+        switch (plazo) {
+            case "10D":
+                return "10";
+            case "15D":
+                return "15";
+            case "20D":
+                return "30";
+            case "1M":
+                return "30";
+            case "2M":
+                return "60";
+            default:
+                return null;
         }
     }
 

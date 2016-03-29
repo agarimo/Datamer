@@ -3,7 +3,7 @@ package datamer.ctrl.boes;
 import datamer.Var;
 import datamer.ctrl.boes.boe.Download;
 import datamer.ctrl.boes.ext.BB0;
-import datamer.ctrl.boes.ext.BB1;
+import datamer.ctrl.boes.ext.INS;
 import datamer.ctrl.boes.ext.Extraccion;
 import datamer.ctrl.boes.ext.script.ScriptArticulo;
 import datamer.ctrl.boes.ext.script.ScriptExp;
@@ -315,7 +315,7 @@ public class ExtC implements Initializable {
 
                 BB0 bb = new BB0(fecha);
                 bb.run();
-                BB1 bb1 = new BB1(fecha);
+                INS bb1 = new INS(fecha);
                 bb1.run();
 
                 Platform.runLater(() -> {

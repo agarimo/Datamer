@@ -17,23 +17,23 @@ public class Fase {
     private String texto1;
     private String texto2;
     private String texto3;
-    private int dias;
+    private String plazo;
 
     public Fase() {
 
     }
 
-    public Fase(int idOrigen, String codigo, int tipo, String texto1, String texto2, String texto3, int dias) {
+    public Fase(int idOrigen, String codigo, int tipo, String texto1, String texto2, String texto3, String plazo) {
         this.idOrigen = idOrigen;
         this.codigo = codigo;
         this.tipo = tipo;
         this.texto1 = texto1;
         this.texto2 = texto2;
         this.texto3 = texto3;
-        this.dias = dias;
+        this.plazo = plazo;
     }
 
-    public Fase(int id, int idOrigen, String codigo, int tipo, String texto1, String texto2, String texto3, int dias) {
+    public Fase(int id, int idOrigen, String codigo, int tipo, String texto1, String texto2, String texto3, String plazo) {
         this.id = id;
         this.idOrigen = idOrigen;
         this.codigo = codigo;
@@ -41,7 +41,7 @@ public class Fase {
         this.texto1 = texto1;
         this.texto2 = texto2;
         this.texto3 = texto3;
-        this.dias = dias;
+        this.plazo = plazo;
     }
 
     public String getCodigo() {
@@ -52,12 +52,12 @@ public class Fase {
         this.codigo = codigo;
     }
 
-    public int getDias() {
-        return dias;
+    public String getPlazo() {
+        return plazo;
     }
 
-    public void setDias(int dias) {
-        this.dias = dias;
+    public void setDias(String plazo) {
+        this.plazo = plazo;
     }
 
     public int getId() {
@@ -110,7 +110,24 @@ public class Fase {
 
     @Override
     public String toString() {
-        return "(" + codigo + ")" + dias + tipoToString();
+        return "(" + codigo + ")" + toStringPlazo(plazo) + tipoToString();
+    }
+
+    public String toStringPlazo(String plazo) {
+        switch (plazo) {
+            case "10D":
+                return "10";
+            case "15D":
+                return "15";
+            case "20D":
+                return "20";
+            case "1M":
+                return "30";
+            case "2M":
+                return "60";
+            default:
+                return null;
+        }
     }
 
     public boolean contiene(String str) {
@@ -151,14 +168,14 @@ public class Fase {
     }
 
     public String SQLCrear() {
-        return "INSERT into " + Var.dbNameBoes + ".fase (idOrigen, codigo, tipo, texto1, texto2,texto3, dias) values("
+        return "INSERT into " + Var.dbNameBoes + ".fase (idOrigen, codigo, tipo, texto1, texto2,texto3, plazo) values("
                 + this.idOrigen + ","
                 + Varios.entrecomillar(this.codigo) + ","
                 + this.tipo + ","
                 + Varios.entrecomillar(getTexto1()) + ","
                 + Varios.entrecomillar(getTexto2()) + ","
                 + Varios.entrecomillar(getTexto3()) + ","
-                + this.dias
+                + Varios.entrecomillar(this.plazo)
                 + ")";
     }
 
@@ -166,7 +183,7 @@ public class Fase {
         return "UPDATE " + Var.dbNameBoes + ".fase SET "
                 + "codigo=" + Varios.entrecomillar(this.codigo) + ","
                 + "tipo=" + this.tipo + ","
-                + "dias=" + this.dias + ","
+                + "plazo=" + Varios.entrecomillar(this.plazo) + ","
                 + "texto1=" + Varios.entrecomillar(this.texto1) + ","
                 + "texto2=" + Varios.entrecomillar(this.texto2) + ","
                 + "texto3=" + Varios.entrecomillar(this.texto3)

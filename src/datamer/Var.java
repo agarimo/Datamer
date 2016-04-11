@@ -153,9 +153,13 @@ public class Var {
     }
 
     private static void initVarKeyStore() {
-        System.setProperty("javax.net.ssl.trustStore", "keystore");
-        System.setProperty("javax.net.ssl.trustStorePassword", "Carras-24");
-        System.setProperty("javax.net.ssl.trustStoreType", "JKS");
+//        System.setProperty("javax.net.ssl.trustStore", "keystore");
+//        System.setProperty("javax.net.ssl.trustStorePassword", "Carras-24");
+//        System.setProperty("javax.net.ssl.trustStoreType", "JKS");
+        
+        System.setProperty("javax.net.ssl.keyStore", "keystore");
+        System.setProperty("javax.net.ssl.keyStorePassword", "Carras-24");
+//        System.setProperty("javax.net.ssl.keyStoreType", "JKS");
     }
 
     private static void initVarStrucFecha() {

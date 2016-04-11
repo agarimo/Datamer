@@ -6,6 +6,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 /**
@@ -17,7 +18,6 @@ public class Datamer extends Application {
     @Override
     public void init() {
         Var.initVar();
-        
         try {
             Thread.sleep(5000);
         } catch (InterruptedException ex) {
@@ -29,6 +29,12 @@ public class Datamer extends Application {
     public void start(Stage stage) throws Exception {
         Var.stage=stage;
         Parent root = FXMLLoader.load(getClass().getResource("/datamer/view/Win.fxml"));
+        
+        Image icon = new Image(getClass().getResourceAsStream("/datamer/resources/DeathStar.png"));
+        Var.stage.getIcons().add(icon);
+        Var.stage.setTitle("DataFest 1.1");
+        
+                
 
         Scene scene = new Scene(root);
         Var.stage.setScene(scene);

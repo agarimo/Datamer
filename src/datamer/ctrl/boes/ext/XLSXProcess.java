@@ -137,7 +137,7 @@ public class XLSXProcess {
         } else {
             multa.setTipoJuridico("P");
         }
-        multa.setPlazo(ve.getPlazo());
+        multa.setPlazo(ve.getPlazo().getValue());
 
         if (sd.expediente != 0) {
             multa.setExpediente(getCelda(linea, sd.expediente).trim().toUpperCase().replace("\"", ""));

@@ -22,7 +22,6 @@ public enum Plazo {
         return this.value;
     }
     
-    
      @Override
     public String toString() {
         switch (this) {

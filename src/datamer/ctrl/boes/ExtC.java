@@ -155,7 +155,7 @@ public class ExtC implements Initializable {
             }
         }
     }
-
+ 
     @FXML
     void abrirCarpetaAr(ActionEvent event) {
         Date fecha = Dates.asDate(dpFecha.getValue());
@@ -244,6 +244,18 @@ public class ExtC implements Initializable {
         dpFecha.setValue(null);
         procesarList.clear();
         previewList.clear();
+    }
+
+    @FXML
+    void eliminarLineaPreview(ActionEvent event) {
+        System.out.println("Eliminando");
+        ModeloPreview aux = (ModeloPreview) tvPreview.getSelectionModel().getSelectedItem();
+        System.out.println(aux);
+        
+        if (aux != null) {
+            System.out.println("Borrando");
+            previewList.remove(aux);
+        }
     }
 
     @FXML
@@ -703,6 +715,7 @@ public class ExtC implements Initializable {
 
     @FXML
     void procesar(ActionEvent event) {
+        cambioEnDatePicker(new ActionEvent());
         Date fecha = Dates.asDate(dpFecha.getValue());
         List<ModeloProcesar> list = getBoletinesProcesar();
 

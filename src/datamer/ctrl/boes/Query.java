@@ -951,7 +951,7 @@ public class Query extends sql.Query {
                 aux.setTexto1(rs.getString("texto1"));
                 aux.setTexto2(rs.getString("texto2"));
                 aux.setTexto3(rs.getString("texto3"));
-                aux.setDias(rs.getString("plazo"));
+                aux.setPlazo(rs.getString("plazo"));
                 list.add(aux);
             }
             rs.close();
@@ -980,7 +980,7 @@ public class Query extends sql.Query {
                 aux.setTexto1(rs.getString("texto1"));
                 aux.setTexto2(rs.getString("texto2"));
                 aux.setTexto3(rs.getString("texto3"));
-                aux.setDias(rs.getString("plazo"));
+                aux.setPlazo(rs.getString("plazo"));
                 list.add(aux);
             }
             rs.close();

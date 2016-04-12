@@ -212,7 +212,7 @@ public class FasesC implements Initializable {
         fase.setTexto1(taTexto1.getText().trim());
         fase.setTexto2(taTexto2.getText().trim());
         fase.setTexto3(taTexto3.getText().trim());
-        fase.setDias(plazo.getValue());
+        fase.setPlazo(plazo);
 
         return fase;
     }
@@ -344,6 +344,7 @@ public class FasesC implements Initializable {
     }
 
     void loadFases() {
+        clear();
         tablaFases.clear();
         ModeloFases mf;
         Origen aux = (Origen) lvOrigen.getSelectionModel().getSelectedItem();

@@ -2,6 +2,7 @@ package datamer.model.boes.enty;
 
 import java.util.Objects;
 import datamer.Var;
+import datamer.model.boes.Plazo;
 import util.Varios;
 
 /**
@@ -17,13 +18,13 @@ public class Fase {
     private String texto1;
     private String texto2;
     private String texto3;
-    private String plazo;
+    private Plazo plazo;
 
     public Fase() {
 
     }
 
-    public Fase(int idOrigen, String codigo, int tipo, String texto1, String texto2, String texto3, String plazo) {
+    public Fase(int idOrigen, String codigo, int tipo, String texto1, String texto2, String texto3, Plazo plazo) {
         this.idOrigen = idOrigen;
         this.codigo = codigo;
         this.tipo = tipo;
@@ -33,7 +34,7 @@ public class Fase {
         this.plazo = plazo;
     }
 
-    public Fase(int id, int idOrigen, String codigo, int tipo, String texto1, String texto2, String texto3, String plazo) {
+    public Fase(int id, int idOrigen, String codigo, int tipo, String texto1, String texto2, String texto3, Plazo plazo) {
         this.id = id;
         this.idOrigen = idOrigen;
         this.codigo = codigo;
@@ -52,12 +53,35 @@ public class Fase {
         this.codigo = codigo;
     }
 
-    public String getPlazo() {
+    public Plazo getPlazo() {
         return plazo;
     }
 
-    public void setDias(String plazo) {
+    public void setPlazo(Plazo plazo) {
         this.plazo = plazo;
+    }
+
+    public void setPlazo(String plazo) {
+        switch (plazo) {
+            case "10D":
+                this.plazo = Plazo.D10;
+                break;
+            case "15D":
+                this.plazo = Plazo.D15;
+                break;
+            case "20D":
+                this.plazo = Plazo.D20;
+                break;
+            case "1M":
+                this.plazo = Plazo.M1;
+                break;
+            case "2M":
+                this.plazo = Plazo.M2;
+                break;
+            default:
+                this.plazo = Plazo.D10;
+                break;
+        }
     }
 
     public int getId() {
@@ -110,23 +134,23 @@ public class Fase {
 
     @Override
     public String toString() {
-        return "(" + codigo + ")" + toStringPlazo(plazo) + tipoToString();
+        return "(" + codigo + ")" + toStringPlazo() + tipoToString();
     }
 
-    public String toStringPlazo(String plazo) {
-        switch (plazo) {
-            case "10D":
+    public String toStringPlazo() {
+        switch (this.plazo) {
+            case D10:
                 return "10";
-            case "15D":
+            case D15:
                 return "15";
-            case "20D":
+            case D20:
                 return "20";
-            case "1M":
+            case M1:
                 return "30";
-            case "2M":
+            case M2:
                 return "60";
             default:
-                return null;
+                throw new IllegalArgumentException();
         }
     }
 
@@ -175,7 +199,7 @@ public class Fase {
                 + Varios.entrecomillar(getTexto1()) + ","
                 + Varios.entrecomillar(getTexto2()) + ","
                 + Varios.entrecomillar(getTexto3()) + ","
-                + Varios.entrecomillar(this.plazo)
+                + Varios.entrecomillar(this.plazo.getValue())
                 + ")";
     }
 
@@ -183,7 +207,7 @@ public class Fase {
         return "UPDATE " + Var.dbNameBoes + ".fase SET "
                 + "codigo=" + Varios.entrecomillar(this.codigo) + ","
                 + "tipo=" + this.tipo + ","
-                + "plazo=" + Varios.entrecomillar(this.plazo) + ","
+                + "plazo=" + Varios.entrecomillar(this.plazo.getValue()) + ","
                 + "texto1=" + Varios.entrecomillar(this.texto1) + ","
                 + "texto2=" + Varios.entrecomillar(this.texto2) + ","
                 + "texto3=" + Varios.entrecomillar(this.texto3)

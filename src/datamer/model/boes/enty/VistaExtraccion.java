@@ -1,6 +1,7 @@
 package datamer.model.boes.enty;
 
 import datamer.Var;
+import datamer.model.boes.Plazo;
 import java.util.Calendar;
 import java.util.Date;
 import util.Varios;
@@ -19,7 +20,7 @@ public class VistaExtraccion {
     private String tipo;
     private String faseCompleta;
     private String fase;
-    private String plazo;
+    private Plazo plazo;
     private String boe;
     
     public VistaExtraccion(){
@@ -66,7 +67,7 @@ public class VistaExtraccion {
         return fase;
     }
 
-    public String getPlazo() {
+    public Plazo getPlazo() {
         return plazo;
     }
 
@@ -80,7 +81,30 @@ public class VistaExtraccion {
         aux = split[1];
 
         fase = aux.substring(1, 4);
-        plazo = aux.substring(5, 7);
+        splitPlazo(aux.substring(5, 7));
+    }
+    
+    private void splitPlazo(String plazo){
+        switch (plazo) {
+            case "10D":
+                this.plazo = Plazo.D10;
+                break;
+            case "15D":
+                this.plazo = Plazo.D15;
+                break;
+            case "20D":
+                this.plazo = Plazo.D20;
+                break;
+            case "1M":
+                this.plazo = Plazo.M1;
+                break;
+            case "2M":
+                this.plazo = Plazo.M2;
+                break;
+            default:
+                this.plazo = Plazo.D10;
+                break;
+        }
     }
 
     private String getBoe(Date fecha,String entidad) {

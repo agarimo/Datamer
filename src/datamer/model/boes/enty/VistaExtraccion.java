@@ -86,19 +86,19 @@ public class VistaExtraccion {
     
     private void splitPlazo(String plazo){
         switch (plazo) {
-            case "10D":
+            case "10":
                 this.plazo = Plazo.D10;
                 break;
-            case "15D":
+            case "15":
                 this.plazo = Plazo.D15;
                 break;
-            case "20D":
+            case "20":
                 this.plazo = Plazo.D20;
                 break;
-            case "1M":
+            case "30":
                 this.plazo = Plazo.M1;
                 break;
-            case "2M":
+            case "60":
                 this.plazo = Plazo.M2;
                 break;
             default:

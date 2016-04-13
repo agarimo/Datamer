@@ -145,7 +145,7 @@ public final class BB0 {
             case "15D":
                 return "15";
             case "20D":
-                return "30";
+                return "20";
             case "1M":
                 return "30";
             case "2M":

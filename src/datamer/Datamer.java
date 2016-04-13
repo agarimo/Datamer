@@ -37,6 +37,7 @@ public class Datamer extends Application {
                 
 
         Scene scene = new Scene(root);
+        scene.getStylesheets().setAll(getClass().getResource("/datamer/resources/modena.css").toExternalForm());
         Var.stage.setScene(scene);
         Var.stage.setMaximized(true);
         Var.stage.show();

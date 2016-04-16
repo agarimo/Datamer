@@ -246,7 +246,7 @@ public class CruceC implements Initializable {
             try {
                 bd = new Sql(Var.con);
 
-                bd.ejecutar("DELETE FROM "+Var.dbNameTestra+".cruceTestra where codigoEdicto=" + procesoManual.getCodigo());
+                bd.ejecutar("DELETE FROM "+Var.dbNameTestra+".captura where id_edicto=" + procesoManual.getCodigo());
 
                 for (int i = 0; i < list.size(); i++) {
                     final int contador = i;
@@ -1059,8 +1059,8 @@ public class CruceC implements Initializable {
         String queryClean;
 
         if (mt != null) {
-            queryReset = "UPDATE "+Var.dbNameTestra+".descarga SET estadoCruce=0 where idDescarga=" + mt.getId();
-            queryClean = "DELETE from "+Var.dbNameTestra+".crucetestra where codigoEdicto=" + Varios.entrecomillar(mt.getCodigo());
+            queryReset = "UPDATE "+Var.dbNameTestra+".captura SET estado_cruce=0 where id=" + mt.getId();
+            queryClean = "DELETE from "+Var.dbNameTestra+".multa where id_edicto=" + Varios.entrecomillar(mt.getCodigo());
             try {
                 Sql bd = new Sql(Var.con);
                 bd.ejecutar(queryReset);
@@ -1081,8 +1081,8 @@ public class CruceC implements Initializable {
         String queryClean;
 
         if (fecha != null) {
-            queryReset = "UPDATE "+Var.dbNameTestra+".descarga SET estadoCruce=0 where fecha=" + Varios.entrecomillar(Dates.imprimeFecha(fecha));
-            queryClean = "DELETE from "+Var.dbNameTestra+".crucetestra where fechaPublicacion=" + Varios.entrecomillar(Dates.imprimeFecha(fecha));
+            queryReset = "UPDATE "+Var.dbNameTestra+".captura SET estado_cruce=0 where fecha=" + Varios.entrecomillar(Dates.imprimeFecha(fecha));
+            queryClean = "DELETE from "+Var.dbNameTestra+".multa where fecha_publicacion=" + Varios.entrecomillar(Dates.imprimeFecha(fecha));
             try {
                 Sql bd = new Sql(Var.con);
                 bd.ejecutar(queryReset);

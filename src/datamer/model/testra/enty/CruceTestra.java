@@ -248,12 +248,12 @@ public class CruceTestra {
     }
 
     public static String SQLBuscar(Date fecha) {
-        return "SELECT * FROM "+Var.dbNameTestra+".cruceTestra where fechaPublicacion=" + Varios.entrecomillar(Dates.imprimeFecha(fecha));
+        return "SELECT * FROM "+Var.dbNameTestra+".multa where fecha_publicacion=" + Varios.entrecomillar(Dates.imprimeFecha(fecha));
     }
 
     public String SQLCrear() {
         if (fechaMulta == null) {
-            return "INSERT into "+Var.dbNameTestra+".cruceTestra (fechaPublicacion,codigoEdicto,nEdicto,origen,expediente,nif,matricula,linea) values("
+            return "INSERT into "+Var.dbNameTestra+".multa (fecha_publicacion,id_edicto,n_edicto,origen,expediente,nif,matricula,linea) values("
                     + Varios.entrecomillar(this.fechaPublicacion) + ","
                     + Varios.entrecomillar(this.codigoBoletin) + ","
                     + Varios.entrecomillar(this.boletin) + ","
@@ -264,7 +264,7 @@ public class CruceTestra {
                     + Varios.entrecomillar(this.linea)
                     + ")";
         } else {
-            return "INSERT into "+Var.dbNameTestra+".cruceTestra (fechaPublicacion,codigoEdicto,nEdicto,origen,expediente,fechaMulta,nif,matricula,linea) values("
+            return "INSERT into "+Var.dbNameTestra+".multa (fecha_publicacion,id_edicto,n_edicto,origen,expediente,fecha_multa,nif,matricula,linea) values("
                     + Varios.entrecomillar(this.fechaPublicacion) + ","
                     + Varios.entrecomillar(this.codigoBoletin) + ","
                     + Varios.entrecomillar(this.boletin) + ","

@@ -1,34 +1,66 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.shape.*?>
-<?import javafx.scene.text.*?>
-<?import javafx.geometry.*?>
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ContextMenu?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="351.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="datamer.ctrl.testra.CruceC">
+<AnchorPane id="AnchorPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="470.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="datamer.ctrl.testra.CruceC">
    <children>
       <SplitPane dividerPositions="0.32082551594746717" minHeight="-Infinity" minWidth="-Infinity" prefHeight="351.0" prefWidth="535.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <items>
-          <AnchorPane maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="349.0" prefWidth="164.0" SplitPane.resizableWithParent="false">
+            <VBox maxWidth="-Infinity" minWidth="-Infinity" prefHeight="349.0" prefWidth="170.0" spacing="10.0" SplitPane.resizableWithParent="false">
                <children>
-                  <DatePicker fx:id="dpFecha" layoutX="7.0" layoutY="14.0" onAction="#cambioEnDatePicker" prefWidth="150.0" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="7.0" AnchorPane.topAnchor="15.0" />
-                  <Button fx:id="btProcesar" layoutX="10.0" layoutY="48.0" mnemonicParsing="false" onAction="#procesar" prefWidth="150.0" text="Procesar" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="7.0" AnchorPane.topAnchor="48.0" />
-                  <Button fx:id="btArchivo" layoutX="7.0" layoutY="164.0" mnemonicParsing="false" onAction="#generarArchivo" prefHeight="25.0" prefWidth="150.0" text="Generar Archivo" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="7.0" AnchorPane.topAnchor="164.0">
+                  <Label text="Fecha :">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <DatePicker fx:id="dpFecha" maxHeight="-Infinity" minHeight="-Infinity" onAction="#cambioEnDatePicker" prefHeight="30.0" prefWidth="150.0" />
+                  <Label text="Acciones :">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <Button fx:id="btProcesar" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#procesar" prefHeight="30.0" prefWidth="150.0" text="Procesar" />
+                  <Button fx:id="btProcesarM" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" onAction="#procesarManual" prefHeight="30.0" prefWidth="150.0" text="Procesar Manualmente" />
+                  <Button fx:id="btEditarBoletin" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" onAction="#editarBoletin" prefHeight="30.0" prefWidth="150.0" text="Editar Boletin" />
+                  <Separator prefHeight="3.0" prefWidth="150.0" />
+                  <Label text="Archivos :">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <Button fx:id="btArchivo" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" onAction="#generarArchivo" prefHeight="30.0" prefWidth="150.0" text="Generar Archivo">
                      <opaqueInsets>
                         <Insets />
-                     </opaqueInsets></Button>
-                  <Button fx:id="btAbrirCarpeta" layoutX="7.0" layoutY="196.0" mnemonicParsing="false" onAction="#abrirCarpeta" prefHeight="25.0" prefWidth="150.0" text="Abrir Carpeta" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="7.0" AnchorPane.topAnchor="196.0" />
-                  <Button fx:id="btCruce" layoutX="7.0" layoutY="312.0" mnemonicParsing="false" onAction="#procesoCruce" prefHeight="25.0" prefWidth="150.0" text="Cruzar Multas" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="7.0" />
-                  <Button fx:id="btProcesarM" layoutX="7.0" layoutY="83.0" mnemonicParsing="false" onAction="#procesarManual" prefHeight="25.0" prefWidth="150.0" text="Procesar Manualmente" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="7.0" AnchorPane.topAnchor="80.0" />
-                  <Separator layoutX="7.0" layoutY="151.0" prefHeight="3.0" prefWidth="150.0" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="7.0" AnchorPane.topAnchor="151.0" />
-                  <Separator layoutX="7.0" layoutY="296.0" prefHeight="3.0" prefWidth="150.0" AnchorPane.bottomAnchor="45.0" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="7.0" />
-                  <Button fx:id="btEditarBoletin" layoutX="7.0" layoutY="115.0" mnemonicParsing="false" onAction="#editarBoletin" prefHeight="25.0" prefWidth="150.0" text="Editar Boletin" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="7.0" AnchorPane.topAnchor="115.0" />
+                     </opaqueInsets>
+                  </Button>
+                  <Button fx:id="btAbrirCarpeta" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" onAction="#abrirCarpeta" prefHeight="30.0" prefWidth="150.0" text="Abrir Carpeta" />
+                  <Pane prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+                  <Separator prefHeight="3.0" prefWidth="150.0" />
+                  <Button fx:id="btCruce" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" onAction="#procesoCruce" prefHeight="30.0" prefWidth="150.0" text="Cruzar Multas" />
                </children>
-            </AnchorPane>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="20.0" />
+               </padding>
+            </VBox>
           <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="160.0" prefWidth="100.0">
                <children>
                   <StackPane prefHeight="150.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">

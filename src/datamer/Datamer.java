@@ -33,11 +33,9 @@ public class Datamer extends Application {
         Image icon = new Image(getClass().getResourceAsStream("/datamer/resources/DeathStar.png"));
         Var.stage.getIcons().add(icon);
         Var.stage.setTitle("DataFest 1.1");
-        
-                
 
         Scene scene = new Scene(root);
-        scene.getStylesheets().setAll(getClass().getResource("/datamer/resources/modena.css").toExternalForm());
+//        scene.getStylesheets().setAll(getClass().getResource("/datamer/resources/modena.css").toExternalForm());
         Var.stage.setScene(scene);
         Var.stage.setMaximized(true);
         Var.stage.show();

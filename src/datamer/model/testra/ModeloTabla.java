@@ -76,8 +76,4 @@ public class ModeloTabla implements Comparable<ModeloTabla> {
             return 0;
         }
     }
-    
-    
-    
-    
 }

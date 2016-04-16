@@ -71,9 +71,8 @@ public class Descarga {
     }
 
     public static String SQLBuscar(Date fecha) {
-        return "SELECT a.idDescarga,b.idEdicto, a.fecha,a.csv,a.datos,a.estadoCruce FROM "+Var.dbNameTestra+".descarga a "
-                + "left join datagest.edicto b on a.idDescarga=b.idDescarga "
+        return "SELECT id,id_edicto,fecha,csv,datos,estado_cruce FROM " + Var.dbNameTestra + ".captura "
                 + "where fecha=" + Varios.entrecomillar(Dates.imprimeFecha(fecha)) + " "
-                + "and estadoCruce<5";
+                + "and estado_cruce <5";
     }
 }

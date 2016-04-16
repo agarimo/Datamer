@@ -24,8 +24,8 @@ import util.Varios;
  * @author Agarimo
  */
 public class Query extends sql.Query {
-    
-    public static void ejecutar(String query){
+
+    public static void ejecutar(String query) {
         try {
             bd = new Sql(Var.con);
             bd.ejecutar(query);
@@ -35,11 +35,11 @@ public class Query extends sql.Query {
             Logger.getLogger(datamer.ctrl.tkm.Query.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    public static Captura getCaptura (){
+
+    public static Captura getCaptura() {
         return new Captura();
     }
-    
+
     public static boolean insertMultas(List<CruceTestra> list) {
         CruceTestra aux;
         Iterator<CruceTestra> it = list.iterator();
@@ -62,7 +62,7 @@ public class Query extends sql.Query {
     }
 
     public static void setEstadoDescarga(int id, Estado estado) {
-        String query = "UPDATE "+Var.dbNameTestra+".descarga SET estadoCruce=" + estado.getValue() + " WHERE idDescarga=" + id;
+        String query = "UPDATE " + Var.dbNameTestra + ".captura SET estado_cruce=" + estado.getValue() + " WHERE id=" + id;
 
         try {
             bd = new Sql(Var.con);
@@ -72,15 +72,13 @@ public class Query extends sql.Query {
             Logger.getLogger(Query.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public static boolean guardarBoletin(String idEdicto, String datos) {
         try {
             bd = new Sql(Var.con);
-            bd.ejecutar("UPDATE "+Var.dbNameTestra+".descarga SET "
+            bd.ejecutar("UPDATE " + Var.dbNameTestra + ".captura SET "
                     + "datos=" + Varios.entrecomillar(datos) + " "
-                    + "where idDescarga="
-                    + "(select idDescarga from datagest.edicto where "
-                    + "idEdicto=" + Varios.entrecomillar(idEdicto) + ")");
+                    + "where id_edicto=" + Varios.entrecomillar(idEdicto) + ")");
             bd.close();
             return true;
         } catch (SQLException ex) {
@@ -99,12 +97,12 @@ public class Query extends sql.Query {
 
             while (rs.next()) {
                 aux = new Descarga();
-                aux.setId(rs.getInt("idDescarga"));
-                aux.setCodigo(rs.getString("idEdicto"));
+                aux.setId(rs.getInt("id"));
+                aux.setCodigo(rs.getString("id_edicto"));
                 aux.setFecha(rs.getDate("fecha"));
                 aux.setCsv(rs.getString("csv"));
                 aux.setDatos(rs.getString("datos"));
-                aux.setEstado(rs.getInt("estadoCruce"));
+                aux.setEstado(rs.getInt("estado_cruce"));
                 list.add(aux);
             }
             rs.close();
@@ -126,10 +124,10 @@ public class Query extends sql.Query {
             while (rs.next()) {
                 aux = new CruceTestra();
                 aux.setId(rs.getInt("id"));
-                aux.setFechaPublicacion(Dates.imprimeFecha(rs.getDate("fechaPublicacion")));
-                aux.setCodigoBoletin(rs.getString("codigoEdicto"));
+                aux.setFechaPublicacion(Dates.imprimeFecha(rs.getDate("fecha_publicacion")));
+                aux.setCodigoBoletin(rs.getString("id_edicto"));
                 aux.setExpediente(rs.getString("expediente"));
-                aux.setFechaMulta(rs.getDate("fechaMulta"));
+                aux.setFechaMulta(rs.getDate("fecha_multa"));
                 aux.setNif(rs.getString("nif"));
                 aux.setMatricula(rs.getString("matricula"));
                 aux.setLineaQuery(rs.getString("linea"));
@@ -143,9 +141,9 @@ public class Query extends sql.Query {
         }
         return list;
     }
-    
+
     public static List<String> listaCapturaParam(Date fecha) {
-        String query = "SELECT parametros FROM "+Var.dbNameTestra+".captura WHERE fecha="+Varios.entrecomillar(Dates.imprimeFecha(fecha));
+        String query = "SELECT parametros FROM " + Var.dbNameTestra + ".captura WHERE fecha=" + Varios.entrecomillar(Dates.imprimeFecha(fecha));
         List<String> list = new ArrayList();
         String aux;
 
@@ -154,7 +152,7 @@ public class Query extends sql.Query {
             rs = bd.ejecutarQueryRs(query);
 
             while (rs.next()) {
-                aux=rs.getString("parametros");
+                aux = rs.getString("parametros");
                 list.add(aux);
             }
             rs.close();
@@ -164,9 +162,9 @@ public class Query extends sql.Query {
         }
         return list;
     }
-    
+
     public static List<Captura> listaCaptura(Date fecha) {
-        String query = "SELECT * FROM "+Var.dbNameTestra+".captura WHERE fecha="+Varios.entrecomillar(Dates.imprimeFecha(fecha));
+        String query = "SELECT * FROM " + Var.dbNameTestra + ".captura WHERE fecha=" + Varios.entrecomillar(Dates.imprimeFecha(fecha));
         List<Captura> list = new ArrayList();
         Captura aux;
 
@@ -194,9 +192,9 @@ public class Query extends sql.Query {
         }
         return list;
     }
-    
+
     public static List<ModeloCaptura> listaModeloCaptura(Date fecha) {
-        String query = "SELECT id,id_edicto,parametros,csv,estado FROM "+Var.dbNameTestra+".captura WHERE fecha="+Varios.entrecomillar(Dates.imprimeFecha(fecha));
+        String query = "SELECT id,id_edicto,parametros,csv,estado FROM " + Var.dbNameTestra + ".captura WHERE fecha=" + Varios.entrecomillar(Dates.imprimeFecha(fecha));
         List<ModeloCaptura> list = new ArrayList();
         ModeloCaptura aux;
 
@@ -221,18 +219,18 @@ public class Query extends sql.Query {
         }
         return list;
     }
-    
+
     public static List<Cruce> listaCruce(TipoCruce tipo, Date fecha) {
         List<Cruce> list = new ArrayList();
         Cruce aux;
-        String query="";
-        
-        switch(tipo){
+        String query = "";
+
+        switch (tipo) {
             case TESTRA:
-                query="SELECT * FROM "+Var.dbNameTestra+".cruce WHERE fechaPublicacion="+Varios.entrecomillar(Dates.imprimeFecha(fecha));
+                query = "SELECT * FROM " + Var.dbNameTestra + ".cruce WHERE fechaPublicacion=" + Varios.entrecomillar(Dates.imprimeFecha(fecha));
                 break;
             case IDBL:
-                query="SELECT * FROM "+Var.dbNameIdbl+".cruce WHERE fecha_publicacion="+Varios.entrecomillar(Dates.imprimeFecha(fecha));
+                query = "SELECT * FROM " + Var.dbNameIdbl + ".cruce WHERE fecha_publicacion=" + Varios.entrecomillar(Dates.imprimeFecha(fecha));
                 break;
         }
 
@@ -243,14 +241,14 @@ public class Query extends sql.Query {
             while (rs.next()) {
                 aux = new Cruce();
                 aux.setId(rs.getInt("id"));
-                if(tipo==TipoCruce.TESTRA){
+                if (tipo == TipoCruce.TESTRA) {
                     aux.setCodigoBoletin("TESTRA");
                     aux.setFechaMulta(rs.getString("fechaMulta"));
-                     aux.setNif(rs.getString("nif"));
-                }else{
+                    aux.setNif(rs.getString("nif"));
+                } else {
                     aux.setCodigoBoletin("IDBL");
                     aux.setFechaMulta(rs.getString("fecha_multa"));
-                     aux.setNif(rs.getString("cif"));
+                    aux.setNif(rs.getString("cif"));
                 }
                 aux.setFechaPublicacion(fecha);
                 aux.setExpediente(rs.getString("expediente"));

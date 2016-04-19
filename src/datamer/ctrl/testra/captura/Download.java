@@ -29,7 +29,7 @@ public class Download {
             cap.setParametros(aux.getParametros());
 
             String datos = files.Download.downloadURL(generaEnlace(cap.getParametros(), false));
-            cap.setIdEdicto(getId(datos));
+            cap.setCodigo(getId(datos));
             cap.setCsv(getCsv(datos));
 
             files.Download.downloadFILE(generaEnlace(cap.getParametros(), true), pdf);

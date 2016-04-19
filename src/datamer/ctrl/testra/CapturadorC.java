@@ -152,7 +152,7 @@ public class CapturadorC implements Initializable {
 
         cap.setParametros(aux);
         cap.setFecha(fecha);
-        cap.setIdEdicto("Sin descargar");
+        cap.setCodigo("Sin descargar");
         cap.setCsv("Sin descargar");
         cap.setDatos("Sin descargar");
 

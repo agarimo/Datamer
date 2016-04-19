@@ -1,5 +1,6 @@
 package datamer;
 
+import datamer.ctrl.CveTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Application;
@@ -27,9 +28,9 @@ public class Datamer extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        Var.stage=stage;
+        Var.stage = stage;
         Parent root = FXMLLoader.load(getClass().getResource("/datamer/view/Win.fxml"));
-        
+
         Image icon = new Image(getClass().getResourceAsStream("/datamer/resources/DeathStar.png"));
         Var.stage.getIcons().add(icon);
         Var.stage.setTitle("DataFest 1.1");
@@ -46,5 +47,12 @@ public class Datamer extends Application {
      */
     public static void main(String[] args) {
         launch(args);
+    }
+
+    public static void test() {
+        Var.initVar();
+        CveTask ct = new CveTask();
+
+        ct.run();
     }
 }

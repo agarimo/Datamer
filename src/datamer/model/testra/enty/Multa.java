@@ -14,9 +14,10 @@ import util.Varios;
  *
  * @author Agarimo
  */
-public class CruceTestra {
+public class Multa {
 
     int id;
+    int id_captura;
     String fechaPublicacion;
     String codigoBoletin;
     String boletin;
@@ -28,7 +29,7 @@ public class CruceTestra {
     String matricula;
     String linea;
 
-    public CruceTestra() {
+    public Multa() {
 
     }
 
@@ -38,6 +39,14 @@ public class CruceTestra {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getId_captura() {
+        return id_captura;
+    }
+
+    public void setId_captura(int id_captura) {
+        this.id_captura = id_captura;
     }
 
     public String getCodigoBoletin() {
@@ -253,7 +262,8 @@ public class CruceTestra {
 
     public String SQLCrear() {
         if (fechaMulta == null) {
-            return "INSERT into "+Var.dbNameTestra+".multa (fecha_publicacion,id_edicto,n_edicto,origen,expediente,nif,matricula,linea) values("
+            return "INSERT into "+Var.dbNameTestra+".multa (id_captura,fecha_publicacion,codigo,n_edicto,origen,expediente,nif,matricula,linea) values("
+                    + this.id_captura + ","
                     + Varios.entrecomillar(this.fechaPublicacion) + ","
                     + Varios.entrecomillar(this.codigoBoletin) + ","
                     + Varios.entrecomillar(this.boletin) + ","
@@ -264,7 +274,8 @@ public class CruceTestra {
                     + Varios.entrecomillar(this.linea)
                     + ")";
         } else {
-            return "INSERT into "+Var.dbNameTestra+".multa (fecha_publicacion,id_edicto,n_edicto,origen,expediente,fecha_multa,nif,matricula,linea) values("
+            return "INSERT into "+Var.dbNameTestra+".multa (id_captura,fecha_publicacion,codigo,n_edicto,origen,expediente,fecha_multa,nif,matricula,linea) values("
+                    + this.id_captura + ","
                     + Varios.entrecomillar(this.fechaPublicacion) + ","
                     + Varios.entrecomillar(this.codigoBoletin) + ","
                     + Varios.entrecomillar(this.boletin) + ","

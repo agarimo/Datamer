@@ -5,8 +5,7 @@ import datamer.model.testra.Estado;
 import datamer.model.testra.ModeloCaptura;
 import datamer.model.testra.TipoCruce;
 import datamer.model.testra.enty.Cruce;
-import datamer.model.testra.enty.Descarga;
-import datamer.model.testra.enty.CruceTestra;
+import datamer.model.testra.enty.Multa;
 import datamer.model.testra.enty.Captura;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -40,9 +39,9 @@ public class Query extends sql.Query {
         return new Captura();
     }
 
-    public static boolean insertMultas(List<CruceTestra> list) {
-        CruceTestra aux;
-        Iterator<CruceTestra> it = list.iterator();
+    public static boolean insertMultas(List<Multa> list) {
+        Multa aux;
+        Iterator<Multa> it = list.iterator();
 
         try {
             bd = new Sql(Var.con);
@@ -87,18 +86,18 @@ public class Query extends sql.Query {
         }
     }
 
-    public static List<Descarga> listaBoe(String query) {
-        List<Descarga> list = new ArrayList();
-        Descarga aux;
+    public static List<Captura> listaBoe(String query) {
+        List<Captura> list = new ArrayList();
+        Captura aux;
 
         try {
             bd = new Sql(Var.con);
             rs = bd.ejecutarQueryRs(query);
 
             while (rs.next()) {
-                aux = new Descarga();
+                aux = new Captura();
                 aux.setId(rs.getInt("id"));
-                aux.setCodigo(rs.getString("id_edicto"));
+                aux.setCodigo(rs.getString("codigo"));
                 aux.setFecha(rs.getDate("fecha"));
                 aux.setCsv(rs.getString("csv"));
                 aux.setDatos(rs.getString("datos"));
@@ -113,16 +112,16 @@ public class Query extends sql.Query {
         return list;
     }
 
-    public static List<CruceTestra> listaMulta(String query) {
-        List<CruceTestra> list = new ArrayList();
-        CruceTestra aux;
+    public static List<Multa> listaMulta(String query) {
+        List<Multa> list = new ArrayList();
+        Multa aux;
 
         try {
             bd = new Sql(Var.con);
             rs = bd.ejecutarQueryRs(query);
 
             while (rs.next()) {
-                aux = new CruceTestra();
+                aux = new Multa();
                 aux.setId(rs.getInt("id"));
                 aux.setFechaPublicacion(Dates.imprimeFecha(rs.getDate("fecha_publicacion")));
                 aux.setCodigoBoletin(rs.getString("id_edicto"));
@@ -175,7 +174,7 @@ public class Query extends sql.Query {
             while (rs.next()) {
                 aux = new Captura();
                 aux.setId(rs.getInt("id"));
-                aux.setIdEdicto(rs.getString("id_edicto"));
+                aux.setCodigo(rs.getString("codigo"));
                 aux.setParametros(rs.getString("parametros"));
                 aux.setCsv(rs.getString("csv"));
                 aux.setFecha(fecha);
@@ -194,7 +193,7 @@ public class Query extends sql.Query {
     }
 
     public static List<ModeloCaptura> listaModeloCaptura(Date fecha) {
-        String query = "SELECT id,id_edicto,parametros,csv,estado FROM " + Var.dbNameTestra + ".captura WHERE fecha=" + Varios.entrecomillar(Dates.imprimeFecha(fecha));
+        String query = "SELECT id,codigo,parametros,csv,estado FROM " + Var.dbNameTestra + ".captura WHERE fecha=" + Varios.entrecomillar(Dates.imprimeFecha(fecha));
         List<ModeloCaptura> list = new ArrayList();
         ModeloCaptura aux;
 
@@ -205,7 +204,7 @@ public class Query extends sql.Query {
             while (rs.next()) {
                 aux = new ModeloCaptura();
                 aux.setId(rs.getInt("id"));
-                aux.setEdicto(rs.getString("id_edicto"));
+                aux.setEdicto(rs.getString("codigo"));
                 aux.setParametros(rs.getString("parametros"));
                 aux.setCsv(rs.getString("csv"));
                 aux.setEstado(rs.getInt("estado"));

@@ -13,17 +13,17 @@ import util.Varios;
 public class Captura {
 
     private int id;
-    private String idEdicto;
+    private String codigo;
     private String parametros;
     private String csv;
     private Date fecha;
     private int estado;
     private String datos;
     private int estadoCruce;
-
+    
     public Captura() {
         this.id = 0;
-        this.idEdicto = null;
+        this.codigo = null;
         this.parametros = null;
         this.csv = null;
         this.fecha = null;
@@ -40,12 +40,12 @@ public class Captura {
         this.id = id;
     }
 
-    public String getIdEdicto() {
-        return idEdicto;
+    public String getCodigo() {
+        return codigo;
     }
 
-    public void setIdEdicto(String idEdicto) {
-        this.idEdicto = idEdicto;
+    public void setCodigo(String idEdicto) {
+        this.codigo = idEdicto;
     }
 
     public String getParametros() {
@@ -120,16 +120,22 @@ public class Captura {
 
     @Override
     public String toString() {
-        return "Edicto{" + "idEdicto=" + idEdicto + '}';
+        return "Edicto{" + "idEdicto=" + codigo + '}';
     }
 
     public String SQLBuscar() {
         return "";
     }
+    
+    public static String SQLBuscar(Date fecha) {
+        return "SELECT id,codigo,fecha,csv,datos,estado_cruce FROM " + Var.dbNameTestra + ".captura "
+                + "where fecha=" + Varios.entrecomillar(Dates.imprimeFecha(fecha)) + " "
+                + "and estado_cruce <5";
+    }
 
     public String SQLCrear() {
         return "INSERT into " + Var.dbNameTestra + ".captura (id_edicto,parametros,csv,fecha,estado,datos,estado_cruce) values("
-                + Varios.entrecomillar(this.idEdicto) + ","
+                + Varios.entrecomillar(this.codigo) + ","
                 + Varios.entrecomillar(this.parametros) + ","
                 + Varios.entrecomillar(this.csv) + ","
                 + Varios.entrecomillar(Dates.imprimeFecha(fecha)) + ","
@@ -153,7 +159,7 @@ public class Captura {
 
     public String SQLsetDatos() {
         return "UPDATE " + Var.dbNameTestra + ".captura SET "
-                + "id_edicto=" + Varios.entrecomillar(this.idEdicto) + ","
+                + "id_edicto=" + Varios.entrecomillar(this.codigo) + ","
                 + "csv=" + Varios.entrecomillar(this.csv) + ","
                 + "estado=" + this.estado + ","
                 + "estado_cruce=" + this.estadoCruce + ","

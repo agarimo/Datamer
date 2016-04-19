@@ -8,9 +8,9 @@ import datamer.model.testra.ModeloCruce;
 import datamer.model.testra.ModeloTabla;
 import datamer.model.testra.Estado;
 import datamer.model.testra.TipoCruce;
+import datamer.model.testra.enty.Captura;
 import datamer.model.testra.enty.Cruce;
-import datamer.model.testra.enty.Descarga;
-import datamer.model.testra.enty.CruceTestra;
+import datamer.model.testra.enty.Multa;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
@@ -231,12 +231,13 @@ public class CruceC implements Initializable {
             });
 
             Sql bd;
-            CruceTestra multa = null;
+            Multa multa = null;
             List<String> lista = procesoManual.getValid();
-            List<CruceTestra> list = new ArrayList();
+            List<Multa> list = new ArrayList();
 
             for (String aux : lista) {
-                multa = new CruceTestra();
+                multa = new Multa();
+                multa.setId_captura(procesoManual.getId());
                 multa.setCodigoBoletin(procesoManual.getCodigo());
                 multa.setFechaPublicacion(procesoManual.getFecha());
                 multa.setLinea(aux);
@@ -246,7 +247,7 @@ public class CruceC implements Initializable {
             try {
                 bd = new Sql(Var.con);
 
-                bd.ejecutar("DELETE FROM "+Var.dbNameTestra+".captura where id_edicto=" + procesoManual.getCodigo());
+                bd.ejecutar("DELETE FROM "+Var.dbNameTestra+".multa where id_captura=" + procesoManual.getId());
 
                 for (int i = 0; i < list.size(); i++) {
                     final int contador = i;
@@ -294,7 +295,7 @@ public class CruceC implements Initializable {
             if (fecha != null) {
 
                 Thread a = new Thread(() -> {
-                    List<Descarga> aux;
+                    List<Captura> aux;
 
                     Platform.runLater(() -> {
                         dpFecha.setDisable(true);
@@ -305,7 +306,7 @@ public class CruceC implements Initializable {
                         mostrarPanel(this.PANEL_ESPERA);
                     });
 
-                    aux = Query.listaBoe(Descarga.SQLBuscar(fecha));
+                    aux = Query.listaBoe(Captura.SQLBuscar(fecha));
 
                     Platform.runLater(() -> {
                         dpFecha.setDisable(false);
@@ -331,15 +332,15 @@ public class CruceC implements Initializable {
 
     }
 
-    void cargarDatos(List<Descarga> lista) {
+    void cargarDatos(List<Captura> lista) {
         this.CONTADOR_TOTAL = 0;
         this.CONTADOR_PROCESADOS = 0;
         this.CONTADOR_ERRORES = 0;
         listaTabla.clear();
         List<ModeloTabla> listModelo = new ArrayList();
-        Descarga aux;
+        Captura aux;
         ModeloTabla mt;
-        Iterator<Descarga> it = lista.iterator();
+        Iterator<Captura> it = lista.iterator();
 
         while (it.hasNext()) {
             mt = new ModeloTabla();
@@ -501,10 +502,10 @@ public class CruceC implements Initializable {
                 mostrarPanel(this.PANEL_ESPERA);
             });
 
-            CruceTestra multa;
+            Multa multa;
             StringBuilder sb = new StringBuilder();
-            List<CruceTestra> list = Query.listaMulta(CruceTestra.SQLBuscar(fecha));
-            Iterator<CruceTestra> it = list.iterator();
+            List<Multa> list = Query.listaMulta(Multa.SQLBuscar(fecha));
+            Iterator<Multa> it = list.iterator();
 
             while (it.hasNext()) {
                 multa = it.next();
@@ -850,7 +851,7 @@ public class CruceC implements Initializable {
                 if (datos.contains("*error*")) {
                     Query.setEstadoDescarga(mt.getId(), Estado.CON_ERRORES);
                 } else {
-                    List<CruceTestra> listado = splitMultas(mt, datos);
+                    List<Multa> listado = splitMultas(mt, datos);
 
                     if (!listado.isEmpty()) {
 
@@ -1013,16 +1014,17 @@ public class CruceC implements Initializable {
         lbInvalid.setText(Integer.toString(procesoManual.invalidCount()));
     }
 
-    private List<CruceTestra> splitMultas(ModeloTabla aux, String datos) {
-        List<CruceTestra> list = new ArrayList();
-        CruceTestra multa;
+    private List<Multa> splitMultas(ModeloTabla aux, String datos) {
+        List<Multa> list = new ArrayList();
+        Multa multa;
         String[] split = datos.split(System.lineSeparator());
 
         System.out.println(aux.getCodigo());
 
         for (String split1 : split) {
             if (!split1.equals("")) {
-                multa = new CruceTestra();
+                multa = new Multa();
+                multa.setId_captura(aux.getId());
                 multa.setCodigoBoletin(aux.getCodigo());
                 multa.setFechaPublicacion(aux.getFecha());
                 multa.setLinea(split1);
@@ -1095,5 +1097,4 @@ public class CruceC implements Initializable {
             cambioEnDatePicker(new ActionEvent());
         }
     }
-
 }

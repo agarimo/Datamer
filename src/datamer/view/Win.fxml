@@ -29,6 +29,12 @@
                   <MenuItem mnemonicParsing="false" onAction="#initBoesPattern" text="Patrones" />
             </items>
           </Menu>
+            <Menu mnemonicParsing="false" text="Rutinas">
+              <items>
+                  <MenuItem mnemonicParsing="false" text="Proceso CVE" />
+                <MenuItem mnemonicParsing="false" text="SQL" />
+              </items>
+            </Menu>
           <Menu mnemonicParsing="false" text="Testra">
             <items>
                   <MenuItem mnemonicParsing="false" onAction="#initCaptura" text="Captura" />

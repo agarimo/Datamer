@@ -11,6 +11,8 @@ import datamer.model.boes.ModeloBoes;
 import datamer.model.boes.enty.Descarga;
 import datamer.model.boes.enty.Boletin;
 import datamer.model.boes.Status;
+import de.jensd.fx.glyphs.GlyphsDude;
+import de.jensd.fx.glyphs.materialicons.MaterialIcon;
 import java.awt.Desktop;
 import java.io.IOException;
 import java.net.URI;
@@ -48,7 +50,8 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -56,13 +59,17 @@ import util.Dates;
 import sql.Sql;
 import util.Varios;
 
+
+
+
+
 /**
  * FXML Controller class
  *
  * @author Agarimo
  */
 public class ClasificacionC implements Initializable {
-    
+
     private static final Logger LOG = LogManager.getLogger(ClasificacionC.class);
 
     Sql bd;
@@ -79,7 +86,7 @@ public class ClasificacionC implements Initializable {
 
     //<editor-fold defaultstate="collapsed" desc="FXML VAR">
     @FXML
-    private AnchorPane rootPane;
+    private VBox rootPane;
     @FXML
     private TableView<ModeloBoes> tvBoes;
     @FXML
@@ -128,6 +135,7 @@ public class ClasificacionC implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        initializeIcons();
         Tooltip a = new Tooltip();
         a.setText("Seleccionar todos");
         btSelectAll.setTooltip(a);
@@ -136,6 +144,32 @@ public class ClasificacionC implements Initializable {
         autoScroll = true;
         cbAutoScroll.setSelected(autoScroll);
         setProcesandoC(false);
+
+    }
+
+    private void initializeIcons() {
+        String green = "#008000";
+        String red = "#FF0000";
+        String orange = "#FFA500";
+        Text text;
+        
+        text = GlyphsDude.createIcon(MaterialIcon.ADD_CIRCLE, "32");
+        text.setFill(Paint.valueOf(green));
+        btSelect.setGraphic(text);
+        
+        text = GlyphsDude.createIcon(MaterialIcon.REMOVE_CIRCLE, "32");
+        text.setFill(Paint.valueOf(red));
+        btDiscard.setGraphic(text);
+        
+        
+        text = GlyphsDude.createIcon(MaterialIcon.CACHED, "32");
+        text.setFill(Paint.valueOf(orange));
+        btRecargarClasificacion.setGraphic(text);
+        
+        
+        GlyphsDude.setIcon(btSelectAll, MaterialIcon.PLAYLIST_ADD, "32");
+        GlyphsDude.setIcon(btRecoverS, MaterialIcon.INPUT, "32");
+        GlyphsDude.setIcon(btRecoverD, MaterialIcon.INPUT, "32");
     }
 
     void initializeBoesData(Boe boe) {
@@ -211,6 +245,10 @@ public class ClasificacionC implements Initializable {
                 }
             }
         });
+
+        codigoCL.prefWidthProperty().bind(tvBoes.widthProperty().multiply(0.10));
+        origenCL.prefWidthProperty().bind(tvBoes.widthProperty().multiply(0.20));
+        descripcionCL.prefWidthProperty().bind(tvBoes.widthProperty().multiply(0.67));
 
         publicacion = FXCollections.observableArrayList();
         tvBoes.setItems(publicacion);
@@ -302,7 +340,7 @@ public class ClasificacionC implements Initializable {
                     discardSource.add(aux.getOrigen());
                     tableUpdate();
                 } catch (SQLException ex) {
-                    LOG.error("[pdfDiscardSource]"+ex);
+                    LOG.error("[pdfDiscardSource]" + ex);
                 }
             }
         } else {
@@ -396,7 +434,7 @@ public class ClasificacionC implements Initializable {
         try {
             Desktop.getDesktop().browse(new URI(aux.getLink()));
         } catch (IOException | URISyntaxException ex) {
-            LOG.error("[pdfShowOnWeb]"+ex);
+            LOG.error("[pdfShowOnWeb]" + ex);
         }
     }
 
@@ -695,7 +733,7 @@ public class ClasificacionC implements Initializable {
                 bd.ejecutar(boe.SQLCrear());
                 bd.close();
             } catch (SQLException ex) {
-                LOG.error("[xLisDatePickerCreateBoe]"+ex);
+                LOG.error("[xLisDatePickerCreateBoe]" + ex);
             }
         });
         a.start();

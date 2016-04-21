@@ -134,7 +134,7 @@ public class Captura {
     }
 
     public String SQLCrear() {
-        return "INSERT into " + Var.dbNameTestra + ".captura (id_edicto,parametros,csv,fecha,estado,datos,estado_cruce) values("
+        return "INSERT into " + Var.dbNameTestra + ".captura (codigo,parametros,csv,fecha,estado,datos,estado_cruce) values("
                 + Varios.entrecomillar(this.codigo) + ","
                 + Varios.entrecomillar(this.parametros) + ","
                 + Varios.entrecomillar(this.csv) + ","
@@ -159,7 +159,7 @@ public class Captura {
 
     public String SQLsetDatos() {
         return "UPDATE " + Var.dbNameTestra + ".captura SET "
-                + "id_edicto=" + Varios.entrecomillar(this.codigo) + ","
+                + "codigo=" + Varios.entrecomillar(this.codigo) + ","
                 + "csv=" + Varios.entrecomillar(this.csv) + ","
                 + "estado=" + this.estado + ","
                 + "estado_cruce=" + this.estadoCruce + ","

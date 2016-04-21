@@ -1,4 +1,4 @@
-package datamer.ctrl;
+package datamer.ctrl.rutines;
 
 import datamer.Var;
 import datamer.model.Cve;

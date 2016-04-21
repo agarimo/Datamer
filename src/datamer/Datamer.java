@@ -1,6 +1,6 @@
 package datamer;
 
-import datamer.ctrl.CveTask;
+import datamer.ctrl.rutines.CveTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Application;

@@ -219,23 +219,25 @@ public class CapturaC implements Initializable {
     void initCapturador(ActionEvent event) {
         Date fecha = Dates.asDate(dpFecha.getValue());
 
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(Nav.TESTRA_CAPTURADOR));
-            Pane nodo = (Pane) fxmlLoader.load();
-            CapturadorC control = fxmlLoader.getController();
-            control.setFecha(fecha);
-            popup = new Stage();
-            popup.initOwner(Var.stage);
-            popup.setResizable(false);
-            popup.initModality(Modality.APPLICATION_MODAL);
-            popup.initStyle(StageStyle.UTILITY);
-            popup.setTitle("Capturador");
-            popup.setScene(new Scene(nodo));
-            popup.setAlwaysOnTop(true);
-            Var.stage.hide();
-            popup.show();
-        } catch (IOException ex) {
-            Logger.getLogger(WinC.class.getName()).log(Level.SEVERE, null, ex);
+        if (fecha != null) {
+            try {
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(Nav.TESTRA_CAPTURADOR));
+                Pane nodo = (Pane) fxmlLoader.load();
+                CapturadorC control = fxmlLoader.getController();
+                control.setFecha(fecha);
+                popup = new Stage();
+                popup.initOwner(Var.stage);
+                popup.setResizable(false);
+                popup.initModality(Modality.APPLICATION_MODAL);
+                popup.initStyle(StageStyle.UTILITY);
+                popup.setTitle("Capturador");
+                popup.setScene(new Scene(nodo));
+                popup.setAlwaysOnTop(true);
+                Var.stage.hide();
+                popup.show();
+            } catch (IOException ex) {
+                Logger.getLogger(WinC.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 

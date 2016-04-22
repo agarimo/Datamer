@@ -37,7 +37,7 @@ public class CapturadorC implements Initializable {
 
     @FXML
     private VBox rootPane;
-    
+
     @FXML
     private Label lbEnlaces;
 
@@ -78,7 +78,7 @@ public class CapturadorC implements Initializable {
         Platform.runLater(() -> {
             rootPane.setCursor(Cursor.WAIT);
         });
-        
+
         try {
             Sql bd = new Sql(Var.con);
 
@@ -91,7 +91,7 @@ public class CapturadorC implements Initializable {
         } catch (SQLException ex) {
             Logger.getLogger(CapturadorC.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         Platform.runLater(() -> {
             rootPane.setCursor(Cursor.DEFAULT);
         });
@@ -108,7 +108,7 @@ public class CapturadorC implements Initializable {
     }
 
     private void loadFecha(Date fecha) {
-        captura.addAll(Query.listaCapturaParam(fecha));
+        captura = Query.listaCapturaParam(fecha);
 
         Platform.runLater(() -> {
             lbEnlaces.setText(Integer.toString(captura.size()));
@@ -132,7 +132,7 @@ public class CapturadorC implements Initializable {
             try {
                 String s = (String) trans.getTransferData(DataFlavor.stringFlavor);
 
-                if (s.contains(cabecera)) {
+                if (s.contains(cabecera) && fecha!=null) {
                     creaDescarga(s);
                 }
 

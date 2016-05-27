@@ -2,43 +2,42 @@ package datamer.model.boes;
 
 /**
  *
- * @author Agarimo
+ * @author Agárimo
  */
 public enum Status {
-    USER {
-        @Override
-        public String toString() {
-            return "USER";
-        }
-    },
-    SOURCE {
-        @Override
-        public String toString() {
-            return "SOURCE";
-        }
-    },
-    APP {
-        @Override
-        public String toString() {
-            return "APP";
-        }
-    },
-    DELETED {
-        @Override
-        public String toString() {
-            return "DELETED";
-        }
-    },
-    DUPLICATED {
-        @Override
-        public String toString() {
-            return "DUPLICATED";
-        }
-    },
-    PENDING {
-        @Override
-        public String toString() {
-            return "PENDING";
+
+    APP(0),
+    DELETED(1),
+    DUPLICATED(2),
+    PENDING(3),
+    SOURCE(4),
+    USER(5);
+
+    private final int value;
+
+    Status(int value) {
+        this.value = value;
+    }
+    
+    public int getValue(){
+        return this.value;
+    }
+
+    @Override
+    public String toString() {
+        switch (this) {
+            case APP:
+                return "APP";
+            case DELETED:
+                return "DELETED";
+            case PENDING:
+                return "PENDING";
+            case SOURCE:
+                return "SOURCE";
+            case USER:
+                return "USER";
+            default:
+                throw new IllegalArgumentException();
         }
     }
 }

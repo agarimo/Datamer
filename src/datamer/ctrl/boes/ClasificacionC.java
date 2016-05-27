@@ -79,11 +79,6 @@ public class ClasificacionC implements Initializable {
     ObservableList<ModeloBoes> selectedList;
     ObservableList<ModeloBoes> discartedList;
 
-    List discardSource;
-    List discardText;
-    List selectText;
-    List selectAlready;
-
     //<editor-fold defaultstate="collapsed" desc="FXML VAR">
     @FXML
     private VBox rootPane;
@@ -123,8 +118,6 @@ public class ClasificacionC implements Initializable {
     private Button btVerWebC;
     @FXML
     private Button btDiscard;
-    @FXML
-    private Button btDescartaOrigen;
     @FXML
     private Button btFinClas;
     @FXML
@@ -170,34 +163,6 @@ public class ClasificacionC implements Initializable {
         GlyphsDude.setIcon(btSelectAll, MaterialIcon.PLAYLIST_ADD, "32");
         GlyphsDude.setIcon(btRecoverS, MaterialIcon.INPUT, "32");
         GlyphsDude.setIcon(btRecoverD, MaterialIcon.INPUT, "32");
-    }
-
-    void initializeBoesData(Boe boe) {
-        discardSource = Query.listaOrigenDescartado();
-        discardText = Query.listaTextoDescartado();
-        selectText = Query.listaTextoSeleccionado();
-        selectAlready = Query.listaAlreadySelected();
-
-        List bol = new ArrayList();
-        boe.getItems();
-
-        Iterator it;
-        Iterator it2;
-        Publicacion pb;
-        Pdf pd;
-
-        it = boe.getPb().iterator();
-
-        while (it.hasNext()) {
-            pb = (Publicacion) it.next();
-            it2 = pb.getPdfs().iterator();
-
-            while (it2.hasNext()) {
-                pd = (Pdf) it2.next();
-                bol.add(pd);
-            }
-        }
-        tableLoadData(bol);
     }
 
     void initializeClear() {
@@ -258,36 +223,6 @@ public class ClasificacionC implements Initializable {
         lvDiscard.setItems(discartedList);
     }
 
-    boolean isTextDiscarted(String aux) {
-        boolean a = false;
-        String str;
-        Iterator it = discardText.iterator();
-
-        while (it.hasNext()) {
-            str = (String) it.next();
-
-            if (aux.toUpperCase().contains(str.toUpperCase())) {
-                a = true;
-            }
-        }
-        return a;
-    }
-
-    boolean isTextSelected(String aux) {
-        boolean a = false;
-        String str;
-        Iterator it = selectText.iterator();
-
-        while (it.hasNext()) {
-            str = (String) it.next();
-
-            if (aux.toUpperCase().contains(str.toUpperCase())) {
-                a = true;
-            }
-        }
-        return a;
-    }
-
     @FXML
     void keyPressed(KeyEvent event) {
         System.out.println(event.getCode());
@@ -314,41 +249,6 @@ public class ClasificacionC implements Initializable {
             publicacion.remove(aux);
             tableFocus();
             setContadores();
-        }
-    }
-
-    @FXML
-    void pdfDiscardSource(ActionEvent event) {
-        ModeloBoes aux = tvBoes.getSelectionModel().getSelectedItem();
-
-        if (aux != null) {
-
-            Alert alert = new Alert(AlertType.CONFIRMATION);
-            alert.setTitle("DESCARTAR ORIGEN");
-            alert.setHeaderText(aux.getEntidad());
-            alert.setContentText("¿Desea DESCARTAR el ORIGEN " + aux.getOrigen());
-
-            Optional<ButtonType> result = alert.showAndWait();
-
-            if (result.get() == ButtonType.OK) {
-                try {
-                    bd = new Sql(Var.con);
-                    bd.ejecutar("INSERT into " + Var.dbNameBoes + ".origen_descartado (nombre) values("
-                            + Varios.entrecomillar(aux.getOrigen())
-                            + ");");
-                    bd.close();
-                    discardSource.add(aux.getOrigen());
-                    tableUpdate();
-                } catch (SQLException ex) {
-                    LOG.error("[pdfDiscardSource]" + ex);
-                }
-            }
-        } else {
-            Alert alert = new Alert(AlertType.INFORMATION);
-            alert.setTitle("ERROR");
-            alert.setHeaderText(null);
-            alert.setContentText("Debes seleccionar un elemento.");
-            alert.showAndWait();
         }
     }
 
@@ -426,6 +326,11 @@ public class ClasificacionC implements Initializable {
             publicacion.clear();
             setContadores();
         }
+    }
+    
+    @FXML
+    void pdfShow(ActionEvent event){
+        
     }
 
     @FXML
@@ -599,7 +504,6 @@ public class ClasificacionC implements Initializable {
         btSelect.setDisable(aux);
         btDiscard.setDisable(aux);
         btVerWebC.setDisable(aux);
-        btDescartaOrigen.setDisable(aux);
         btRecargarClasificacion.setDisable(aux);
         btRecoverD.setDisable(aux);
         btRecoverS.setDisable(aux);
@@ -644,19 +548,19 @@ public class ClasificacionC implements Initializable {
         while (it.hasNext()) {
             aux = (ModeloBoes) it.next();
 
-            if (discardSource.contains(aux.getOrigen())) {
-                aux.setStatus(Status.SOURCE);
-                dList.add(aux);
-            } else if (isTextDiscarted(aux.getDescripcion())) {
-                aux.setStatus(Status.APP);
-                dList.add(aux);
-            } else if (selectAlready.contains(aux.getCodigo())) {
-                aux.setStatus(Status.DUPLICATED);
-                sList.add(aux);
-            } else if (isTextSelected(aux.getDescripcion())) {
-                aux.setStatus(Status.APP);
-                sList.add(aux);
-            }
+//            if (discardSource.contains(aux.getOrigen())) {
+//                aux.setStatus(Status.SOURCE);
+//                dList.add(aux);
+//            } else if (isTextDiscarted(aux.getDescripcion())) {
+//                aux.setStatus(Status.APP);
+//                dList.add(aux);
+//            } else if (selectAlready.contains(aux.getCodigo())) {
+//                aux.setStatus(Status.DUPLICATED);
+//                sList.add(aux);
+//            } else if (isTextSelected(aux.getDescripcion())) {
+//                aux.setStatus(Status.APP);
+//                sList.add(aux);
+//            }
         }
 
         it = dList.iterator();
@@ -708,37 +612,8 @@ public class ClasificacionC implements Initializable {
         Date aux = Dates.asDate(dpFechaC.getValue());
 
         if (aux != null) {
-            Boe boe = Query.getBoe(aux);
-
-            if (boe != null) {
-                xLisDatePickerRun(boe);
-            } else {
-                TextInputDialog dialog = new TextInputDialog();
-                dialog.setTitle("Añadir Link");
-                dialog.setHeaderText("Introduzca el link para continuar");
-                dialog.setContentText("Link:");
-
-                Optional<String> result = dialog.showAndWait();
-                result.ifPresent(name -> xLisDatePickerCreateBoe(aux, name));
-            }
+            //TODO load DATA.
         }
-    }
-
-    private void xLisDatePickerCreateBoe(Date fecha, String link) {
-        Boe boe = new Boe(fecha, link);
-
-        Thread a = new Thread(() -> {
-            try {
-                bd = new Sql(Var.con);
-                bd.ejecutar(boe.SQLCrear());
-                bd.close();
-            } catch (SQLException ex) {
-                LOG.error("[xLisDatePickerCreateBoe]" + ex);
-            }
-        });
-        a.start();
-
-        xLisDatePickerRun(boe);
     }
 
     private void xLisDatePickerRun(Boe aux) {
@@ -748,7 +623,7 @@ public class ClasificacionC implements Initializable {
                 rootPane.getScene().setCursor(Cursor.WAIT);
             });
 
-            initializeBoesData(aux);
+//            initializeBoesData(aux);
             Var.boesIsClasificando = true;
 
             Platform.runLater(() -> {

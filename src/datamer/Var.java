@@ -68,6 +68,7 @@ public class Var {
     /**
      * BOES
      */
+    public static String dbNameServer="server";
     public static String dbNameBoes = "boes";
     public static String dbNameBoesStats = "boes_stats";
 

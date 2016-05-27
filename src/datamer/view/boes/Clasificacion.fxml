@@ -32,19 +32,17 @@
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin>
                   </Label>
-                  <Button fx:id="btVerWebC" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pdfShowOnWeb" prefHeight="50.0" prefWidth="150.0" style="-fx-graphic: url(https://cdn1.iconfinder.com/data/icons/smallicons-logotypes/32/chrome-32.png);" text="Ver Boletin        ">
+                  <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="150.0" text="Ver Boletín" />
+                  <Button fx:id="btVerWebC" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pdfShowOnWeb" prefHeight="50.0" prefWidth="150.0" style="-fx-graphic: url(https://cdn1.iconfinder.com/data/icons/smallicons-logotypes/32/chrome-32.png);" text="Ver en WEB        ">
                      <opaqueInsets>
                         <Insets />
                      </opaqueInsets>
                   </Button>
                   <Button fx:id="btSelectAll" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pdfSelectAll" prefHeight="50.0" prefWidth="150.0" text="Seleccionar TODO" />
-                  <Label text="Origen :">
-                     <font>
-                        <Font name="System Bold" size="12.0" />
-                     </font>
-                  </Label>
-                  <Button fx:id="btDescartaOrigen" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pdfDiscardSource" prefHeight="50.0" prefWidth="150.0" style="-fx-graphic: url(https://cdn0.iconfinder.com/data/icons/star-wars/512/death_star-32.png);" text="Descartar Origen" />
                </children>
                <padding>
                   <Insets left="10.0" right="10.0" top="23.0" />
@@ -114,22 +112,22 @@
                         <Insets bottom="10.0" left="10.0" top="20.0" />
                      </VBox.margin>
                   </HBox>
-                  <TitledPane fx:id="tpSeleccionados" collapsible="false" prefHeight="189.0" prefWidth="300.0" text="Boletines Seleccionados">
+                  <TitledPane fx:id="tpSeleccionados" collapsible="false" prefHeight="139.0" prefWidth="300.0" text="Boletines Seleccionados">
                      <content>
                         <HBox>
                            <children>
-                              <ListView fx:id="lvSelect" prefHeight="150.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
-                              <Button fx:id="btRecoverS" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pdfRecoverS" prefHeight="150.0" prefWidth="40.0" />
+                              <ListView fx:id="lvSelect" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+                              <Button fx:id="btRecoverS" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pdfRecoverS" prefHeight="100.0" prefWidth="40.0" />
                            </children>
                         </HBox>
                      </content>
                   </TitledPane>
-                  <TitledPane fx:id="tpDescartados" collapsible="false" prefHeight="189.0" prefWidth="300.0" text="Boletines Descartados">
+                  <TitledPane fx:id="tpDescartados" collapsible="false" prefHeight="139.0" prefWidth="300.0" text="Boletines Descartados">
                      <content>
                         <HBox>
                            <children>
-                              <ListView fx:id="lvDiscard" prefHeight="150.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
-                              <Button fx:id="btRecoverD" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pdfRecoverD" prefHeight="150.0" prefWidth="40.0" />
+                              <ListView fx:id="lvDiscard" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+                              <Button fx:id="btRecoverD" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pdfRecoverD" prefHeight="100.0" prefWidth="40.0" />
                            </children>
                         </HBox>
                      </content>

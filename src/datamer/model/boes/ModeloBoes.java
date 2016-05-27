@@ -17,6 +17,7 @@ public class ModeloBoes {
     public SimpleStringProperty link = new SimpleStringProperty();
     public SimpleStringProperty fecha = new SimpleStringProperty();
     public Status status = Status.PENDING;
+    public Boolean selected = null;
 
     public String getOrigen() {
         return origen.get();
@@ -48,6 +49,14 @@ public class ModeloBoes {
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public Boolean getSelected() {
+        return selected;
+    }
+
+    public void setSelected(Boolean selected) {
+        this.selected = selected;
     }
 
     @Override

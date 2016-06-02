@@ -126,9 +126,9 @@ public class Boletin {
                 + this.idOrigen + ","
                 + this.idBoe + ","
                 + this.idDescarga + ","
-                + Varios.entrecomillar(this.codigo) + ","
-                + Varios.entrecomillar(this.tipo) + ","
-                + Varios.entrecomillar(this.fase) + ","
+                + Varios.comillas(this.codigo) + ","
+                + Varios.comillas(this.tipo) + ","
+                + Varios.comillas(this.fase) + ","
                 + this.isFase + ","
                 + this.isEstructura + ","
                 + this.idioma

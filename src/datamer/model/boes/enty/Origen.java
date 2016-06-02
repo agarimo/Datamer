@@ -108,21 +108,21 @@ public class Origen {
     public String SQLCrear() {
         return "INSERT into " + Var.dbNameBoes + ".origen (idEntidad ,nombre, nombreMostrar) values("
                 + this.idEntidad + ","
-                + Varios.entrecomillar(this.nombre) + ","
-                + Varios.entrecomillar(this.nombreMostrar)
+                + Varios.comillas(this.nombre) + ","
+                + Varios.comillas(this.nombreMostrar)
                 + ");";
     }
 
     public String SQLBuscar() {
-        return "SELECT * FROM " + Var.dbNameBoes + ".origen WHERE nombre=" + Varios.entrecomillar(this.nombre) + " "
+        return "SELECT * FROM " + Var.dbNameBoes + ".origen WHERE nombre=" + Varios.comillas(this.nombre) + " "
                 + "and idEntidad=" + this.idEntidad;
     }
 
     public String SQLBuscarNombre() {
-        return "SELECT * FROM " + Var.dbNameBoes + ".origen WHERE nombre=" + util.Varios.entrecomillar(this.nombre);
+        return "SELECT * FROM " + Var.dbNameBoes + ".origen WHERE nombre=" + util.Varios.comillas(this.nombre);
     }
 
     public String SQLBuscarCodigo() {
-        return "SELECT * FROM " + Var.dbNameBoes + ".origen WHERE codigo=" + util.Varios.entrecomillar(this.codigo);
+        return "SELECT * FROM " + Var.dbNameBoes + ".origen WHERE codigo=" + util.Varios.comillas(this.codigo);
     }
 }

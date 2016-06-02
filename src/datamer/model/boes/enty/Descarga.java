@@ -64,19 +64,19 @@ public class Descarga {
 
     public String SQLCrear() {
         return "INSERT into " + Var.dbNameBoes + ".descarga (codigo,link,datos) values("
-                + Varios.entrecomillar(this.codigo) + ","
-                + Varios.entrecomillar(this.link) + ","
-                + Varios.entrecomillar(this.datos)
+                + Varios.comillas(this.codigo) + ","
+                + Varios.comillas(this.link) + ","
+                + Varios.comillas(this.datos)
                 + ");";
     }
 
     public String SQLSetDatos() {
         return "UPDATE " + Var.dbNameBoes + ".descarga SET "
-                + "datos=" + Varios.entrecomillar(this.datos) + " "
+                + "datos=" + Varios.comillas(this.datos) + " "
                 + "WHERE id=" + this.id;
     }
 
     public String SQLBuscar() {
-        return "SELECT * from " + Var.dbNameBoes + ".descarga where codigo=" + Varios.entrecomillar(this.codigo);
+        return "SELECT * from " + Var.dbNameBoes + ".descarga where codigo=" + Varios.comillas(this.codigo);
     }
 }

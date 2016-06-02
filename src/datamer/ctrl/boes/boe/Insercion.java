@@ -6,8 +6,9 @@ import datamer.model.boes.enty.Boletin;
 import datamer.model.boes.enty.Descarga;
 import datamer.model.boes.enty.Entidad;
 import datamer.model.boes.enty.Origen;
-import datamer.model.boes.enty.Stats;
+import datamer.model.boes.enty.Publicacion;
 import java.sql.SQLException;
+import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
@@ -27,22 +28,21 @@ public class Insercion {
 
     }
 
-    //<editor-fold defaultstate="collapsed" desc="Inserción">
-    public void insertaBoletin(ModeloBoes aux) {
+    public void insertaBoletin(Publicacion aux) {
         Boletin bol = new Boletin();
 
         try {
             bd = new Sql(Var.con);
 
             bol.setIdOrigen(getIdOrigen(aux.getEntidad(), aux.getOrigen()));
-            bol.setIdBoe(getIdBoe(aux.getFecha()));
-            bol.setIdDescarga(getIdDescarga(aux.getCodigo(), aux.getLink()));
+            bol.setIdBoe(getIdBoe(aux.getFecha().format(DateTimeFormatter.ISO_DATE)));
+            bol.setIdDescarga(getIdDescarga(aux.getCodigo(), aux.getLink(), aux.getDatos()));
             bol.setCodigo(aux.getCodigo());
             bol.setTipo("*711*");
             bol.setFase("BCN1");
             bol.setIsFase(0);
             bol.setIsEstructura(0);
-            bol.setIdioma(getIdioma(bol.getIdOrigen()));
+            bol.setIdioma(0);
 
             bd.ejecutar(bol.SQLCrear());
             bd.close();
@@ -56,7 +56,7 @@ public class Insercion {
         int aux;
         Origen or = new Origen();
         or.setIdEntidad(getIdEntidad(entidad));
-        or.setNombre(origen.replace("'", "\\'"));
+        or.setNombre(origen);
 
         aux = bd.buscar(or.SQLBuscar());
 
@@ -71,7 +71,7 @@ public class Insercion {
     private int getIdEntidad(String nombre) throws SQLException {
         int aux;
         Entidad en = new Entidad();
-        en.setNombre(nombre.replace("'", "\\'"));
+        en.setNombre(nombre);
 
         aux = bd.buscar(en.SQLBuscar());
 
@@ -87,16 +87,12 @@ public class Insercion {
         return bd.getInt("SELECT * FROM " + Var.dbNameBoes + ".boe where fecha=" + Varios.entrecomillar(fecha));
     }
 
-    private int getIdioma(int idOrigen) throws SQLException {
-        return bd.getInt("SELECT idioma FROM " + Var.dbNameBoes + ".origen where id=" + idOrigen);
-    }
-
-    private int getIdDescarga(String codigo, String link) throws SQLException {
+    private int getIdDescarga(String codigo, String link, String datos) throws SQLException {
         int aux;
         Descarga ds = new Descarga();
         ds.setCodigo(codigo);
         ds.setLink(link);
-        ds.setDatos("null");
+        ds.setDatos(datos);
 
         aux = bd.buscar(ds.SQLBuscar());
 
@@ -106,10 +102,8 @@ public class Insercion {
         }
         return aux;
     }
-//</editor-fold>
 
     public void guardaStatsD(List lista) {
-        Stats bp;
         ModeloBoes aux;
         Iterator it = lista.iterator();
 
@@ -128,7 +122,6 @@ public class Insercion {
     }
 
     public void guardaStatsS(List lista) {
-        Stats bp;
         ModeloBoes aux;
         Iterator it = lista.iterator();
 

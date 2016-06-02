@@ -1,16 +1,10 @@
 package datamer.ctrl.boes;
 
 import datamer.Var;
-import datamer.ctrl.boes.boe.Boe;
-import datamer.ctrl.boes.boe.Download;
 import datamer.ctrl.boes.boe.Insercion;
-import datamer.ctrl.boes.boe.Pdf;
-import datamer.ctrl.boes.boe.Publicacion;
-import datamer.ctrl.boes.boletines.Limpieza;
 import datamer.model.boes.ModeloBoes;
-import datamer.model.boes.enty.Descarga;
-import datamer.model.boes.enty.Boletin;
 import datamer.model.boes.Status;
+import datamer.model.boes.enty.Publicacion;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.materialicons.MaterialIcon;
 import java.awt.Desktop;
@@ -22,11 +16,11 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -46,7 +40,6 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -57,7 +50,6 @@ import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import util.Dates;
 import sql.Sql;
 import util.Varios;
 
@@ -371,6 +363,10 @@ public class ClasificacionC implements Initializable {
     void procesarTask() {
         Thread a = new Thread(() -> {
 
+            Publicacion aux;
+            LocalDate fecha = dpFechaC.getValue();
+            String query = "SELECT * FROM " + Var.dbNameServer + ".publicacion WHERE fecha=" + Varios.comillas(fecha.format(DateTimeFormatter.ISO_DATE)) + " and selected=true;";
+
             Platform.runLater(() -> {
                 setProcesandoC(true);
                 pbClasificacion.setProgress(-1);
@@ -393,79 +389,34 @@ public class ClasificacionC implements Initializable {
                 lbClasificacion.setText("INICIANDO CARGA");
             });
 
-//            for (int i = 0; i < list.size(); i++) {
-//                final int contador = i;
-//                final int total = list.size();
-//
-//                Platform.runLater(() -> {
-//                    int contadour = contador + 1;
-//                    double counter = contador + 1;
-//                    double toutal = total;
-//                    lbClasificacion.setText("INSERTANDO BOLETÍN " + contadour + " de " + total);
-//                    pbClasificacion.setProgress(counter / toutal);
-//                });
-//
-//                aux = (ModeloBoes) list.get(i);
-//                in.insertaBoletin(aux);
-//            }
-//
-//            Platform.runLater(() -> {
-//                lbClasificacion.setText("INSERCIÓN FINALIZADA");
-//                pbClasificacion.setProgress(-1);
-//                lbClasificacion.setText("INICIANDO DESCARGA");
-//            });
-//
-//            Descarga des;
-//            Download dw = new Download();
-//            List listDes = dw.getListado();
-//
-//            for (int i = 0; i < listDes.size(); i++) {
-//                final int contador = i;
-//                final int total = listDes.size();
-//                Platform.runLater(() -> {
-//                    int contadour = contador + 1;
-//                    double counter = contador + 1;
-//                    double toutal = total;
-//                    lbClasificacion.setText("DESCARGANDO ARCHIVO " + contadour + " de " + total);
-//                    pbClasificacion.setProgress(counter / toutal);
-//                });
-//                des = (Descarga) listDes.get(i);
-//                dw.descarga(des);
-//            }
-//
-//            Platform.runLater(() -> {
-//                lbClasificacion.setText("DESCARGA FINALIZADA");
-//                pbClasificacion.setProgress(-1);
-//                lbClasificacion.setText("INICIANDO LIMPIEZA");
-//            });
-//
-//            Date fecha = Dates.asDate(dpFechaC.getValue());
-//
-//            if (fecha != null) {
-//                Boletin bol;
-//                Limpieza li;
-//                List listLi = Query.listaBoletin("SELECT * FROM boes.boletin where idBoe="
-//                        + "(SELECT id FROM boes.boe where fecha=" + Varios.entrecomillar(Dates.imprimeFecha(fecha)) + ")");
-//
-//                for (int i = 0; i < listLi.size(); i++) {
-//                    final int contador = i;
-//                    final int total = listLi.size();
-//                    Platform.runLater(() -> {
-//                        int contadour = contador + 1;
-//                        double counter = contador + 1;
-//                        double toutal = total;
-//                        lbClasificacion.setText("LIMPIANDO BOLETIN " + contadour + " de " + total);
-//                        pbClasificacion.setProgress(counter / toutal);
-//                    });
-//                    bol = (Boletin) listLi.get(i);
-//                    li = new Limpieza(bol);
-//                    li.run();
-//                }
-//            }
-//
+            procesarTaskPreClean(fecha);
+            List list = Query.listaPublicacion(query);
+
+            for (int i = 0; i < list.size(); i++) {
+                final int contador = i;
+                final int total = list.size();
+
+                Platform.runLater(() -> {
+                    int contadour = contador + 1;
+                    double counter = contador + 1;
+                    double toutal = total;
+                    lbClasificacion.setText("INSERTANDO BOLETÍN " + contadour + " de " + total);
+                    pbClasificacion.setProgress(counter / toutal);
+                });
+
+                aux = (Publicacion) list.get(i);
+                in.insertaBoletin(aux);
+            }
+
+            Platform.runLater(() -> {
+                lbClasificacion.setText("INSERCIÓN FINALIZADA");
+                pbClasificacion.setProgress(-1);
+            });
+
             Platform.runLater(() -> {
                 setProcesandoC(false);
-                lbClasificacion.setText("LIMPIEZA FINALIZADA");
+                lbClasificacion.setText("INSERCIÓN FINALIZADA");
+                pbClasificacion.setProgress(-1);
 
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("COMPLETADO");
@@ -477,6 +428,17 @@ public class ClasificacionC implements Initializable {
             });
         });
         a.start();
+    }
+
+    private void procesarTaskPreClean(LocalDate fecha) {
+        try {
+            String query = "DELETE FROM " + Var.dbNameBoes + ".boletin WHERE idBoe=(SELECT id FROM " + Var.dbNameBoes + ".boe WHERE fecha=" + Varios.comillas(fecha.format(DateTimeFormatter.ISO_DATE)) + ")";
+            Sql bd1 = new Sql(Var.con);
+            bd1.ejecutar(query);
+            bd1.close();
+        } catch (SQLException ex) {
+            java.util.logging.Logger.getLogger(ClasificacionC.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     void setContadores() {

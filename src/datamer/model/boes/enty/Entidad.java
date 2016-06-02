@@ -54,8 +54,8 @@ public class Entidad {
 
     public String SQLCrear() {
         return "INSERT into " + Var.dbNameBoes + ".entidad (nombre,codigo) values("
-                + Varios.entrecomillar(this.nombre) + ","
-                + Varios.entrecomillar(this.codigo)
+                + Varios.comillas(this.nombre) + ","
+                + Varios.comillas(this.codigo)
                 + ");";
     }
 
@@ -65,7 +65,7 @@ public class Entidad {
     }
 
     public String SQLBuscar() {
-        return "SELECT * from " + Var.dbNameBoes + ".entidad where nombre=" + Varios.entrecomillar(this.nombre);
+        return "SELECT * from " + Var.dbNameBoes + ".entidad where nombre=" + Varios.comillas(this.nombre);
     }
 
 }

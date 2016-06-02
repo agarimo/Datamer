@@ -7,7 +7,6 @@ import datamer.model.boes.enty.ReqObs;
 import datamer.model.boes.ModeloBoletines;
 import datamer.model.boes.ModeloFases;
 import datamer.model.boes.ModeloUnion;
-import datamer.model.boes.Status;
 import datamer.model.boes.enty.Boletin;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -26,6 +25,7 @@ import datamer.model.boes.enty.OrigenExpediente;
 import datamer.model.boes.enty.OrigenFase;
 import datamer.model.boes.enty.Pattern;
 import datamer.model.boes.enty.Procesar;
+import datamer.model.boes.enty.Publicacion;
 import datamer.model.boes.enty.StrucData;
 import datamer.model.boes.enty.Tipo;
 import datamer.model.boes.enty.VistaExtraccion;
@@ -131,6 +131,38 @@ public class Query extends sql.Query {
             while (rs.next()) {
                 aux = rs.getString("estructura");
             }
+            rs.close();
+            bd.close();
+        } catch (SQLException ex) {
+            error(ex.getMessage());
+            Logger.getLogger(Query.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return aux;
+    }
+    
+    public static Publicacion getPublicacion(String codigo) {
+        Publicacion aux = null;
+        String query = "SELECT * FROM " + Var.dbNameServer + ".publicacion where codigo=" + Varios.entrecomillar(codigo);
+
+        try {
+            bd = new Sql(Var.con);
+            rs = bd.ejecutarQueryRs(query);
+
+            while (rs.next()) {
+                aux = new Publicacion();
+                aux.setId(rs.getInt("id"));
+                aux.setFecha(Dates.asLocalDate(rs.getDate("fecha")));
+                aux.setCodigo(rs.getString("codigo"));
+                aux.setEntidad(rs.getString("entidad"));
+                aux.setOrigen(rs.getString("origen"));
+                aux.setDescripcion(rs.getString("descripcion"));
+                aux.setDatos(rs.getString("datos"));
+                aux.setLink(rs.getString("link"));
+                aux.setCve(rs.getString("cve"));
+                aux.setSelected(rs.getBoolean("selected"));
+                aux.setStatus(rs.getString("status"));
+            }
+
             rs.close();
             bd.close();
         } catch (SQLException ex) {
@@ -257,50 +289,6 @@ public class Query extends sql.Query {
         }
         return aux;
     }
-
-//    public static List listaAlreadyDiscarted() {
-//        String query = "SELECT codigo FROM " + Var.dbNameBoesStats + ".boletines where isSelected=false;";
-//        List list = new ArrayList();
-//        String aux;
-//
-//        try {
-//            bd = new Sql(Var.con);
-//            rs = bd.ejecutarQueryRs(query);
-//
-//            while (rs.next()) {
-//                aux = rs.getString("codigo");
-//                list.add(aux);
-//            }
-//            rs.close();
-//            bd.close();
-//        } catch (SQLException ex) {
-//            error(ex.getMessage());
-//            Logger.getLogger(Query.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//        return list;
-//    }
-//
-//    public static List listaAlreadySelected() {
-//        String query = "SELECT codigo FROM " + Var.dbNameBoes + ".boletin";
-//        List list = new ArrayList();
-//        String aux;
-//
-//        try {
-//            bd = new Sql(Var.con);
-//            rs = bd.ejecutarQueryRs(query);
-//
-//            while (rs.next()) {
-//                aux = rs.getString("codigo");
-//                list.add(aux);
-//            }
-//            rs.close();
-//            bd.close();
-//        } catch (SQLException ex) {
-//            error(ex.getMessage());
-//            Logger.getLogger(Query.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//        return list;
-//    }
 
     public static List<Boletin> listaBoletin(String query) {
 
@@ -481,6 +469,39 @@ public class Query extends sql.Query {
                 list.add(aux);
             }
 
+            rs.close();
+            bd.close();
+        } catch (SQLException ex) {
+            error(ex.getMessage());
+            Logger.getLogger(Query.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return list;
+    }
+    
+    public static List<Publicacion> listaPublicacion(String query) {
+        List<Publicacion> list = new ArrayList();
+        Publicacion aux;
+
+        try {
+            bd = new Sql(Var.con);
+            rs = bd.ejecutarQueryRs(query);
+
+            while (rs.next()) {
+                aux = new Publicacion();
+                aux.setId(rs.getInt("id"));
+                aux.setFecha(Dates.asLocalDate(rs.getDate("fecha")));
+                aux.setCodigo(rs.getString("codigo"));
+                aux.setEntidad(rs.getString("entidad"));
+                aux.setOrigen(rs.getString("origen"));
+                aux.setDescripcion(rs.getString("descripcion"));
+                aux.setDatos(rs.getString("datos"));
+                aux.setLink(rs.getString("link"));
+                aux.setCve(rs.getString("cve"));
+                aux.setSelected(rs.getBoolean("selected"));
+                aux.setStatus(rs.getString("status"));
+                
+                list.add(aux);
+            }
             rs.close();
             bd.close();
         } catch (SQLException ex) {

@@ -2,10 +2,12 @@ package datamer.ctrl.boes;
 
 import datamer.Var;
 import datamer.ctrl.boes.boe.Boe;
+import datamer.model.boes.ModeloBoes;
 import datamer.model.boes.enty.ReqObs;
 import datamer.model.boes.ModeloBoletines;
 import datamer.model.boes.ModeloFases;
 import datamer.model.boes.ModeloUnion;
+import datamer.model.boes.Status;
 import datamer.model.boes.enty.Boletin;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -256,49 +258,49 @@ public class Query extends sql.Query {
         return aux;
     }
 
-    public static List listaAlreadyDiscarted() {
-        String query = "SELECT codigo FROM " + Var.dbNameBoesStats + ".boletines where isSelected=false;";
-        List list = new ArrayList();
-        String aux;
-
-        try {
-            bd = new Sql(Var.con);
-            rs = bd.ejecutarQueryRs(query);
-
-            while (rs.next()) {
-                aux = rs.getString("codigo");
-                list.add(aux);
-            }
-            rs.close();
-            bd.close();
-        } catch (SQLException ex) {
-            error(ex.getMessage());
-            Logger.getLogger(Query.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return list;
-    }
-
-    public static List listaAlreadySelected() {
-        String query = "SELECT codigo FROM " + Var.dbNameBoes + ".boletin";
-        List list = new ArrayList();
-        String aux;
-
-        try {
-            bd = new Sql(Var.con);
-            rs = bd.ejecutarQueryRs(query);
-
-            while (rs.next()) {
-                aux = rs.getString("codigo");
-                list.add(aux);
-            }
-            rs.close();
-            bd.close();
-        } catch (SQLException ex) {
-            error(ex.getMessage());
-            Logger.getLogger(Query.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return list;
-    }
+//    public static List listaAlreadyDiscarted() {
+//        String query = "SELECT codigo FROM " + Var.dbNameBoesStats + ".boletines where isSelected=false;";
+//        List list = new ArrayList();
+//        String aux;
+//
+//        try {
+//            bd = new Sql(Var.con);
+//            rs = bd.ejecutarQueryRs(query);
+//
+//            while (rs.next()) {
+//                aux = rs.getString("codigo");
+//                list.add(aux);
+//            }
+//            rs.close();
+//            bd.close();
+//        } catch (SQLException ex) {
+//            error(ex.getMessage());
+//            Logger.getLogger(Query.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        return list;
+//    }
+//
+//    public static List listaAlreadySelected() {
+//        String query = "SELECT codigo FROM " + Var.dbNameBoes + ".boletin";
+//        List list = new ArrayList();
+//        String aux;
+//
+//        try {
+//            bd = new Sql(Var.con);
+//            rs = bd.ejecutarQueryRs(query);
+//
+//            while (rs.next()) {
+//                aux = rs.getString("codigo");
+//                list.add(aux);
+//            }
+//            rs.close();
+//            bd.close();
+//        } catch (SQLException ex) {
+//            error(ex.getMessage());
+//            Logger.getLogger(Query.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        return list;
+//    }
 
     public static List<Boletin> listaBoletin(String query) {
 
@@ -449,6 +451,36 @@ public class Query extends sql.Query {
                 aux = rs.getInt("id");
                 list.add(aux);
             }
+            rs.close();
+            bd.close();
+        } catch (SQLException ex) {
+            error(ex.getMessage());
+            Logger.getLogger(Query.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return list;
+    }
+
+    public static List<ModeloBoes> listaModeloBoes(String query) {
+        List<ModeloBoes> list = new ArrayList();
+        ModeloBoes aux;
+
+        try {
+            bd = new Sql(Var.con);
+            rs = bd.ejecutarQueryRs(query);
+
+            while (rs.next()) {
+                aux = new ModeloBoes();
+                aux.fecha.set(rs.getString("fecha"));
+                aux.codigo.set(rs.getString("codigo"));
+                aux.entidad.set(rs.getString("entidad"));
+                aux.origen.set(rs.getString("origen"));
+                aux.descripcion.set(rs.getString("descripcion"));
+                aux.link.set(rs.getString("link"));
+                aux.setStatus(rs.getString("status"));
+                aux.setSelected(rs.getBoolean("selected"));
+                list.add(aux);
+            }
+
             rs.close();
             bd.close();
         } catch (SQLException ex) {
@@ -1028,19 +1060,19 @@ public class Query extends sql.Query {
         }
         return list;
     }
-    
-     public static String getLink(String codigo) {
-        String query = "SELECT link FROM "+Var.dbNameBoes+".descarga where codigo=" + Varios.entrecomillar(codigo);
+
+    public static String getLink(String codigo) {
+        String query = "SELECT link FROM " + Var.dbNameBoes + ".descarga where codigo=" + Varios.entrecomillar(codigo);
         String aux = null;
-        
+
         try {
             bd = new Sql(Var.con);
             rs = bd.ejecutarQueryRs(query);
-            
+
             while (rs.next()) {
                 aux = rs.getString("link");
             }
-            
+
             rs.close();
             bd.close();
         } catch (SQLException ex) {

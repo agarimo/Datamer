@@ -19,6 +19,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -59,10 +61,6 @@ import util.Dates;
 import sql.Sql;
 import util.Varios;
 
-
-
-
-
 /**
  * FXML Controller class
  *
@@ -74,6 +72,9 @@ public class ClasificacionC implements Initializable {
 
     Sql bd;
     boolean autoScroll;
+
+    private int selectedCount = 0;
+    private int discartedCount = 0;
 
     ObservableList<ModeloBoes> publicacion;
     ObservableList<ModeloBoes> selectedList;
@@ -137,7 +138,6 @@ public class ClasificacionC implements Initializable {
         autoScroll = true;
         cbAutoScroll.setSelected(autoScroll);
         setProcesandoC(false);
-
     }
 
     private void initializeIcons() {
@@ -145,21 +145,19 @@ public class ClasificacionC implements Initializable {
         String red = "#FF0000";
         String orange = "#FFA500";
         Text text;
-        
+
         text = GlyphsDude.createIcon(MaterialIcon.ADD_CIRCLE, "32");
         text.setFill(Paint.valueOf(green));
         btSelect.setGraphic(text);
-        
+
         text = GlyphsDude.createIcon(MaterialIcon.REMOVE_CIRCLE, "32");
         text.setFill(Paint.valueOf(red));
         btDiscard.setGraphic(text);
-        
-        
+
         text = GlyphsDude.createIcon(MaterialIcon.CACHED, "32");
         text.setFill(Paint.valueOf(orange));
         btRecargarClasificacion.setGraphic(text);
-        
-        
+
         GlyphsDude.setIcon(btSelectAll, MaterialIcon.PLAYLIST_ADD, "32");
         GlyphsDude.setIcon(btRecoverS, MaterialIcon.INPUT, "32");
         GlyphsDude.setIcon(btRecoverD, MaterialIcon.INPUT, "32");
@@ -247,6 +245,7 @@ public class ClasificacionC implements Initializable {
             aux.setStatus(Status.USER);
             discartedList.add(0, aux);
             publicacion.remove(aux);
+            discartedCount++;
             tableFocus();
             setContadores();
         }
@@ -260,6 +259,7 @@ public class ClasificacionC implements Initializable {
             aux.setStatus(Status.PENDING);
             publicacion.add(0, aux);
             discartedList.remove(aux);
+            discartedCount--;
             tableFocus();
             setContadores();
         } else {
@@ -277,8 +277,10 @@ public class ClasificacionC implements Initializable {
 
         if (aux != null) {
             aux.setStatus(Status.PENDING);
+            aux.setSelected(false);
             publicacion.add(0, aux);
             selectedList.remove(aux);
+            selectedCount--;
             tableFocus();
             setContadores();
         } else {
@@ -296,8 +298,10 @@ public class ClasificacionC implements Initializable {
 
         if (aux != null) {
             aux.setStatus(Status.USER);
+            aux.setSelected(true);
             selectedList.add(0, aux);
             publicacion.remove(aux);
+            selectedCount++;
             tableFocus();
             setContadores();
         }
@@ -322,15 +326,16 @@ public class ClasificacionC implements Initializable {
                 aux = (ModeloBoes) it.next();
                 aux.setStatus(Status.USER);
                 selectedList.add(0, aux);
+                selectedCount++;
             }
             publicacion.clear();
             setContadores();
         }
     }
-    
+
     @FXML
-    void pdfShow(ActionEvent event){
-        
+    void pdfShow(ActionEvent event) {
+
     }
 
     @FXML
@@ -372,106 +377,92 @@ public class ClasificacionC implements Initializable {
                 lbClasificacion.setText("INICIANDO");
             });
 
-            ModeloBoes aux;
             Insercion in = new Insercion();
 
             Platform.runLater(() -> {
-                lbClasificacion.setText("LIMPIANDO DUPLICADOS (Selected)");
-            });
-            List list = in.cleanDuplicateS(this.selectedList);
-
-            Platform.runLater(() -> {
-                lbClasificacion.setText("LIMPIANDO DUPLICADOS (Discarted)");
-            });
-            List listD = in.cleanDuplicateD(this.discartedList);
-
-            Platform.runLater(() -> {
-                lbClasificacion.setText("GUARDANDO ESTADÍSTICAS (Selected)");
+                lbClasificacion.setText("GUARDANDO SELECCIÓN");
             });
 
-            in.guardaStatsS(list);
+            in.guardaStatsS(selectedList);
+            in.guardaStatsD(discartedList);
 
             Platform.runLater(() -> {
-                lbClasificacion.setText("GUARDANDO ESTADÍSTICAS (Discarted)");
-            });
-
-            in.guardaStatsD(listD);
-
-            Platform.runLater(() -> {
+                selectedList.clear();
+                discartedList.clear();
                 pbClasificacion.setProgress(0);
-                lbClasificacion.setText("INICIANDO CARGA DE BOLETINES");
+                lbClasificacion.setText("INICIANDO CARGA");
             });
 
-            for (int i = 0; i < list.size(); i++) {
-                final int contador = i;
-                final int total = list.size();
-
-                Platform.runLater(() -> {
-                    int contadour = contador + 1;
-                    double counter = contador + 1;
-                    double toutal = total;
-                    lbClasificacion.setText("INSERTANDO BOLETÍN " + contadour + " de " + total);
-                    pbClasificacion.setProgress(counter / toutal);
-                });
-
-                aux = (ModeloBoes) list.get(i);
-                in.insertaBoletin(aux);
-            }
-
-            Platform.runLater(() -> {
-                lbClasificacion.setText("INSERCIÓN FINALIZADA");
-                pbClasificacion.setProgress(-1);
-                lbClasificacion.setText("INICIANDO DESCARGA");
-            });
-
-            Descarga des;
-            Download dw = new Download();
-            List listDes = dw.getListado();
-
-            for (int i = 0; i < listDes.size(); i++) {
-                final int contador = i;
-                final int total = listDes.size();
-                Platform.runLater(() -> {
-                    int contadour = contador + 1;
-                    double counter = contador + 1;
-                    double toutal = total;
-                    lbClasificacion.setText("DESCARGANDO ARCHIVO " + contadour + " de " + total);
-                    pbClasificacion.setProgress(counter / toutal);
-                });
-                des = (Descarga) listDes.get(i);
-                dw.descarga(des);
-            }
-
-            Platform.runLater(() -> {
-                lbClasificacion.setText("DESCARGA FINALIZADA");
-                pbClasificacion.setProgress(-1);
-                lbClasificacion.setText("INICIANDO");
-            });
-
-            Date fecha = Dates.asDate(dpFechaC.getValue());
-
-            if (fecha != null) {
-                Boletin bol;
-                Limpieza li;
-                List listLi = Query.listaBoletin("SELECT * FROM boes.boletin where idBoe="
-                        + "(SELECT id FROM boes.boe where fecha=" + Varios.entrecomillar(Dates.imprimeFecha(fecha)) + ")");
-
-                for (int i = 0; i < listLi.size(); i++) {
-                    final int contador = i;
-                    final int total = listLi.size();
-                    Platform.runLater(() -> {
-                        int contadour = contador + 1;
-                        double counter = contador + 1;
-                        double toutal = total;
-                        lbClasificacion.setText("LIMPIANDO BOLETIN " + contadour + " de " + total);
-                        pbClasificacion.setProgress(counter / toutal);
-                    });
-                    bol = (Boletin) listLi.get(i);
-                    li = new Limpieza(bol);
-                    li.run();
-                }
-            }
-
+//            for (int i = 0; i < list.size(); i++) {
+//                final int contador = i;
+//                final int total = list.size();
+//
+//                Platform.runLater(() -> {
+//                    int contadour = contador + 1;
+//                    double counter = contador + 1;
+//                    double toutal = total;
+//                    lbClasificacion.setText("INSERTANDO BOLETÍN " + contadour + " de " + total);
+//                    pbClasificacion.setProgress(counter / toutal);
+//                });
+//
+//                aux = (ModeloBoes) list.get(i);
+//                in.insertaBoletin(aux);
+//            }
+//
+//            Platform.runLater(() -> {
+//                lbClasificacion.setText("INSERCIÓN FINALIZADA");
+//                pbClasificacion.setProgress(-1);
+//                lbClasificacion.setText("INICIANDO DESCARGA");
+//            });
+//
+//            Descarga des;
+//            Download dw = new Download();
+//            List listDes = dw.getListado();
+//
+//            for (int i = 0; i < listDes.size(); i++) {
+//                final int contador = i;
+//                final int total = listDes.size();
+//                Platform.runLater(() -> {
+//                    int contadour = contador + 1;
+//                    double counter = contador + 1;
+//                    double toutal = total;
+//                    lbClasificacion.setText("DESCARGANDO ARCHIVO " + contadour + " de " + total);
+//                    pbClasificacion.setProgress(counter / toutal);
+//                });
+//                des = (Descarga) listDes.get(i);
+//                dw.descarga(des);
+//            }
+//
+//            Platform.runLater(() -> {
+//                lbClasificacion.setText("DESCARGA FINALIZADA");
+//                pbClasificacion.setProgress(-1);
+//                lbClasificacion.setText("INICIANDO LIMPIEZA");
+//            });
+//
+//            Date fecha = Dates.asDate(dpFechaC.getValue());
+//
+//            if (fecha != null) {
+//                Boletin bol;
+//                Limpieza li;
+//                List listLi = Query.listaBoletin("SELECT * FROM boes.boletin where idBoe="
+//                        + "(SELECT id FROM boes.boe where fecha=" + Varios.entrecomillar(Dates.imprimeFecha(fecha)) + ")");
+//
+//                for (int i = 0; i < listLi.size(); i++) {
+//                    final int contador = i;
+//                    final int total = listLi.size();
+//                    Platform.runLater(() -> {
+//                        int contadour = contador + 1;
+//                        double counter = contador + 1;
+//                        double toutal = total;
+//                        lbClasificacion.setText("LIMPIANDO BOLETIN " + contadour + " de " + total);
+//                        pbClasificacion.setProgress(counter / toutal);
+//                    });
+//                    bol = (Boletin) listLi.get(i);
+//                    li = new Limpieza(bol);
+//                    li.run();
+//                }
+//            }
+//
             Platform.runLater(() -> {
                 setProcesandoC(false);
                 lbClasificacion.setText("LIMPIEZA FINALIZADA");
@@ -491,8 +482,8 @@ public class ClasificacionC implements Initializable {
     void setContadores() {
         Platform.runLater(() -> {
             lbContadorT.setText(Integer.toString(publicacion.size()));
-            tpDescartados.setText("Boletines Descartados - " + discartedList.size());
-            tpSeleccionados.setText("Boletines Seleccionados - " + selectedList.size());
+            tpDescartados.setText("Boletines Descartados - " + discartedCount);
+            tpSeleccionados.setText("Boletines Seleccionados - " + selectedCount);
         });
     }
 
@@ -520,79 +511,22 @@ public class ClasificacionC implements Initializable {
 
     void tableLoadData(List lista) {
         publicacion.clear();
-        Pdf aux;
-        ModeloBoes model;
+        ModeloBoes aux;
         Iterator it = lista.iterator();
 
         while (it.hasNext()) {
-            aux = (Pdf) it.next();
-            model = new ModeloBoes();
-            model.origen.set(aux.getOrigen());
-            model.entidad.set(aux.getEntidad());
-            model.fecha.set(Dates.imprimeFecha(aux.getFecha()));
-            model.codigo.set(aux.getCodigo());
-            model.descripcion.set(aux.getDescripcion());
-            model.link.set(aux.getLink());
-
-            publicacion.add(model);
-        }
-        tableUpdate();
-    }
-
-    void tableUpdate() {
-        ModeloBoes aux;
-        ObservableList<ModeloBoes> dList = FXCollections.observableArrayList();
-        ObservableList<ModeloBoes> sList = FXCollections.observableArrayList();
-        Iterator it = publicacion.iterator();
-
-        while (it.hasNext()) {
             aux = (ModeloBoes) it.next();
 
-//            if (discardSource.contains(aux.getOrigen())) {
-//                aux.setStatus(Status.SOURCE);
-//                dList.add(aux);
-//            } else if (isTextDiscarted(aux.getDescripcion())) {
-//                aux.setStatus(Status.APP);
-//                dList.add(aux);
-//            } else if (selectAlready.contains(aux.getCodigo())) {
-//                aux.setStatus(Status.DUPLICATED);
-//                sList.add(aux);
-//            } else if (isTextSelected(aux.getDescripcion())) {
-//                aux.setStatus(Status.APP);
-//                sList.add(aux);
-//            }
-        }
-
-        it = dList.iterator();
-
-        while (it.hasNext()) {
-            aux = (ModeloBoes) it.next();
-
-            if (publicacion.contains(aux)) {
-                publicacion.remove(aux);
+            if (aux.getSelected()) {
+                selectedCount++;
+            } else if (aux.getStatus() == Status.PENDING) {
+                publicacion.add(aux);
+            } else {
+                discartedCount++;
             }
         }
 
-        it = sList.iterator();
-
-        while (it.hasNext()) {
-            aux = (ModeloBoes) it.next();
-
-            if (publicacion.contains(aux)) {
-                publicacion.remove(aux);
-            }
-        }
-
-        Platform.runLater(() -> {
-            tableFocus();
-            discartedList.clear();
-            discartedList.addAll(dList);
-            selectedList.clear();
-            selectedList.addAll(sList);
-            lbContadorT.setText(Integer.toString(publicacion.size()));
-            tpDescartados.setText("Boletines Descartados - " + discartedList.size());
-            tpSeleccionados.setText("Boletines Seleccionados - " + selectedList.size());
-        });
+        setContadores();
     }
 
     @FXML
@@ -609,27 +543,24 @@ public class ClasificacionC implements Initializable {
         selectedList.clear();
         discartedList.clear();
 
-        Date aux = Dates.asDate(dpFechaC.getValue());
+        LocalDate aux = dpFechaC.getValue();
 
         if (aux != null) {
-            //TODO load DATA.
+            Thread a = new Thread(() -> {
+                String query = "SELECT fecha,codigo,entidad,origen,descripcion,link,selected,status FROM " + Var.dbNameServer + ".publicacion WHERE fecha=" + Varios.comillas(aux.format(DateTimeFormatter.ISO_DATE));
+
+                Platform.runLater(() -> {
+                    rootPane.getScene().setCursor(Cursor.WAIT);
+                });
+
+                tableLoadData(Query.listaModeloBoes(query));
+                Var.boesIsClasificando = true;
+
+                Platform.runLater(() -> {
+                    rootPane.getScene().setCursor(Cursor.DEFAULT);
+                });
+            });
+            a.start();
         }
-    }
-
-    private void xLisDatePickerRun(Boe aux) {
-        Thread a = new Thread(() -> {
-
-            Platform.runLater(() -> {
-                rootPane.getScene().setCursor(Cursor.WAIT);
-            });
-
-//            initializeBoesData(aux);
-            Var.boesIsClasificando = true;
-
-            Platform.runLater(() -> {
-                rootPane.getScene().setCursor(Cursor.DEFAULT);
-            });
-        });
-        a.start();
     }
 }

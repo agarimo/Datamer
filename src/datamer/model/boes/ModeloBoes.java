@@ -1,8 +1,8 @@
 package datamer.model.boes;
 
-
-
+import datamer.Var;
 import javafx.beans.property.SimpleStringProperty;
+import util.Varios;
 
 /**
  *
@@ -10,12 +10,12 @@ import javafx.beans.property.SimpleStringProperty;
  */
 public class ModeloBoes {
 
+    public SimpleStringProperty fecha = new SimpleStringProperty();
+    public SimpleStringProperty codigo = new SimpleStringProperty();
     public SimpleStringProperty entidad = new SimpleStringProperty();
     public SimpleStringProperty origen = new SimpleStringProperty();
-    public SimpleStringProperty codigo = new SimpleStringProperty();
     public SimpleStringProperty descripcion = new SimpleStringProperty();
     public SimpleStringProperty link = new SimpleStringProperty();
-    public SimpleStringProperty fecha = new SimpleStringProperty();
     public Status status = Status.PENDING;
     public Boolean selected = null;
 
@@ -51,6 +51,31 @@ public class ModeloBoes {
         this.status = status;
     }
 
+    public void setStatus(String status) {
+        switch (status) {
+            case "PENDING":
+                this.status = Status.PENDING;
+                break;
+            case "APP":
+                this.status = Status.APP;
+                break;
+            case "SOURCE":
+                this.status = Status.SOURCE;
+                break;
+            case "USER":
+                this.status = Status.USER;
+                break;
+            case "DELETED":
+                this.status = Status.DELETED;
+                break;
+            case "DUPLICATED":
+                this.status = Status.DUPLICATED;
+                break;
+            default:
+                this.status = Status.PENDING;
+        }
+    }
+
     public Boolean getSelected() {
         return selected;
     }
@@ -61,6 +86,13 @@ public class ModeloBoes {
 
     @Override
     public String toString() {
-        return codigo.get()+" ["+this.status.toString()+"]";
+        return codigo.get() + " [" + this.status.toString() + "]";
+    }
+    
+    public String SQLUpdate(){
+        return "UPDATE "+Var.dbNameServer+".publicacion SET "
+                + "selected="+this.selected+","
+                + "status="+Varios.comillas(this.status.toString())+" "
+                + "WHERE codigo="+Varios.comillas(this.codigo.get())+";";
     }
 }

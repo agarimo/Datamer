@@ -2,14 +2,12 @@ package datamer.ctrl.boes.boe;
 
 import datamer.model.boes.ModeloBoes;
 import datamer.Var;
-import datamer.ctrl.boes.Query;
 import datamer.model.boes.enty.Boletin;
 import datamer.model.boes.enty.Descarga;
 import datamer.model.boes.enty.Entidad;
 import datamer.model.boes.enty.Origen;
 import datamer.model.boes.enty.Stats;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
@@ -24,46 +22,10 @@ import util.Varios;
 public class Insercion {
 
     private Sql bd;
-    private final List alreadySelected;
-    private final List alreadyDiscarted;
 
     public Insercion() {
-        this.alreadySelected = Query.listaAlreadySelected();
-        this.alreadyDiscarted = Query.listaAlreadyDiscarted();
 
     }
-
-    //<editor-fold defaultstate="collapsed" desc="Comprobar Selección">
-    public List cleanDuplicateS(List list) {
-        List lista = new ArrayList();
-        ModeloBoes aux;
-        Iterator it = list.iterator();
-
-        while (it.hasNext()) {
-            aux = (ModeloBoes) it.next();
-            if (!alreadySelected.contains(aux.getCodigo())) {
-                lista.add(aux);
-            }
-        }
-
-        return lista;
-    }
-
-    public List cleanDuplicateD(List list) {
-        List lista = new ArrayList();
-        ModeloBoes aux;
-        Iterator it = list.iterator();
-
-        while (it.hasNext()) {
-            aux = (ModeloBoes) it.next();
-            if (!alreadyDiscarted.contains(aux.getCodigo())) {
-                lista.add(aux);
-            }
-        }
-
-        return lista;
-    }
-//</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Inserción">
     public void insertaBoletin(ModeloBoes aux) {
@@ -156,18 +118,7 @@ public class Insercion {
 
             while (it.hasNext()) {
                 aux = (ModeloBoes) it.next();
-                bp = new Stats();
-                bp.setFecha(aux.getFecha());
-                bp.setCodigo(aux.getCodigo());
-                bp.setIsSelected(false);
-                bp.setStatus(aux.getStatus());
-                bp.setCve(null);
-                bp.setEntidad(aux.getEntidad().replace("'", "\\'"));
-                bp.setOrigen(aux.getOrigen().replace("'", "\\'"));
-                bp.setDescripcion(aux.getDescripcion().replace("'", "\\'"));
-                bp.setLink(aux.getLink().replace("'", "\\'"));
-
-                bd.ejecutar(bp.SQLCrear());
+                bd.ejecutar(aux.SQLUpdate());
             }
 
             bd.close();
@@ -186,18 +137,7 @@ public class Insercion {
 
             while (it.hasNext()) {
                 aux = (ModeloBoes) it.next();
-                bp = new Stats();
-                bp.setFecha(aux.getFecha());
-                bp.setCodigo(aux.getCodigo());
-                bp.setIsSelected(true);
-                bp.setStatus(aux.getStatus());
-                bp.setCve(null);
-                bp.setEntidad(aux.getEntidad().replace("'", "\\'"));
-                bp.setOrigen(aux.getOrigen().replace("'", "\\'"));
-                bp.setDescripcion(aux.getDescripcion().replace("'", "\\'"));
-                bp.setLink(aux.getLink().replace("'", "\\'"));
-
-                bd.ejecutar(bp.SQLCrear());
+                bd.ejecutar(aux.SQLUpdate());
             }
 
             bd.close();

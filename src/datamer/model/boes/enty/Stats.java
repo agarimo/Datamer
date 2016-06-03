@@ -116,17 +116,17 @@ public class Stats {
         this.cve = cve;
     }
 
-    public String SQLCrear() {
-        return "INSERT into " + Var.dbNameBoesStats + ".boletines (fecha, codigo, isSelected, status, cve, entidad, origen, descripcion, link) values("
-                + Varios.entrecomillar(this.fecha) + ","
-                + Varios.entrecomillar(this.codigo) + ","
-                + this.isSelected + ","
-                + Varios.entrecomillar(this.status.toString()) + ","
-                + Varios.entrecomillar(this.cve) + ","
-                + Varios.entrecomillar(this.entidad) + ","
-                + Varios.entrecomillar(this.origen) + ","
-                + Varios.entrecomillar(this.descripcion) + ","
-                + Varios.entrecomillar(this.link)
-                + ");";
-    }
+//    public String SQLCrear() {
+//        return "INSERT into " + Var.dbNameBoesStats + ".boletines (fecha, codigo, isSelected, status, cve, entidad, origen, descripcion, link) values("
+//                + Varios.entrecomillar(this.fecha) + ","
+//                + Varios.entrecomillar(this.codigo) + ","
+//                + this.isSelected + ","
+//                + Varios.entrecomillar(this.status.toString()) + ","
+//                + Varios.entrecomillar(this.cve) + ","
+//                + Varios.entrecomillar(this.entidad) + ","
+//                + Varios.entrecomillar(this.origen) + ","
+//                + Varios.entrecomillar(this.descripcion) + ","
+//                + Varios.entrecomillar(this.link)
+//                + ");";
+//    }
 }

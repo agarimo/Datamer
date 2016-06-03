@@ -8,6 +8,7 @@ import datamer.model.boes.enty.Publicacion;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.materialicons.MaterialIcon;
 import java.awt.Desktop;
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -109,6 +110,8 @@ public class ClasificacionC implements Initializable {
     private Button btRecoverS;
     @FXML
     private Button btVerWebC;
+     @FXML
+    private Button btVerBoletinC;
     @FXML
     private Button btDiscard;
     @FXML
@@ -153,6 +156,7 @@ public class ClasificacionC implements Initializable {
         GlyphsDude.setIcon(btSelectAll, MaterialIcon.PLAYLIST_ADD, "32");
         GlyphsDude.setIcon(btRecoverS, MaterialIcon.INPUT, "32");
         GlyphsDude.setIcon(btRecoverD, MaterialIcon.INPUT, "32");
+        GlyphsDude.setIcon(btVerBoletinC, MaterialIcon.FIND_IN_PAGE, "32");
     }
 
     void initializeClear() {
@@ -327,7 +331,13 @@ public class ClasificacionC implements Initializable {
 
     @FXML
     void pdfShow(ActionEvent event) {
-
+        ModeloBoes aux = tvBoes.getSelectionModel().getSelectedItem();
+        files.Util.escribeArchivo(Var.temporal, Query.getPublicacionData(aux.getCodigo()));
+        try {
+            Desktop.getDesktop().browse(Var.temporal.toURI());
+        } catch (IOException ex) {
+            LOG.error("[pdfShowOnWeb]" + ex);
+        }
     }
 
     @FXML

@@ -70,7 +70,7 @@ public class Var {
      */
     public static String dbNameServer="server";
     public static String dbNameBoes = "boes";
-    public static String dbNameBoesStats = "boes_stats";
+//    public static String dbNameBoesStats = "boes_stats";
 
     public static File ficheroPdf;
     public static File ficheroTxt;

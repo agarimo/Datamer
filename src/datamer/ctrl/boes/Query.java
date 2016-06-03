@@ -43,7 +43,7 @@ public class Query extends sql.Query {
         try {
             bd = new Sql(Var.con);
             bd.ejecutar("DELETE FROM " + Var.dbNameBoes + ".boletin where codigo=" + Varios.entrecomillar(codigo));
-            bd.ejecutar("UPDATE " + Var.dbNameBoesStats + ".boletines set status='DELETED',isSelected=false where codigo=" + Varios.entrecomillar(codigo));
+            bd.ejecutar("UPDATE " + Var.dbNameServer + ".publicacion set status='DELETED', selected=false where codigo=" + Varios.entrecomillar(codigo));
             bd.close();
         } catch (SQLException ex) {
             error(ex.getMessage());
@@ -164,6 +164,21 @@ public class Query extends sql.Query {
             }
 
             rs.close();
+            bd.close();
+        } catch (SQLException ex) {
+            error(ex.getMessage());
+            Logger.getLogger(Query.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return aux;
+    }
+    
+    public static String getPublicacionData(String codigo){
+        String query = "SELECT datos FROM " + Var.dbNameServer + ".publicacion where codigo=" + Varios.entrecomillar(codigo);
+        String aux = "";
+
+        try {
+            bd = new Sql(Var.con);
+            aux = bd.getString(query);
             bd.close();
         } catch (SQLException ex) {
             error(ex.getMessage());
@@ -1049,7 +1064,7 @@ public class Query extends sql.Query {
         try {
             bd = new Sql(Var.con);
             bd.ejecutar("DELETE FROM " + Var.dbNameBoes + ".boletin where codigo=" + Varios.entrecomillar(codigo));
-            bd.ejecutar("UPDATE " + Var.dbNameBoesStats + ".boletines set status='FASE',isSelected=false where codigo=" + Varios.entrecomillar(codigo));
+            bd.ejecutar("UPDATE " + Var.dbNameServer + ".publicacion set status='DELETED', selected=false where codigo=" + Varios.entrecomillar(codigo));
             bd.close();
         } catch (SQLException ex) {
             error(ex.getMessage());

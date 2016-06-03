@@ -36,7 +36,7 @@
                         <Insets top="10.0" />
                      </VBox.margin>
                   </Label>
-                  <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="150.0" text="Ver Boletín" />
+                  <Button fx:id="btVerBoletinC" mnemonicParsing="false" onAction="#pdfShow" prefHeight="50.0" prefWidth="150.0" text="Ver Boletín" />
                   <Button fx:id="btVerWebC" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pdfShowOnWeb" prefHeight="50.0" prefWidth="150.0" style="-fx-graphic: url(https://cdn1.iconfinder.com/data/icons/smallicons-logotypes/32/chrome-32.png);" text="Ver en WEB        ">
                      <opaqueInsets>
                         <Insets />

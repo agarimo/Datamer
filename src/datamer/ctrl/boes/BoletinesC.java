@@ -112,7 +112,7 @@ public class BoletinesC implements Initializable {
 
     @FXML
     DatePicker dpFechaB;
-    
+
     ObservableList<ModeloBoletines> boletinesList;
 
     /**
@@ -205,29 +205,28 @@ public class BoletinesC implements Initializable {
                 }
             };
         });
-        
+
         codigoCLB.prefWidthProperty().bind(tvBoletines.widthProperty().multiply(0.13));
         origenCLB.prefWidthProperty().bind(tvBoletines.widthProperty().multiply(0.56));
         fechaCLB.prefWidthProperty().bind(tvBoletines.widthProperty().multiply(0.1));
         tipoCLB.prefWidthProperty().bind(tvBoletines.widthProperty().multiply(0.07));
         faseCLB.prefWidthProperty().bind(tvBoletines.widthProperty().multiply(0.04));
         estructuraCLB.prefWidthProperty().bind(tvBoletines.widthProperty().multiply(0.116));
-        
 
         boletinesList = FXCollections.observableArrayList();
         tvBoletines.setItems(boletinesList);
     }
-    
+
     void cargaDatosTablaBoletines(Date fecha) {
         ModeloBoletines aux;
-        String query = "SELECT * FROM " + Var.dbNameBoes + ".vista_boletines where fecha=" + Varios.entrecomillar(Dates.imprimeFecha(fecha))+" order by codigo";
+        String query = "SELECT * FROM " + Var.dbNameBoes + ".vista_boletines where fecha=" + Varios.entrecomillar(Dates.imprimeFecha(fecha)) + " order by codigo";
         Iterator it = Query.listaModeloBoletines(query).iterator();
 
         while (it.hasNext()) {
             aux = (ModeloBoletines) it.next();
             boletinesList.add(aux);
         }
-        
+
         lbContador.setText(Integer.toString(boletinesList.size()));
     }
 
@@ -608,8 +607,13 @@ public class BoletinesC implements Initializable {
             Optional<ButtonType> result = alert.showAndWait();
 
             if (result.get() == ButtonType.OK) {
-                Query.eliminaBoletin(aux.getCodigo());
-                recargarBoletines(new ActionEvent());
+
+                Thread a = new Thread(() -> {
+                    boletinesList.remove(aux);
+                    Query.eliminaBoletin(aux.getCodigo());
+                });
+                a.start();
+
             }
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);

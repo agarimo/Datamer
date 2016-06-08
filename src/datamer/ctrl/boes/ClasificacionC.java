@@ -110,7 +110,7 @@ public class ClasificacionC implements Initializable {
     private Button btRecoverS;
     @FXML
     private Button btVerWebC;
-     @FXML
+    @FXML
     private Button btVerBoletinC;
     @FXML
     private Button btDiscard;
@@ -423,6 +423,8 @@ public class ClasificacionC implements Initializable {
                 pbClasificacion.setProgress(-1);
             });
 
+            in.clean();
+
             Platform.runLater(() -> {
                 setProcesandoC(false);
                 lbClasificacion.setText("INSERCIÓN FINALIZADA");
@@ -443,8 +445,10 @@ public class ClasificacionC implements Initializable {
     private void procesarTaskPreClean(LocalDate fecha) {
         try {
             String query = "DELETE FROM " + Var.dbNameBoes + ".boletin WHERE idBoe=(SELECT id FROM " + Var.dbNameBoes + ".boe WHERE fecha=" + Varios.comillas(fecha.format(DateTimeFormatter.ISO_DATE)) + ")";
+            String queryC = "DELETE FROM " + Var.dbNameBoes + ".descarga WHERE codigo NOT IN (SELECT codigo FROM " + Var.dbNameBoes + ".boletin)";
             Sql bd1 = new Sql(Var.con);
             bd1.ejecutar(query);
+            bd1.ejecutar(queryC);
             bd1.close();
         } catch (SQLException ex) {
             java.util.logging.Logger.getLogger(ClasificacionC.class.getName()).log(Level.SEVERE, null, ex);
@@ -491,10 +495,22 @@ public class ClasificacionC implements Initializable {
 
             if (aux.getSelected()) {
                 selectedCount++;
-            } else if (aux.getStatus() == Status.PENDING) {
-                publicacion.add(aux);
+                switch (aux.getStatus()) {
+//                    case USER:
+//                        selectedList.add(aux);
+//                        break;
+                }
+
             } else {
                 discartedCount++;
+                switch (aux.getStatus()) {
+                    case PENDING:
+                        publicacion.add(aux);
+                        break;
+//                    case USER:
+//                        discartedList.add(aux);
+//                        break;
+                }
             }
         }
 

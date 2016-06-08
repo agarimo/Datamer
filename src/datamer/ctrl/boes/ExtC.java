@@ -1,5 +1,7 @@
 package datamer.ctrl.boes;
 
+import com.itextpdf.text.pdf.PdfReader;
+import com.itextpdf.text.pdf.parser.PdfTextExtractor;
 import datamer.Var;
 import datamer.ctrl.boes.boe.Download;
 import datamer.ctrl.boes.ext.BB0;
@@ -16,8 +18,11 @@ import datamer.model.boes.ModeloPreview;
 import datamer.model.boes.ModeloProcesar;
 import datamer.model.boes.enty.Multa;
 import datamer.model.boes.enty.Procesar;
+import files.Util;
 import java.awt.Desktop;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -395,7 +400,7 @@ public class ExtC implements Initializable {
             a.start();
         }
     }
-
+    
     /**
      * Generar PDF individual.
      *

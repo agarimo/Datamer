@@ -55,9 +55,7 @@ public class Var {
 
     public static String configFile = "config.xml";
     public static String defaultFile = "/resources/default.xml";
-//    public static String dbName = "idbl";
 
-//    public static String dbNameStats = "idbl_stats";
     public static boolean modoAdmin;
     public static String passwordAdmin;
     public static String queryLimit;
@@ -71,7 +69,9 @@ public class Var {
     public static String dbNameServer="server";
     public static String dbNameBoes = "boes";
 //    public static String dbNameBoesStats = "boes_stats";
-
+    
+    
+    public static File fileSystem;
     public static File ficheroPdf;
     public static File ficheroTxt;
     public static File ficheroEx;
@@ -121,12 +121,17 @@ public class Var {
     }
 
     private static void initVarFiles() {
-        fichero = new File(new File("data"), "testraData");
-        temporal = new File(new File("data"), "temp.txt");
-        ficheroPdf = new File(new File("data"), "pdfData");
-        ficheroTxt = new File(new File("data"), "txtData");
-        ficheroEx = new File(new File("data"), "exData");
-        ficheroUnion = new File(new File("data"), "unionData");
+        fileSystem = new File("data");
+        fichero = new File(fileSystem, "testraData");
+        temporal = new File(fileSystem, "temp.txt");
+        ficheroPdf = new File(fileSystem, "pdfData");
+        ficheroTxt = new File(fileSystem, "txtData");
+        ficheroEx = new File(fileSystem, "exData");
+        ficheroUnion = new File(fileSystem, "unionData");
+        
+        if (!fileSystem.exists()) {
+            fileSystem.mkdirs();
+        }
 
         if (!ficheroPdf.exists()) {
             ficheroPdf.mkdirs();

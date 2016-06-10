@@ -1,6 +1,7 @@
 package datamer.ctrl.boes;
 
 import datamer.Var;
+import static datamer.Var.executor;
 import datamer.ctrl.boes.boe.Insercion;
 import datamer.model.boes.ModeloBoes;
 import datamer.model.boes.Status;
@@ -21,6 +22,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 import java.util.logging.Level;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -496,9 +500,9 @@ public class ClasificacionC implements Initializable {
             if (aux.getSelected()) {
                 selectedCount++;
                 switch (aux.getStatus()) {
-//                    case USER:
-//                        selectedList.add(aux);
-//                        break;
+                    case USER:
+                        selectedList.add(aux);
+                        break;
                 }
 
             } else {
@@ -507,14 +511,14 @@ public class ClasificacionC implements Initializable {
                     case PENDING:
                         publicacion.add(aux);
                         break;
-//                    case USER:
-//                        discartedList.add(aux);
-//                        break;
+                    case USER:
+                        discartedList.add(aux);
+                        break;
                 }
             }
         }
-
         setContadores();
+        tableFocus();
     }
 
     @FXML
@@ -550,5 +554,6 @@ public class ClasificacionC implements Initializable {
             });
             a.start();
         }
+
     }
 }

@@ -40,6 +40,8 @@ import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 import sql.Conexion;
 import files.Util;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  *
@@ -50,6 +52,8 @@ public class Var {
     public static Stage stage;
     public static Stage popup;
     public static HostServicesDelegate hostServices;
+    
+    public static ExecutorService executor;
 
     public static Conexion con;
 
@@ -110,6 +114,7 @@ public class Var {
         initVarKeyStore();
         boesIsClasificando = false;
         boesIsDownloading = false;
+        executor = Executors.newFixedThreadPool(3);
     }
 
     private static void initVarDriver() {

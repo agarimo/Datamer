@@ -114,7 +114,7 @@ public class Var {
         initVarKeyStore();
         boesIsClasificando = false;
         boesIsDownloading = false;
-        executor = Executors.newFixedThreadPool(3);
+//        executor = Executors.newFixedThreadPool(3);
     }
 
     private static void initVarDriver() {

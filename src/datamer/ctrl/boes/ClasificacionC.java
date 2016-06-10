@@ -399,7 +399,7 @@ public class ClasificacionC implements Initializable {
             Platform.runLater(() -> {
                 selectedList.clear();
                 discartedList.clear();
-                pbClasificacion.setProgress(0);
+                pbClasificacion.setProgress(-1);
                 lbClasificacion.setText("INICIANDO CARGA");
             });
 
@@ -510,6 +510,7 @@ public class ClasificacionC implements Initializable {
                 switch (aux.getStatus()) {
                     case PENDING:
                         publicacion.add(aux);
+
                         break;
                     case USER:
                         discartedList.add(aux);
@@ -518,7 +519,6 @@ public class ClasificacionC implements Initializable {
             }
         }
         setContadores();
-        tableFocus();
     }
 
     @FXML
@@ -545,11 +545,13 @@ public class ClasificacionC implements Initializable {
                     rootPane.getScene().setCursor(Cursor.WAIT);
                 });
 
-                tableLoadData(Query.listaModeloBoes(query));
+                List list = Query.listaModeloBoes(query);
                 Var.boesIsClasificando = true;
 
                 Platform.runLater(() -> {
+                    tableLoadData(list);
                     rootPane.getScene().setCursor(Cursor.DEFAULT);
+                    tableFocus();
                 });
             });
             a.start();

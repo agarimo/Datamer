@@ -278,7 +278,6 @@ public class BoletinesC implements Initializable {
 
                 Boletin aux;
                 Estructuras es = new Estructuras(fecha, false);
-                es.limpiarEstructuras();
                 List list = es.getBoletines();
 
                 for (int i = 0; i < list.size(); i++) {
@@ -309,7 +308,7 @@ public class BoletinesC implements Initializable {
                         pbEstado.setProgress(counter / toutal);
                     });
                     aux = (Boletin) list.get(i);
-                    fs.runFase(aux);
+                    fs.run(aux);
                 }
 
                 trasvaseEx(fecha);
@@ -353,7 +352,6 @@ public class BoletinesC implements Initializable {
 
                 Boletin aux;
                 Estructuras es = new Estructuras(fecha, false);
-                es.limpiarEstructuras();
                 List list = es.getBoletines();
 
                 for (int i = 0; i < list.size(); i++) {
@@ -400,7 +398,6 @@ public class BoletinesC implements Initializable {
 
                 Boletin aux;
                 Estructuras es = new Estructuras(fecha, true);
-                es.limpiarEstructuras();
                 List list = es.getBoletines();
 
                 for (int i = 0; i < list.size(); i++) {
@@ -461,7 +458,7 @@ public class BoletinesC implements Initializable {
                         pbEstado.setProgress(counter / toutal);
                     });
                     aux = (Boletin) list.get(i);
-                    fs.runFase(aux);
+                    fs.run(aux);
                 }
 
                 Platform.runLater(() -> {

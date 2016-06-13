@@ -1,13 +1,10 @@
 package datamer.ctrl.boes.boletines;
 
-
 import datamer.Var;
 import datamer.ctrl.boes.Query;
 import datamer.model.boes.enty.Boletin;
 import datamer.model.boes.enty.Fase;
-import datamer.model.boes.enty.Origen;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -23,6 +20,7 @@ import util.Varios;
  */
 public class Fases {
 
+    Sql bd;
     Date fecha;
     List boletines;
 
@@ -40,61 +38,39 @@ public class Fases {
         return this.boletines;
     }
 
-    private String getDatos(int id) {
-        Sql bd;
+    private void conectar() {
+        try {
+            bd = new Sql(Var.con);
+        } catch (SQLException ex) {
+            Logger.getLogger(Fases.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void desconectar() {
+        try {
+            bd.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(Fases.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private String getDatos(String codigo) {
         String str = null;
 
         try {
-            bd = new Sql(Var.con);
-            str = bd.getString("SELECT datos FROM " + Var.dbNameBoes + ".descarga where id=" + id);
-            bd.close();
+            str = bd.getString("SELECT datos FROM " + Var.dbNameServer + ".publicacion where codigo=" + Varios.comillas(codigo));
         } catch (SQLException ex) {
             Logger.getLogger(Fases.class.getName()).log(Level.SEVERE, null, ex);
         }
         return str;
     }
 
-    @Deprecated
-    public void run() {
-        Sql bd;
+
+    public void run(Boletin aux) {
         Fase fase;
-        Boletin aux;
-        Iterator it = boletines.iterator();
-
-        while (it.hasNext()) {
-
-            aux = (Boletin) it.next();
-            fase = compruebaFase(aux.getIdDescarga(), getFases(aux.getIdOrigen()));
-
-            if (fase != null) {
-                aux.setTipo(fase.getCodigo());
-                aux.setFase(getBCN(aux.getIdOrigen(), aux.getIsEstructura()) + "-" + fase.toString());
-
-                if (fase.getCodigo().equals("*DSC*")) {
-                    aux.setIsFase(3);
-                } else {
-                    aux.setIsFase(2);
-                }
-            } else {
-                aux.setFase(getBCN(aux.getIdOrigen(), aux.getIsEstructura()));
-                aux.setIsFase(1);
-            }
-
-            try {
-                bd = new Sql(Var.con);
-                bd.ejecutar(aux.SQLEditar());
-                bd.close();
-            } catch (SQLException ex) {
-                Logger.getLogger(Fases.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-    }
-
-    public void runFase(Boletin aux) {
-        Sql bd;
-        Fase fase;
-
-        fase = compruebaFase(aux.getIdDescarga(), getFases(aux.getIdOrigen()));
+        conectar();
+        
+        fase = compruebaFase(aux.getCodigo(), getFases(aux.getIdOrigen()));
 
         if (fase != null) {
             aux.setTipo(fase.getCodigo());
@@ -111,15 +87,15 @@ public class Fases {
         }
 
         try {
-            bd = new Sql(Var.con);
             bd.ejecutar(aux.SQLEditar());
-            bd.close();
         } catch (SQLException ex) {
             Logger.getLogger(Fases.class.getName()).log(Level.SEVERE, null, ex);
         }
+        desconectar();
     }
 
-    private Fase compruebaFase(int id, List fases) {
+    private Fase compruebaFase(String codigo, List fases) {
+        String datos = getDatos(codigo);
         Fase fase = null;
         Fase aux;
         Iterator it = fases.iterator();
@@ -127,7 +103,7 @@ public class Fases {
         while (it.hasNext()) {
             aux = (Fase) it.next();
 
-            if (aux.contiene(getDatos(id))) {
+            if (aux.contiene(datos)) {
                 fase = aux;
             }
         }
@@ -135,18 +111,15 @@ public class Fases {
     }
 
     private String getBCN(int idOrigen, int estructura) {
-        Sql bd;
         String str = "";
 
         try {
-            bd = new Sql(Var.con);
             if (estructura == -1) {
                 str = "BCN1null";
             } else {
                 str = bd.getString("SELECT nombre FROM " + Var.dbNameBoes + ".estructura where id=" + estructura);
             }
             str = str + bd.getString("SELECT codigoUn FROM " + Var.dbNameBoes + ".origen where id=" + idOrigen);
-            bd.close();
         } catch (SQLException ex) {
             Logger.getLogger(Fases.class.getName()).log(Level.SEVERE, null, ex);
         }

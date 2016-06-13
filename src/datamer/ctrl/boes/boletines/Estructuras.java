@@ -5,7 +5,6 @@ import datamer.ctrl.boes.Query;
 import datamer.model.boes.enty.Boletin;
 import datamer.model.boes.enty.Estructura;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -21,6 +20,7 @@ import util.Varios;
  */
 public class Estructuras {
 
+    Sql bd;
     Date fecha;
     List boletines;
     List estructuras;
@@ -47,6 +47,26 @@ public class Estructuras {
         }
     }
 
+    private boolean conectar() {
+        try {
+            bd = new Sql(Var.con);
+            return true;
+        } catch (SQLException ex) {
+            Logger.getLogger(Estructuras.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+    }
+
+    private boolean desconectar() {
+        try {
+            bd.close();
+            return true;
+        } catch (SQLException ex) {
+            Logger.getLogger(Estructuras.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+    }
+
     private List getEstructuras() {
         return Query.listaEstructuras("SELECT * FROM boes.estructura order by estructura");
     }
@@ -56,27 +76,28 @@ public class Estructuras {
     }
 
     public void run(Boletin aux) {
-        Sql bd;
-        Estructura estructura;
+        Estructura struc;
+        conectar();
+        
+        struc = compruebaEstructura(aux.getCodigo());
 
-        estructura = compruebaEstructura(aux.getIdDescarga());
-
-        if (estructura != null) {
-            aux.setIsEstructura(estructura.getId());
+        if (struc != null) {
+            aux.setIsEstructura(struc.getId());
         } else {
             aux.setIsEstructura(-1);
         }
 
         try {
-            bd = new Sql(Var.con);
             bd.ejecutar(aux.SQLEditar());
-            bd.close();
         } catch (SQLException ex) {
             Logger.getLogger(Fases.class.getName()).log(Level.SEVERE, null, ex);
         }
+
+        desconectar();
     }
 
-    private Estructura compruebaEstructura(int id) {
+    private Estructura compruebaEstructura(String codigo) {
+        String datos = getDatos(codigo);
         Estructura estructura = null;
         Estructura aux;
         Iterator it = estructuras.iterator();
@@ -84,56 +105,21 @@ public class Estructuras {
         while (it.hasNext()) {
             aux = (Estructura) it.next();
 
-            if (getDatos(id).contains(aux.getEstructura())) {
+            if (datos.contains(aux.getEstructura())) {
                 estructura = aux;
             }
         }
         return estructura;
     }
 
-    private String getDatos(int id) {
-        Sql bd;
+    private String getDatos(String codigo) {
         String str = null;
 
         try {
-            bd = new Sql(Var.con);
-            str = bd.getString("SELECT datos FROM " + Var.dbNameBoes + ".descarga where id=" + id);
-            bd.close();
+            str = bd.getString("SELECT datos FROM " + Var.dbNameServer + ".publicacion where codigo=" + Varios.comillas(codigo));
         } catch (SQLException ex) {
             Logger.getLogger(Fases.class.getName()).log(Level.SEVERE, null, ex);
         }
         return str;
     }
-
-    public void limpiarEstructuras() {
-        Sql bd;
-        Estructura aux;
-        List sel = new ArrayList();
-        List des = new ArrayList();
-        Iterator it = estructuras.iterator();
-
-        while (it.hasNext()) {
-            aux = (Estructura) it.next();
-
-            if (sel.contains(aux)) {
-                des.add(aux);
-            } else {
-                sel.add(aux);
-            }
-        }
-
-        try {
-            bd = new Sql(Var.con);
-            it = des.iterator();
-
-            while (it.hasNext()) {
-                aux = (Estructura) it.next();
-                bd.ejecutar(aux.SQLBorrar());
-            }
-            bd.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(Estructuras.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
 }

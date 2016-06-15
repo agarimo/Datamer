@@ -1,6 +1,5 @@
 package datamer;
 
-import datamer.ctrl.rutines.CveTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Application;
@@ -47,12 +46,5 @@ public class Datamer extends Application {
      */
     public static void main(String[] args) {
         launch(args);
-    }
-
-    public static void test() {
-        Var.initVar();
-        CveTask ct = new CveTask();
-
-        ct.run();
     }
 }

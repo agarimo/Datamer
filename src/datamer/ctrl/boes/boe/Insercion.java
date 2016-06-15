@@ -1,20 +1,13 @@
 package datamer.ctrl.boes.boe;
 
-import com.itextpdf.text.pdf.PdfReader;
-import com.itextpdf.text.pdf.parser.PdfTextExtractor;
 import datamer.model.boes.ModeloBoes;
 import datamer.Var;
 import datamer.model.boes.enty.Boletin;
-import datamer.model.boes.enty.Descarga;
 import datamer.model.boes.enty.Entidad;
 import datamer.model.boes.enty.Origen;
 import datamer.model.boes.enty.Publicacion;
 import files.LoadFile;
-import files.Util;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
@@ -58,7 +51,6 @@ public class Insercion {
 
             bol.setIdOrigen(getIdOrigen(aux.getEntidad(), aux.getOrigen()));
             bol.setIdBoe(getIdBoe(aux.getFecha().format(DateTimeFormatter.ISO_DATE)));
-            bol.setIdDescarga(getIdDescarga(aux.getCodigo(), aux.getLink()));
             bol.setCodigo(aux.getCodigo());
             bol.setTipo("*711*");
             bol.setFase("BCN1");
@@ -66,6 +58,7 @@ public class Insercion {
             bol.setIsEstructura(0);
             bol.setIdioma(0);
 
+            bd.ejecutar(bol.SQLUpdateData(getDatos(aux.getLink())));
             bd.ejecutar(bol.SQLCrear());
             bd.close();
 
@@ -107,22 +100,6 @@ public class Insercion {
 
     private int getIdBoe(String fecha) throws SQLException {
         return bd.getInt("SELECT * FROM " + Var.dbNameBoes + ".boe where fecha=" + Varios.entrecomillar(fecha));
-    }
-
-    private int getIdDescarga(String codigo, String link) throws SQLException {
-        int aux;
-        Descarga ds = new Descarga();
-        ds.setCodigo(codigo);
-        ds.setLink(link);
-        ds.setDatos(getDatos(link));
-
-        aux = bd.buscar(ds.SQLBuscar());
-
-        if (aux == -1) {
-            bd.ejecutar(ds.SQLCrear());
-            aux = bd.ultimoRegistro();
-        }
-        return aux;
     }
 
     private String getDatos(String link) {

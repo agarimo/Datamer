@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import sql.Sql;
-import datamer.model.boes.enty.Descarga;
 import datamer.model.boes.enty.Entidad;
 import datamer.model.boes.enty.Estructura;
 import datamer.model.boes.enty.Fase;
@@ -93,7 +92,7 @@ public class Query extends sql.Query {
             rs = bd.ejecutarQueryRs(query);
 
             while (rs.next()) {
-                aux = new Boletin(rs.getInt("id"), rs.getInt("idOrigen"), rs.getInt("idBoe"), rs.getInt("idDescarga"),
+                aux = new Boletin(rs.getInt("id"), rs.getInt("idOrigen"), rs.getInt("idBoe"),
                         rs.getString("codigo"), rs.getString("tipo"), rs.getString("fase"), rs.getInt("isFase"),
                         rs.getInt("isEstructura"), rs.getInt("idioma"));
             }
@@ -206,7 +205,6 @@ public class Query extends sql.Query {
                 aux.fase.set(rs.getString("fase"));
                 aux.isFase.set(rs.getInt("isFase"));
                 aux.isEstructura.set(rs.getString("isEstructura"));
-                aux.idDescarga.set(rs.getInt("idDescarga"));
                 aux.link.set(rs.getString("link"));
                 aux.idioma.set(rs.getInt("idioma"));
             }
@@ -315,31 +313,9 @@ public class Query extends sql.Query {
             rs = bd.ejecutarQueryRs(query);
 
             while (rs.next()) {
-                aux = new Boletin(rs.getInt("id"), rs.getInt("idOrigen"), rs.getInt("idBoe"), rs.getInt("idDescarga"),
+                aux = new Boletin(rs.getInt("id"), rs.getInt("idOrigen"), rs.getInt("idBoe"),
                         rs.getString("codigo"), rs.getString("tipo"), rs.getString("fase"), rs.getInt("isFase"),
                         rs.getInt("isEstructura"), rs.getInt("idioma"));
-                list.add(aux);
-            }
-            rs.close();
-            bd.close();
-        } catch (SQLException ex) {
-            error(ex.getMessage());
-            Logger.getLogger(Query.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return list;
-    }
-
-    public static List<Descarga> listaDescargaPendiente() {
-        String query = "SELECT * FROM boes.descarga where datos='null'";
-        List<Descarga> list = new ArrayList();
-        Descarga aux;
-
-        try {
-            bd = new Sql(Var.con);
-            rs = bd.ejecutarQueryRs(query);
-
-            while (rs.next()) {
-                aux = new Descarga(rs.getInt("id"), rs.getString("codigo"), rs.getString("link"), rs.getString("datos"));
                 list.add(aux);
             }
             rs.close();
@@ -545,7 +521,6 @@ public class Query extends sql.Query {
                 aux.fase.set(rs.getString("fase"));
                 aux.isFase.set(rs.getInt("isFase"));
                 aux.isEstructura.set(rs.getString("isEstructura"));
-                aux.idDescarga.set(rs.getInt("idDescarga"));
                 aux.link.set(rs.getString("link"));
                 aux.idioma.set(rs.getInt("idioma"));
                 list.add(aux);
@@ -804,7 +779,6 @@ public class Query extends sql.Query {
             while (rs.next()) {
                 aux = new ModeloUnion();
                 aux.codigo.set(rs.getString("codigo"));
-                aux.idDescarga.set(rs.getInt("idDescarga"));
                 aux.fecha.set(rs.getString("fecha"));
                 aux.codigoUn.set(rs.getString("codigoUn"));
                 aux.estructura.set(rs.getString("isEstructura"));
@@ -924,10 +898,10 @@ public class Query extends sql.Query {
 
     public static List listaProcesarPendiente(Date fecha) {
         List list = new ArrayList();
-        String query = "select a.id,a.codigo,b.link,a.isEstructura from boes.boletin a "
-                + "left join boes.descarga b on a.idDescarga=b.id "
+        String query = "select a.id,a.codigo,b.link,a.isEstructura from "+Var.dbNameBoes+".boletin a "
+                + "left join "+Var.dbNameServer+".publicacion b on a.codigo=b.codigo "
                 + "where a.idBoe=(select id from boes.boe where fecha=" + Varios.entrecomillar(Dates.imprimeFecha(fecha)) + ") "
-                + "and a.id not in (select id from boes.procesar)";
+                + "and a.id not in (select id from "+Var.dbNameBoes+".procesar)";
         Procesar aux;
 
         try {

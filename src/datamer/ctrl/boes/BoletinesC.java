@@ -632,7 +632,7 @@ public class BoletinesC implements Initializable {
         if (aux != null) {
             try {
                 bd = new Sql(Var.con);
-                datos = bd.getString("SELECT datos FROM boes.descarga WHERE id=" + aux.getIdDescarga());
+                datos = bd.getString("SELECT datos FROM " + Var.dbNameServer + ".publicacion WHERE codigo=" + Varios.comillas(aux.getCodigo()));
                 bd.close();
             } catch (SQLException ex) {
                 Logger.getLogger(BoletinesC.class.getName()).log(Level.SEVERE, null, ex);

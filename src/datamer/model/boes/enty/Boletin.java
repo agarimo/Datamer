@@ -11,7 +11,6 @@ public class Boletin {
     private int id;
     private int idOrigen;
     private int idBoe;
-    private int idDescarga;
     private String codigo;
     private String tipo;
     private String fase;
@@ -22,12 +21,11 @@ public class Boletin {
     public Boletin() {
     }
 
-    public Boletin(int id, int idOrigen, int idBoe, int idDescarga, String codigo,String tipo, String fase,
+    public Boletin(int id, int idOrigen, int idBoe, String codigo,String tipo, String fase,
             int isFase,int isEstructura,int idioma) {
         this.id = id;
         this.idOrigen = idOrigen;
         this.idBoe = idBoe;
-        this.idDescarga = idDescarga;
         this.codigo = codigo;
         this.tipo=tipo;
         this.fase = fase;
@@ -66,14 +64,6 @@ public class Boletin {
 
     public void setIdBoe(int idBoe) {
         this.idBoe = idBoe;
-    }
-
-    public int getIdDescarga() {
-        return idDescarga;
-    }
-
-    public void setIdDescarga(int idDescarga) {
-        this.idDescarga = idDescarga;
     }
 
     public String getCodigo() {
@@ -122,10 +112,9 @@ public class Boletin {
     }
     
     public String SQLCrear() {
-        return "INSERT into " + Var.dbNameBoes + ".boletin (idOrigen,idBoe,idDescarga,codigo,tipo,fase,isFase,isEstructura,idioma) values("
+        return "INSERT into " + Var.dbNameBoes + ".boletin (idOrigen,idBoe,codigo,tipo,fase,isFase,isEstructura,idioma) values("
                 + this.idOrigen + ","
                 + this.idBoe + ","
-                + this.idDescarga + ","
                 + Varios.comillas(this.codigo) + ","
                 + Varios.comillas(this.tipo) + ","
                 + Varios.comillas(this.fase) + ","
@@ -147,5 +136,11 @@ public class Boletin {
     
     public String SQLBuscar(){
         return "SELECT * from "+Var.dbNameBoes+".boletin where codigo="+Varios.entrecomillar(this.codigo);
+    }
+
+    public String SQLUpdateData(String datos) {
+        return "UPDATE " + Var.dbNameServer + ".publicacion SET "
+                + "datos=" + Varios.comillas(datos) + " "
+                + "WHERE codigo=" + Varios.comillas(this.codigo);
     }
 }

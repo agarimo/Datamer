@@ -144,7 +144,7 @@ public class Archivos {
         buffer.append(System.getProperty("line.separator"));
         buffer.append(getCodigoAyutamiento(aux.getOrigen()));
         buffer.append(System.getProperty("line.separator"));
-        buffer.append(getDatosBoletin(aux.getIdDescarga()));
+        buffer.append(getDatosBoletin(aux.getCodigo()));
 
         return buffer.toString();
     }
@@ -270,13 +270,13 @@ public class Archivos {
         return aux;
     }
 
-    private String getDatosBoletin(int id) {
+    private String getDatosBoletin(String codigo) {
         Sql bd;
         String aux;
 
         try {
             bd = new Sql(Var.con);
-            aux = bd.getString("SELECT datos from " + Var.dbNameBoes + ".descarga where id=" + id);
+            aux = bd.getString("SELECT datos from " + Var.dbNameServer + ".publicacion where codigo=" + Varios.comillas(codigo));
             bd.close();
         } catch (SQLException ex) {
             aux = "ERROR AL GENERAR EL ARCHIVO ----- " + ex.getMessage();

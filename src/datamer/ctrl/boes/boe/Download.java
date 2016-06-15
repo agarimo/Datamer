@@ -4,7 +4,6 @@ import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.parser.PdfTextExtractor;
 import datamer.Var;
 import datamer.ctrl.boes.Query;
-import datamer.model.boes.enty.Descarga;
 import java.io.BufferedWriter;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -38,98 +37,23 @@ public class Download extends Thread {
         this.list = new ArrayList();
     }
 
-    private void cargaList() {
-        this.list = Query.listaDescargaPendiente();
-    }
-
-    @Override
-    public void run() {
-        cargaList();
-        if (!Var.boesIsDownloading) {
-            Var.boesIsDownloading = true;
-
-            if (!list.isEmpty()) {
-                try {
-                    descarga();
-                } catch (SQLException | IOException ex) {
-                    Logger.getLogger(Download.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-
-            Var.boesIsDownloading = false;
-        }
-    }
-
-    public List getListado() {
-        return Query.listaDescargaPendiente();
-    }
-
-    public void descarga(Descarga aux) {
-        try {
-            Sql bd;
-            String datos;
-
-            bd = new Sql(Var.con);
-            descargaPDF(aux.getLink());
-            convertirPDF();
-            datos = Util.leeArchivo(new File("temp.txt"));
-            datos = datos.replace("'", "´");
-            aux.setDatos(datos);
-            bd.ejecutar(aux.SQLSetDatos());
-//            bd.ejecutar("UPDATE " + Variables.nombreBD + ".boletin SET estado=1 where idDescarga=" + aux.getId());
-
-            new File("temp.txt").delete();
-            new File("temp.pdf").delete();
-            bd.close();
-        } catch (IOException | SQLException ex) {
-            Logger.getLogger(Download.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    private void descarga() throws SQLException, IOException {
-        Sql bd;
-        Descarga aux;
-        String datos;
-        Iterator it = list.iterator();
-
-        bd = new Sql(Var.con);
-
-        while (it.hasNext()) {
-            aux = (Descarga) it.next();
-
-            descargaPDF(aux.getLink());
-            convertirPDF();
-            datos = Util.leeArchivo(new File("temp.txt"));
-            datos = datos.replace("'", "´");
-            aux.setDatos(datos);
-            bd.ejecutar(aux.SQLSetDatos());
-//            bd.ejecutar("UPDATE " + Variables.nombreBD + ".boletin SET estado=1 where idDescarga=" + aux.getId());
-
-            new File("temp.txt").delete();
-            new File("temp.pdf").delete();
-        }
-
-        bd.close();
-    }
-
-    public void descargaPDF(String link) throws MalformedURLException, IOException, SQLException {
-        File fichero = new File("temp.pdf");
-
-        URL enlace = new URL(link);
-        URLConnection connection = enlace.openConnection();
-
-        OutputStream out;
-        try (InputStream in = connection.getInputStream()) {
-            out = new DataOutputStream(new FileOutputStream(fichero));
-            byte[] buffer = new byte[1024];
-            int sizeRead;
-            while ((sizeRead = in.read(buffer)) >= 0) {
-                out.write(buffer, 0, sizeRead);
-            }
-        }
-        out.close();
-    }
-
+//    public void descargaPDF(String link) throws MalformedURLException, IOException, SQLException {
+//        File fichero = new File("temp.pdf");
+//
+//        URL enlace = new URL(link);
+//        URLConnection connection = enlace.openConnection();
+//
+//        OutputStream out;
+//        try (InputStream in = connection.getInputStream()) {
+//            out = new DataOutputStream(new FileOutputStream(fichero));
+//            byte[] buffer = new byte[1024];
+//            int sizeRead;
+//            while ((sizeRead = in.read(buffer)) >= 0) {
+//                out.write(buffer, 0, sizeRead);
+//            }
+//        }
+//        out.close();
+//    }
     public static void descargaPDF(String link, File destino) {
         try {
             URL enlace = new URL(link);

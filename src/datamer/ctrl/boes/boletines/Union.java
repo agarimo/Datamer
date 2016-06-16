@@ -35,12 +35,12 @@ public class Union {
 
         if (estructura == null) {
             it = Query.listaUnion("SELECT * FROM " + Var.dbNameBoes + ".vista_union "
-                    + "where fecha=" + Varios.entrecomillar(Dates.imprimeFecha(fecha)) + " "
+                    + "where fecha=" + Varios.comillas(Dates.imprimeFecha(fecha)) + " "
                     + "and isEstructura is null").iterator();
         } else {
             it = Query.listaUnion("SELECT * FROM " + Var.dbNameBoes + ".vista_union "
-                    + "where fecha=" + Varios.entrecomillar(Dates.imprimeFecha(fecha)) + " "
-                    + "and isEstructura=" + Varios.entrecomillar(estructura)).iterator();
+                    + "where fecha=" + Varios.comillas(Dates.imprimeFecha(fecha)) + " "
+                    + "and isEstructura=" + Varios.comillas(estructura)).iterator();
         }
 
         while (it.hasNext()) {

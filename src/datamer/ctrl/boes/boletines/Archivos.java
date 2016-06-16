@@ -44,7 +44,7 @@ public class Archivos {
     }
 
     private void cargaBoletines() {
-        String query = "SELECT * FROM boes.vista_boletines where fecha=" + Varios.entrecomillar(Dates.imprimeFecha(this.fecha));
+        String query = "SELECT * FROM boes.vista_boletines where fecha=" + Varios.comillas(Dates.imprimeFecha(this.fecha));
         boletines = Query.listaModeloBoletines(query);
     }
 
@@ -261,7 +261,7 @@ public class Archivos {
 
         try {
             bd = new Sql(Var.con);
-            aux = bd.getString("SELECT codigo FROM boes.entidad where nombre=" + Varios.entrecomillar(entidad));
+            aux = bd.getString("SELECT codigo FROM boes.entidad where nombre=" + Varios.comillas(entidad));
             bd.close();
         } catch (SQLException ex) {
             Logger.getLogger(Archivos.class.getName()).log(Level.SEVERE, null, ex);
@@ -292,7 +292,7 @@ public class Archivos {
 
         try {
             bd = new Sql(Var.con);
-            aux = bd.getString("SELECT fase FROM boes.boletin where codigo=" + Varios.entrecomillar(codigo));
+            aux = bd.getString("SELECT fase FROM boes.boletin where codigo=" + Varios.comillas(codigo));
             bd.close();
         } catch (SQLException ex) {
             Logger.getLogger(Archivos.class.getName()).log(Level.SEVERE, null, ex);
@@ -303,15 +303,14 @@ public class Archivos {
 
     private String getCodigoAyutamiento(String nombre) {
         Sql bd;
-        nombre=nombre.replace("'", "\\'");
         String aux = "";
 
         try {
             bd = new Sql(Var.con);
-            aux = bd.getString("SELECT codigoAy FROM boes.origen where nombre=" + Varios.entrecomillar(nombre));
+            aux = bd.getString("SELECT codigoAy FROM boes.origen where nombre=" + Varios.comillas(nombre));
             bd.close();
         } catch (SQLException ex) {
-            System.out.println("SELECT codigoAy FROM boes.origen where nombre=" + Varios.entrecomillar(nombre));
+            System.out.println("SELECT codigoAy FROM boes.origen where nombre=" + Varios.comillas(nombre));
             Logger.getLogger(Archivos.class.getName()).log(Level.SEVERE, null, ex);
         }
 

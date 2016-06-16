@@ -8,13 +8,14 @@ import util.Varios;
  * @author Agarimo
  */
 public class OrigenArticulo {
+
     private int idOrigen;
     private String fase;
     private String articulo;
     private String nuevaFase;
-    
-    public OrigenArticulo(){
-        
+
+    public OrigenArticulo() {
+
     }
 
     public OrigenArticulo(int idOrigen, String fase, String articulo, String nuevaFase) {
@@ -55,15 +56,15 @@ public class OrigenArticulo {
     public void setNuevaFase(String nuevaFase) {
         this.nuevaFase = nuevaFase;
     }
-    
-    public String SQLScript(){
-        return "UPDATE "+Var.dbNameBoes+".multa SET fase="+Varios.entrecomillar(this.nuevaFase)+" "
+
+    public String SQLScript() {
+        return "UPDATE " + Var.dbNameBoes + ".multa SET fase=" + Varios.comillas(this.nuevaFase) + " "
                 + "WHERE "
-                + "idOrganismo="+this.idOrigen+" "
+                + "idOrganismo=" + this.idOrigen + " "
                 + "AND "
-                + "fase="+Varios.entrecomillar(this.fase)+" "
+                + "fase=" + Varios.comillas(this.fase) + " "
                 + "AND "
-                + "articulo="+Varios.entrecomillar(articulo)+";";
-               
+                + "articulo=" + Varios.comillas(articulo) + ";";
+
     }
 }

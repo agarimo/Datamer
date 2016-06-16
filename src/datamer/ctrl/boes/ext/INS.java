@@ -33,11 +33,11 @@ public class INS {
         docData = new ArrayList();
         this.boletines = Query
                 .listaProcesar("SELECT * FROM " + Var.dbNameBoes + ".procesar "
-                        + "WHERE fecha=" + Varios.entrecomillar(Dates.imprimeFecha(this.fecha))
+                        + "WHERE fecha=" + Varios.comillas(Dates.imprimeFecha(this.fecha))
                         + " AND estado!=1");
         this.doc = Query
                 .listaProcesar("SELECT * FROM " + Var.dbNameBoes + ".procesar "
-                        + "WHERE fecha=" + Varios.entrecomillar(Dates.imprimeFecha(this.fecha)));
+                        + "WHERE fecha=" + Varios.comillas(Dates.imprimeFecha(this.fecha)));
         fichero = new File(Var.ficheroTxt, Dates.imprimeFecha(fecha));
         fichero.mkdirs();
     }

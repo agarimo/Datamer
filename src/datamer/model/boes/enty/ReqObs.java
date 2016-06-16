@@ -13,9 +13,9 @@ public class ReqObs {
     String fase;
     String reqObs;
     String nuevaFase;
-    
-    public ReqObs(){
-        
+
+    public ReqObs() {
+
     }
 
     public ReqObs(int id, int idOrigen, String fase, String reqObs, String nuevaFase) {
@@ -25,11 +25,11 @@ public class ReqObs {
         this.reqObs = reqObs;
         this.nuevaFase = nuevaFase;
     }
-    
-    public String SQLEjecutar(){
-        return "UPDATE boes.multa SET fase="+Varios.entrecomillar(this.nuevaFase)+" WHERE "
-                + "idOrganismo="+this.idOrigen+" "
-                + "AND fase="+Varios.entrecomillar(this.fase)+" "
-                + "AND reqObs="+Varios.entrecomillar(this.reqObs);
+
+    public String SQLEjecutar() {
+        return "UPDATE boes.multa SET fase=" + Varios.comillas(this.nuevaFase) + " WHERE "
+                + "idOrganismo=" + this.idOrigen + " "
+                + "AND fase=" + Varios.comillas(this.fase) + " "
+                + "AND reqObs=" + Varios.comillas(this.reqObs);
     }
 }

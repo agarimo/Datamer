@@ -1,10 +1,6 @@
 package datamer.model.tkm.enty;
 
 import datamer.Var;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import sql.Sql;
 import util.Varios;
 
 /**
@@ -53,7 +49,7 @@ public class Comentario {
     public String SQLCrear(){
         return "INSERT into " + Var.dbNameTkm + ".comentario (id_cliente,comentario,fecha) values("
                 + this.idCliente + ","
-                + Varios.entrecomillar(this.comentario) + ","
+                + Varios.comillas(this.comentario) + ","
                 + "CURDATE()"
                 + ");";
     }

@@ -14,6 +14,7 @@ import java.util.Iterator;
 import java.util.List;
 import datamer.Var;
 import datamer.ctrl.boes.Query;
+import java.time.LocalDate;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -47,7 +48,7 @@ public class Extraccion {
 
     private List<Procesar> cargaBoletines() {
         return Query.listaProcesar("SELECT * FROM " + Var.dbNameBoes + ".procesar "
-                + "where fecha=" + Varios.entrecomillar(Dates.imprimeFecha(fecha)) + " "
+                + "where fecha=" + Varios.comillas(Dates.imprimeFecha(fecha)) + " "
                 + "and estado=1");
     }
 

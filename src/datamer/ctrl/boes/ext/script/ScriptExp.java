@@ -1,6 +1,5 @@
 package datamer.ctrl.boes.ext.script;
 
-
 import datamer.model.boes.enty.Multa;
 import datamer.model.boes.enty.OrigenExpediente;
 import java.sql.SQLException;
@@ -78,7 +77,7 @@ public final class ScriptExp {
                     bd.ejecutar(multa.SQLEditarOrganismo(aux.getOrigen()));
                 }
             }
-            
+
             bd.close();
         } catch (SQLException ex) {
             Logger.getLogger(ScriptExp.class.getName()).log(Level.SEVERE, null, ex);
@@ -117,19 +116,19 @@ public final class ScriptExp {
     }
 
     private List cargaMultas(Date fecha, int idOrigen) {
-        List aux = Query.listaMultas("SELECT * FROM "+Var.dbNameBoes+".multa where "
-                + "fechaPublicacion=" + Varios.entrecomillar(Dates.imprimeFecha(fecha)) + " "
+        List aux = Query.listaMultas("SELECT * FROM " + Var.dbNameBoes + ".multa where "
+                + "fechaPublicacion=" + Varios.comillas(Dates.imprimeFecha(fecha)) + " "
                 + "and idOrganismo=" + idOrigen);
         return aux;
     }
 
     private List cargaMultas(String codigoBoletin) {
-        List aux = Query.listaMultas("SELECT * FROM "+Var.dbNameBoes+".multa where "
+        List aux = Query.listaMultas("SELECT * FROM " + Var.dbNameBoes + ".multa where "
                 + "idBoletin IN"
-                + "(SELECT id FROM boes.procesar WHERE codigo=" + Varios.entrecomillar(codigoBoletin) + ") "
+                + "(SELECT id FROM " + Var.dbNameBoes + ".procesar WHERE codigo=" + Varios.comillas(codigoBoletin) + ") "
                 + "AND "
                 + "idOrganismo IN "
-                + "(select idOrigen from boes.origen_expediente group by idOrigen)");
+                + "(select idOrigen from " + Var.dbNameBoes + ".origen_expediente group by idOrigen)");
         return aux;
     }
 

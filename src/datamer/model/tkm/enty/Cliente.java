@@ -92,31 +92,31 @@ public class Cliente {
     }
 
     public static String SQLBuscarCif(String aux) {
-        return "SELECT * FROM " + Var.dbNameTkm + ".cliente WHERE cif=" + Varios.entrecomillar(aux);
+        return "SELECT * FROM " + Var.dbNameTkm + ".cliente WHERE cif=" + Varios.comillas(aux);
     }
 
     public static String SQLBuscarTelf(String aux) {
-        return "SELECT * FROM " + Var.dbNameTkm + ".cliente WHERE telefono=" + Varios.entrecomillar(aux);
+        return "SELECT * FROM " + Var.dbNameTkm + ".cliente WHERE telefono=" + Varios.comillas(aux);
     }
 
     public String SQLCrear() {
         return "INSERT into " + Var.dbNameTkm + ".cliente (estado,cif,nombre,telefono,contacto,mail) values("
                 + this.estado + ","
-                + Varios.entrecomillar(this.cif) + ","
-                + Varios.entrecomillar(this.nombre) + ","
-                + Varios.entrecomillar(this.telefono) + ","
-                + Varios.entrecomillar(this.contacto) + ","
-                + Varios.entrecomillar(this.mail)
+                + Varios.comillas(this.cif) + ","
+                + Varios.comillas(this.nombre) + ","
+                + Varios.comillas(this.telefono) + ","
+                + Varios.comillas(this.contacto) + ","
+                + Varios.comillas(this.mail)
                 + ");";
     }
 
     public String SQLEditar() {
         return "UPDATE " + Var.dbNameTkm + ".cliente SET "
-                + "nombre=" + Varios.entrecomillar(this.nombre) + ","
+                + "nombre=" + Varios.comillas(this.nombre) + ","
                 + "estado=" + this.estado + ","
-                + "telefono=" + Varios.entrecomillar(this.telefono) + ","
-                + "contacto=" + Varios.entrecomillar(this.contacto) + ","
-                + "mail=" + Varios.entrecomillar(this.mail) + " "
+                + "telefono=" + Varios.comillas(this.telefono) + ","
+                + "contacto=" + Varios.comillas(this.contacto) + ","
+                + "mail=" + Varios.comillas(this.mail) + " "
                 + "WHERE id=" + this.id;
     }
     

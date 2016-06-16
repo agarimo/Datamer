@@ -46,10 +46,10 @@ public class ImportClientes {
         String[] split = aux.split(";");
 
         String cif = validaCif(split[0].trim());
-        String nombre = split[1].trim().replace("'", "\\'");
+        String nombre = split[1].trim();
         String telefono = split[2].trim();
         int estado = validaEstado(split[3].trim());
-        String contacto = split[4].replace("'", "\\'");
+        String contacto = split[4];
 
         cliente.setCif(cif);
         cliente.setNombre(nombre);
@@ -61,7 +61,7 @@ public class ImportClientes {
         
 
         if (split.length == 6) {
-            splitComentario(split[5].replace("'", "\\'"), idCliente);
+            splitComentario(split[5], idCliente);
         }
     }
 

@@ -1,7 +1,5 @@
 package datamer.ctrl.boes;
 
-import com.itextpdf.text.pdf.PdfReader;
-import com.itextpdf.text.pdf.parser.PdfTextExtractor;
 import datamer.Var;
 import datamer.ctrl.boes.boe.Download;
 import datamer.ctrl.boes.ext.BB0;
@@ -18,16 +16,15 @@ import datamer.model.boes.ModeloPreview;
 import datamer.model.boes.ModeloProcesar;
 import datamer.model.boes.enty.Multa;
 import datamer.model.boes.enty.Procesar;
-import files.Util;
 import java.awt.Desktop;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -160,7 +157,7 @@ public class ExtC implements Initializable {
             }
         }
     }
- 
+
     @FXML
     void abrirCarpetaAr(ActionEvent event) {
         Date fecha = Dates.asDate(dpFecha.getValue());
@@ -181,7 +178,7 @@ public class ExtC implements Initializable {
             Date fecha = Dates.asDate(dpFecha.getValue());
 
             if (fecha != null) {
-                String query = "SELECT * FROM boes.procesar where fecha=" + Varios.entrecomillar(Dates.imprimeFecha(fecha));
+                String query = "SELECT * FROM boes.procesar where fecha=" + Varios.comillas(Dates.imprimeFecha(fecha));
                 cargarDatosProcesar(Query.listaProcesar(query));
             }
         } catch (NullPointerException ex) {
@@ -256,7 +253,7 @@ public class ExtC implements Initializable {
         System.out.println("Eliminando");
         ModeloPreview aux = (ModeloPreview) tvPreview.getSelectionModel().getSelectedItem();
         System.out.println(aux);
-        
+
         if (aux != null) {
             System.out.println("Borrando");
             previewList.remove(aux);
@@ -353,7 +350,7 @@ public class ExtC implements Initializable {
         Date fecha = Dates.asDate(dpFecha.getValue());
 
         if (fecha != null) {
-            String query = "SELECT * FROM " + Var.dbNameBoes + ".procesar where fecha=" + Varios.entrecomillar(Dates.imprimeFecha(fecha));
+            String query = "SELECT * FROM " + Var.dbNameBoes + ".procesar where fecha=" + Varios.comillas(Dates.imprimeFecha(fecha));
             File fichero = new File(Var.ficheroEx, Dates.imprimeFecha(fecha));
             fichero.mkdirs();
 
@@ -400,7 +397,7 @@ public class ExtC implements Initializable {
             a.start();
         }
     }
-    
+
     /**
      * Generar PDF individual.
      *
@@ -735,13 +732,7 @@ public class ExtC implements Initializable {
                     lbProceso.setText("PREPARANDO BBDD");
                 });
 
-                try {
-                    Sql bd = new Sql(Var.con);
-                    bd.ejecutar("DELETE from boes.boe where DATEDIFF(curdate(),fecha)> 15");
-                    bd.close();
-                } catch (SQLException ex) {
-                    Logger.getLogger(ExtC.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                procesarPreClean(Dates.asLocalDate(fecha));
 
                 Platform.runLater(() -> {
                     lbProgreso.setText("");
@@ -784,7 +775,6 @@ public class ExtC implements Initializable {
                         System.out.println(e.getMessage());
                         System.out.println(aux.getCodigo());
                         pr.SQLSetEstado(Estado.ERROR_PROCESAR.getValue());
-//                        e.printStackTrace();
                     }
                 }
 
@@ -799,6 +789,20 @@ public class ExtC implements Initializable {
                 });
             });
             a.start();
+        }
+    }
+
+    private void procesarPreClean(LocalDate fecha) {
+        String queryMultas = "DELETE FROM " + Var.dbNameBoes + ".multa WHERE fechaPublicacion=" + Varios.comillas(fecha.format(DateTimeFormatter.ISO_DATE));
+        String queryProcesar = "UPDATE " + Var.dbNameBoes + ".procesar SET estado=1 WHERE fecha=" + Varios.comillas(fecha.format(DateTimeFormatter.ISO_DATE));
+
+        try {
+            Sql bd = new Sql(Var.con);
+            bd.ejecutar(queryMultas);
+            bd.ejecutar(queryProcesar);
+            bd.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(ExtC.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

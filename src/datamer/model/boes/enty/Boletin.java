@@ -126,8 +126,8 @@ public class Boletin {
     
     public String SQLEditar(){
         return "UPDATE " + Var.dbNameBoes + ".boletin SET "
-                + "tipo=" + Varios.entrecomillar(this.tipo) + ","
-                + "fase=" + Varios.entrecomillar(this.fase) + ","
+                + "tipo=" + Varios.comillas(this.tipo) + ","
+                + "fase=" + Varios.comillas(this.fase) + ","
                 + "isFase=" + this.isFase + ","
                 + "isEstructura=" + this.isEstructura + ","
                 + "idioma=" + this.idioma + " "
@@ -135,7 +135,7 @@ public class Boletin {
     }
     
     public String SQLBuscar(){
-        return "SELECT * from "+Var.dbNameBoes+".boletin where codigo="+Varios.entrecomillar(this.codigo);
+        return "SELECT * from "+Var.dbNameBoes+".boletin where codigo="+Varios.comillas(this.codigo);
     }
 
     public String SQLUpdateData(String datos) {

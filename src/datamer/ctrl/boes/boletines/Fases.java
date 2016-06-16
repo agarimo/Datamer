@@ -31,7 +31,7 @@ public class Fases {
 
     private List getBol() {
         return Query.listaBoletin("SELECT * FROM " + Var.dbNameBoes + ".boletin where idBoe in "
-                + "(SELECT id FROM " + Var.dbNameBoes + ".boe where fecha=" + Varios.entrecomillar(Dates.imprimeFecha(this.fecha)) + ")");
+                + "(SELECT id FROM " + Var.dbNameBoes + ".boe where fecha=" + Varios.comillas(Dates.imprimeFecha(this.fecha)) + ")");
     }
 
     public List getBoletines() {
@@ -65,11 +65,10 @@ public class Fases {
         return str;
     }
 
-
     public void run(Boletin aux) {
         Fase fase;
         conectar();
-        
+
         fase = compruebaFase(aux.getCodigo(), getFases(aux.getIdOrigen()));
 
         if (fase != null) {

@@ -219,7 +219,7 @@ public class BoletinesC implements Initializable {
 
     void cargaDatosTablaBoletines(Date fecha) {
         ModeloBoletines aux;
-        String query = "SELECT * FROM " + Var.dbNameBoes + ".vista_boletines where fecha=" + Varios.entrecomillar(Dates.imprimeFecha(fecha)) + " order by codigo";
+        String query = "SELECT * FROM " + Var.dbNameBoes + ".vista_boletines where fecha=" + Varios.comillas(Dates.imprimeFecha(fecha)) + " order by codigo";
         Iterator it = Query.listaModeloBoletines(query).iterator();
 
         while (it.hasNext()) {
@@ -244,7 +244,7 @@ public class BoletinesC implements Initializable {
 
         try {
             bd = new Sql(Var.con);
-            bd.ejecutar("DELETE FROM boes.procesar where fecha=" + Varios.entrecomillar(Dates.imprimeFecha(fecha)));
+            bd.ejecutar("DELETE FROM boes.procesar where fecha=" + Varios.comillas(Dates.imprimeFecha(fecha)));
 
             it = Query.listaProcesarPendiente(fecha).iterator();
 
@@ -549,7 +549,7 @@ public class BoletinesC implements Initializable {
 
                 ModeloBoletines aux;
                 String query = "SELECT * FROM " + Var.dbNameBoes + ".vista_boletines where "
-                        + "fecha=" + Varios.entrecomillar(Dates.imprimeFecha(fecha)) + " "
+                        + "fecha=" + Varios.comillas(Dates.imprimeFecha(fecha)) + " "
                         + "AND tipo='*DSC*'";
                 Iterator<ModeloBoletines> it = Query.listaModeloBoletines(query).iterator();
 

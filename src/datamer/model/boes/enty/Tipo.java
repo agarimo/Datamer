@@ -48,22 +48,22 @@ public class Tipo {
 
     public String SQLCrear() {
         return "INSERT into " + Var.dbNameBoes + ".tipo (id, nombre) values("
-                + Varios.entrecomillar(this.id) + ","
-                + Varios.entrecomillar(this.nombre)
+                + Varios.comillas(this.id) + ","
+                + Varios.comillas(this.nombre)
                 + ")";
     }
 
     public String SQLEditar() {
         return "UPDATE " + Var.dbNameBoes + ".tipo SET "
-                + "nombre=" + Varios.entrecomillar(this.nombre)
-                + "WHERE id=" + Varios.entrecomillar(this.id);
+                + "nombre=" + Varios.comillas(this.nombre)
+                + "WHERE id=" + Varios.comillas(this.id);
     }
 
     public String SQLBorrar() {
-        return "DELETE FROM " + Var.dbNameBoes + ".tipo WHERE id=" + Varios.entrecomillar(this.id);
+        return "DELETE FROM " + Var.dbNameBoes + ".tipo WHERE id=" + Varios.comillas(this.id);
     }
 
     public String SQLBuscar() {
-        return "SELECT * FROM " + Var.dbNameBoes + ".tipo WHERE id=" + Varios.entrecomillar(this.id);
+        return "SELECT * FROM " + Var.dbNameBoes + ".tipo WHERE id=" + Varios.comillas(this.id);
     }
 }

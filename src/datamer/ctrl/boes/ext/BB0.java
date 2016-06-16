@@ -36,12 +36,12 @@ public final class BB0 {
         data = new ArrayList();
         this.boletines = Query
                 .listaProcesar("SELECT * FROM " + Var.dbNameBoes + ".procesar "
-                        + "WHERE fecha=" + Varios.entrecomillar(Dates.imprimeFecha(this.fecha))
+                        + "WHERE fecha=" + Varios.comillas(Dates.imprimeFecha(this.fecha))
                         + " AND estado!=1");
         this.boletinesD = Query
-                .listaModeloBoletines("SELECT * FROM boes.vista_boletines "
-                        + "where fecha=" + Varios.entrecomillar(Dates.imprimeFecha(this.fecha)) + " "
-                        + "and codigo in (select codigo from boes.procesar where estructura=-1 and estado=1)");
+                .listaModeloBoletines("SELECT * FROM "+Var.dbNameBoes+".vista_boletines "
+                        + "where fecha=" + Varios.comillas(Dates.imprimeFecha(this.fecha)) + " "
+                        + "and codigo in (select codigo from "+Var.dbNameBoes+".procesar where estructura=-1 and estado=1)");
         fichero = new File(Var.ficheroTxt, Dates.imprimeFecha(fecha));
         fichero.mkdirs();
     }

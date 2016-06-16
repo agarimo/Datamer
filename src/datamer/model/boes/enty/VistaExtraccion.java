@@ -145,6 +145,6 @@ public class VistaExtraccion {
     }
 
     public static String SQLBuscar(String codigo) {
-        return "SELECT * FROM "+Var.dbNameBoes+".vista_extraccion where codigo=" + Varios.entrecomillar(codigo);
+        return "SELECT * FROM "+Var.dbNameBoes+".vista_extraccion where codigo=" + Varios.comillas(codigo);
     }
 }

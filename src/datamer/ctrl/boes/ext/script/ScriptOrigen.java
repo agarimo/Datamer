@@ -23,12 +23,12 @@ public class ScriptOrigen {
     List<ModeloBoletines> list;
 
     public ScriptOrigen() {
-        query = "SELECT * FROM boes.vista_boletines where idOrigen=372";
+        query = "SELECT * FROM "+Var.dbNameBoes+".vista_boletines where idOrigen=372";
         list = Query.listaModeloBoletines(query);
     }
 
     public ScriptOrigen(Date fecha) {
-        query = "SELECT * FROM boes.vista_boletines where idOrigen=372 and fecha=" + Varios.entrecomillar(Dates.imprimeFecha(fecha));
+        query = "SELECT * FROM "+Var.dbNameBoes+".vista_boletines where idOrigen=372 and fecha=" + Varios.comillas(Dates.imprimeFecha(fecha));
         list = Query.listaModeloBoletines(query);
     }
 
@@ -43,7 +43,7 @@ public class ScriptOrigen {
 
             while (it.hasNext()) {
                 aux = it.next();
-                str = getAy(aux.getCodigo()).replace("'", "\\'").toUpperCase();
+                str = getAy(aux.getCodigo()).toUpperCase();
                 if (!str.equals("")) {
                     bd.ejecutar(getQuery(aux.getIdBoletin(), str));
                 }
@@ -78,6 +78,6 @@ public class ScriptOrigen {
     }
 
     private String getQuery(int idBoletin, String organismo) {
-        return "UPDATE " + Var.dbNameBoes + ".multa SET organismo=" + Varios.entrecomillar(organismo) + " WHERE idBoletin=" + idBoletin;
+        return "UPDATE " + Var.dbNameBoes + ".multa SET organismo=" + Varios.comillas(organismo) + " WHERE idBoletin=" + idBoletin;
     }
 }

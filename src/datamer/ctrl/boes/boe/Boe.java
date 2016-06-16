@@ -174,18 +174,18 @@ public class Boe {
 
     public String SQLCrear() {
         return "INSERT into " + Var.dbNameBoes + ".boe (fecha,link,isClas) values("
-                + Varios.entrecomillar(Dates.imprimeFecha(this.fecha)) + ","
-                + Varios.entrecomillar(this.link) + ","
+                + Varios.comillas(Dates.imprimeFecha(this.fecha)) + ","
+                + Varios.comillas(this.link) + ","
                 + this.isClas
                 + ");";
     }
 
     public String SQLBuscar() {
-        return "SELECT * FROM " + Var.dbNameBoes + ".boe WHERE fecha=" + util.Varios.entrecomillar(Dates.imprimeFecha(this.fecha));
+        return "SELECT * FROM " + Var.dbNameBoes + ".boe WHERE fecha=" + util.Varios.comillas(Dates.imprimeFecha(this.fecha));
     }
 
     public String SQLSetClas() {
-        return "UPDATE " + Var.dbNameBoes + ".boe SET isClas=1 where fecha=" + Varios.entrecomillar(Dates.imprimeFecha(fecha));
+        return "UPDATE " + Var.dbNameBoes + ".boe SET isClas=1 where fecha=" + Varios.comillas(Dates.imprimeFecha(fecha));
     }
 
 }

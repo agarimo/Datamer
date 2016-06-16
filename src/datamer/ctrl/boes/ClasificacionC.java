@@ -1,7 +1,6 @@
 package datamer.ctrl.boes;
 
 import datamer.Var;
-import static datamer.Var.executor;
 import datamer.ctrl.boes.boe.Insercion;
 import datamer.model.boes.ModeloBoes;
 import datamer.model.boes.Status;
@@ -9,7 +8,6 @@ import datamer.model.boes.enty.Publicacion;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.materialicons.MaterialIcon;
 import java.awt.Desktop;
-import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -17,14 +15,10 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 import java.util.logging.Level;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -67,7 +61,6 @@ public class ClasificacionC implements Initializable {
 
     private static final Logger LOG = LogManager.getLogger(ClasificacionC.class);
 
-    Sql bd;
     boolean autoScroll;
 
     private int selectedCount = 0;
@@ -449,11 +442,9 @@ public class ClasificacionC implements Initializable {
     private void procesarTaskPreClean(LocalDate fecha) {
         try {
             String query = "DELETE FROM " + Var.dbNameBoes + ".boletin WHERE idBoe=(SELECT id FROM " + Var.dbNameBoes + ".boe WHERE fecha=" + Varios.comillas(fecha.format(DateTimeFormatter.ISO_DATE)) + ")";
-            String queryC = "DELETE FROM " + Var.dbNameBoes + ".descarga WHERE codigo NOT IN (SELECT codigo FROM " + Var.dbNameBoes + ".boletin)";
-            Sql bd1 = new Sql(Var.con);
-            bd1.ejecutar(query);
-            bd1.ejecutar(queryC);
-            bd1.close();
+            Sql bd = new Sql(Var.con);
+            bd.ejecutar(query);
+            bd.close();
         } catch (SQLException ex) {
             java.util.logging.Logger.getLogger(ClasificacionC.class.getName()).log(Level.SEVERE, null, ex);
         }

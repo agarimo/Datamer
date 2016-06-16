@@ -76,8 +76,8 @@ public class Query extends sql.Query {
         try {
             bd = new Sql(Var.con);
             bd.ejecutar("UPDATE " + Var.dbNameTestra + ".captura SET "
-                    + "datos=" + Varios.entrecomillar(datos) + " "
-                    + "where id_edicto=" + Varios.entrecomillar(idEdicto) + ")");
+                    + "datos=" + Varios.comillas(datos) + " "
+                    + "where id_edicto=" + Varios.comillas(idEdicto) + ")");
             bd.close();
             return true;
         } catch (SQLException ex) {
@@ -142,7 +142,7 @@ public class Query extends sql.Query {
     }
 
     public static List<String> listaCapturaParam(Date fecha) {
-        String query = "SELECT parametros FROM " + Var.dbNameTestra + ".captura WHERE fecha=" + Varios.entrecomillar(Dates.imprimeFecha(fecha));
+        String query = "SELECT parametros FROM " + Var.dbNameTestra + ".captura WHERE fecha=" + Varios.comillas(Dates.imprimeFecha(fecha));
         List<String> list = new ArrayList();
         String aux;
 
@@ -163,7 +163,7 @@ public class Query extends sql.Query {
     }
 
     public static List<Captura> listaCaptura(Date fecha) {
-        String query = "SELECT * FROM " + Var.dbNameTestra + ".captura WHERE fecha=" + Varios.entrecomillar(Dates.imprimeFecha(fecha));
+        String query = "SELECT * FROM " + Var.dbNameTestra + ".captura WHERE fecha=" + Varios.comillas(Dates.imprimeFecha(fecha));
         List<Captura> list = new ArrayList();
         Captura aux;
 
@@ -193,7 +193,7 @@ public class Query extends sql.Query {
     }
 
     public static List<ModeloCaptura> listaModeloCaptura(Date fecha) {
-        String query = "SELECT id,codigo,parametros,csv,estado FROM " + Var.dbNameTestra + ".captura WHERE fecha=" + Varios.entrecomillar(Dates.imprimeFecha(fecha));
+        String query = "SELECT id,codigo,parametros,csv,estado FROM " + Var.dbNameTestra + ".captura WHERE fecha=" + Varios.comillas(Dates.imprimeFecha(fecha));
         List<ModeloCaptura> list = new ArrayList();
         ModeloCaptura aux;
 
@@ -226,10 +226,10 @@ public class Query extends sql.Query {
 
         switch (tipo) {
             case TESTRA:
-                query = "SELECT * FROM " + Var.dbNameTestra + ".cruce WHERE fechaPublicacion=" + Varios.entrecomillar(Dates.imprimeFecha(fecha));
+                query = "SELECT * FROM " + Var.dbNameTestra + ".cruce WHERE fechaPublicacion=" + Varios.comillas(Dates.imprimeFecha(fecha));
                 break;
             case IDBL:
-                query = "SELECT * FROM " + Var.dbNameIdbl + ".cruce WHERE fecha_publicacion=" + Varios.entrecomillar(Dates.imprimeFecha(fecha));
+                query = "SELECT * FROM " + Var.dbNameIdbl + ".cruce WHERE fecha_publicacion=" + Varios.comillas(Dates.imprimeFecha(fecha));
                 break;
         }
 

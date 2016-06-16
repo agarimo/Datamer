@@ -257,34 +257,34 @@ public class Multa {
     }
 
     public static String SQLBuscar(Date fecha) {
-        return "SELECT * FROM "+Var.dbNameTestra+".multa where fecha_publicacion=" + Varios.entrecomillar(Dates.imprimeFecha(fecha));
+        return "SELECT * FROM "+Var.dbNameTestra+".multa where fecha_publicacion=" + Varios.comillas(Dates.imprimeFecha(fecha));
     }
 
     public String SQLCrear() {
         if (fechaMulta == null) {
             return "INSERT into "+Var.dbNameTestra+".multa (id_captura,fecha_publicacion,codigo,n_edicto,origen,expediente,nif,matricula,linea) values("
                     + this.id_captura + ","
-                    + Varios.entrecomillar(this.fechaPublicacion) + ","
-                    + Varios.entrecomillar(this.codigoBoletin) + ","
-                    + Varios.entrecomillar(this.boletin) + ","
-                    + Varios.entrecomillar(this.origen) + ","
-                    + Varios.entrecomillar(this.expediente) + ","
-                    + Varios.entrecomillar(this.nif) + ","
-                    + Varios.entrecomillar(this.matricula) + ","
-                    + Varios.entrecomillar(this.linea)
+                    + Varios.comillas(this.fechaPublicacion) + ","
+                    + Varios.comillas(this.codigoBoletin) + ","
+                    + Varios.comillas(this.boletin) + ","
+                    + Varios.comillas(this.origen) + ","
+                    + Varios.comillas(this.expediente) + ","
+                    + Varios.comillas(this.nif) + ","
+                    + Varios.comillas(this.matricula) + ","
+                    + Varios.comillas(this.linea)
                     + ")";
         } else {
             return "INSERT into "+Var.dbNameTestra+".multa (id_captura,fecha_publicacion,codigo,n_edicto,origen,expediente,fecha_multa,nif,matricula,linea) values("
                     + this.id_captura + ","
-                    + Varios.entrecomillar(this.fechaPublicacion) + ","
-                    + Varios.entrecomillar(this.codigoBoletin) + ","
-                    + Varios.entrecomillar(this.boletin) + ","
-                    + Varios.entrecomillar(this.origen) + ","
-                    + Varios.entrecomillar(this.expediente) + ","
-                    + Varios.entrecomillar(Dates.imprimeFecha(this.fechaMulta)) + ","
-                    + Varios.entrecomillar(this.nif) + ","
-                    + Varios.entrecomillar(this.matricula) + ","
-                    + Varios.entrecomillar(this.linea)
+                    + Varios.comillas(this.fechaPublicacion) + ","
+                    + Varios.comillas(this.codigoBoletin) + ","
+                    + Varios.comillas(this.boletin) + ","
+                    + Varios.comillas(this.origen) + ","
+                    + Varios.comillas(this.expediente) + ","
+                    + Varios.comillas(Dates.imprimeFecha(this.fechaMulta)) + ","
+                    + Varios.comillas(this.nif) + ","
+                    + Varios.comillas(this.matricula) + ","
+                    + Varios.comillas(this.linea)
                     + ")";
         }
     }

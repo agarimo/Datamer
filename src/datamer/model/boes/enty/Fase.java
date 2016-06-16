@@ -194,23 +194,23 @@ public class Fase {
     public String SQLCrear() {
         return "INSERT into " + Var.dbNameBoes + ".fase (idOrigen, codigo, tipo, texto1, texto2,texto3, plazo) values("
                 + this.idOrigen + ","
-                + Varios.entrecomillar(this.codigo) + ","
+                + Varios.comillas(this.codigo) + ","
                 + this.tipo + ","
-                + Varios.entrecomillar(getTexto1()) + ","
-                + Varios.entrecomillar(getTexto2()) + ","
-                + Varios.entrecomillar(getTexto3()) + ","
-                + Varios.entrecomillar(this.plazo.getValue())
+                + Varios.comillas(getTexto1()) + ","
+                + Varios.comillas(getTexto2()) + ","
+                + Varios.comillas(getTexto3()) + ","
+                + Varios.comillas(this.plazo.getValue())
                 + ")";
     }
 
     public String SQLEditar() {
         return "UPDATE " + Var.dbNameBoes + ".fase SET "
-                + "codigo=" + Varios.entrecomillar(this.codigo) + ","
+                + "codigo=" + Varios.comillas(this.codigo) + ","
                 + "tipo=" + this.tipo + ","
-                + "plazo=" + Varios.entrecomillar(this.plazo.getValue()) + ","
-                + "texto1=" + Varios.entrecomillar(this.texto1) + ","
-                + "texto2=" + Varios.entrecomillar(this.texto2) + ","
-                + "texto3=" + Varios.entrecomillar(this.texto3)
+                + "plazo=" + Varios.comillas(this.plazo.getValue()) + ","
+                + "texto1=" + Varios.comillas(this.texto1) + ","
+                + "texto2=" + Varios.comillas(this.texto2) + ","
+                + "texto3=" + Varios.comillas(this.texto3)
                 + "WHERE id=" + this.id;
     }
 
@@ -220,9 +220,9 @@ public class Fase {
 
     public String SQLBuscar() {
         return "SELECT * FROM " + Var.dbNameBoes + ".fase "
-                + "WHERE texto1=" + Varios.entrecomillar(this.texto1) + " "
-                + "and texto2=" + Varios.entrecomillar(this.texto2) + " "
-                + "and texto3=" + Varios.entrecomillar(this.texto3) + " "
+                + "WHERE texto1=" + Varios.comillas(this.texto1) + " "
+                + "and texto2=" + Varios.comillas(this.texto2) + " "
+                + "and texto3=" + Varios.comillas(this.texto3) + " "
                 + "and idOrigen=" + this.idOrigen;
     }
 }

@@ -134,9 +134,9 @@ public class Procesar {
     public String SQLCrear() {
         return "INSERT into " + Var.dbNameBoes + ".procesar (id,fecha,codigo,link,estructura,estado) values("
                 + this.id + ","
-                + Varios.entrecomillar(Dates.imprimeFecha(this.fecha)) + ","
-                + Varios.entrecomillar(this.codigo) + ","
-                + Varios.entrecomillar(this.link) + ","
+                + Varios.comillas(Dates.imprimeFecha(this.fecha)) + ","
+                + Varios.comillas(this.codigo) + ","
+                + Varios.comillas(this.link) + ","
                 + this.estructura + ","
                 + 1
                 + ");";
@@ -155,7 +155,7 @@ public class Procesar {
             Logger.getLogger(Procesar.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public void SQLEliminarEstructura() {
         String query = "UPDATE " + Var.dbNameBoes + ".procesar SET "
                 + "estructura=-1 "

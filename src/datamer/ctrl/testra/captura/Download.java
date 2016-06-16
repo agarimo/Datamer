@@ -37,7 +37,7 @@ public class Download {
 
             datos = files.Util.leeArchivo(file);
 
-            cap.setDatos(clearData(datos));
+            cap.setDatos(datos);
             cap.setEstado(2);
             cap.setEstadoCruce(0);
         } catch (IOException ex) {
@@ -46,12 +46,7 @@ public class Download {
         }
         Query.ejecutar(cap.SQLsetDatos());
     }
-
-    private String clearData(String datos) {
-        datos = datos.replace("'", "\\'");
-
-        return datos;
-    }
+    
 
     /**
      * Método que extrae el id del edicto del documento pasado como parámetro.

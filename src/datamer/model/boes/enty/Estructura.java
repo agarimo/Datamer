@@ -75,15 +75,15 @@ public class Estructura {
 
     public String SQLCrear() {
         return "INSERT into " + Var.dbNameBoes + ".estructura (nombre,estructura) values("
-                + Varios.entrecomillar(this.nombre) + ","
-                + Varios.entrecomillar(this.estructura)
+                + Varios.comillas(this.nombre) + ","
+                + Varios.comillas(this.estructura)
                 + ");";
     }
 
     public String SQLEditar() {
         return "UPDATE " + Var.dbNameBoes + ".estructura SET "
-                + "nombre=" + Varios.entrecomillar(this.nombre) + ","
-                + "estructura=" + Varios.entrecomillar(this.estructura) + " "
+                + "nombre=" + Varios.comillas(this.nombre) + ","
+                + "estructura=" + Varios.comillas(this.estructura) + " "
                 + "WHERE id=" + this.id;
     }
 
@@ -92,11 +92,11 @@ public class Estructura {
     }
 
     public String SQLBuscarEstructura() {
-        return "SELECT * from " + Var.dbNameBoes + ".estructura where estructura=" + Varios.entrecomillar(this.estructura);
+        return "SELECT * from " + Var.dbNameBoes + ".estructura where estructura=" + Varios.comillas(this.estructura);
     }
 
     public String SQLBuscarNombre() {
-        return "SELECT * from " + Var.dbNameBoes + ".estructura where nombre=" + Varios.entrecomillar(this.nombre);
+        return "SELECT * from " + Var.dbNameBoes + ".estructura where nombre=" + Varios.comillas(this.nombre);
     }
 
 }

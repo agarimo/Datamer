@@ -267,7 +267,6 @@ public class XLSXProcess {
 
     private String clean(String str) {
         String aux = str.trim();
-        aux = aux.replace("'", "\\'");
         aux = aux.replace("|", "");
 
         return aux;

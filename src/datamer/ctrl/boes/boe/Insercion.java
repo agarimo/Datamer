@@ -99,7 +99,7 @@ public class Insercion {
     }
 
     private int getIdBoe(String fecha) throws SQLException {
-        return bd.getInt("SELECT * FROM " + Var.dbNameBoes + ".boe where fecha=" + Varios.entrecomillar(fecha));
+        return bd.getInt("SELECT * FROM " + Var.dbNameBoes + ".boe where fecha=" + Varios.comillas(fecha));
     }
 
     private String getDatos(String link) {

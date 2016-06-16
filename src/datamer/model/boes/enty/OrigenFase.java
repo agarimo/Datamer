@@ -58,11 +58,11 @@ public class OrigenFase {
     }
     
     public String SQLScript(){
-        return "UPDATE "+Var.dbNameBoes+".multa SET fase="+Varios.entrecomillar(this.nuevaFase)+" "
+        return "UPDATE "+Var.dbNameBoes+".multa SET fase="+Varios.comillas(this.nuevaFase)+" "
                 + "WHERE "
                 + "idOrganismo="+this.idOrigen+" "
                 + "AND "
-                + "fase="+Varios.entrecomillar(this.fase)+" "
+                + "fase="+Varios.comillas(this.fase)+" "
                 + "AND "
                 + "expediente like '"+this.cabecera+"%'";
                

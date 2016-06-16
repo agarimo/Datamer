@@ -1062,7 +1062,7 @@ public class CruceC implements Initializable {
 
         if (mt != null) {
             queryReset = "UPDATE "+Var.dbNameTestra+".captura SET estado_cruce=0 where id=" + mt.getId();
-            queryClean = "DELETE from "+Var.dbNameTestra+".multa where id_edicto=" + Varios.entrecomillar(mt.getCodigo());
+            queryClean = "DELETE from "+Var.dbNameTestra+".multa where id_edicto=" + Varios.comillas(mt.getCodigo());
             try {
                 Sql bd = new Sql(Var.con);
                 bd.ejecutar(queryReset);
@@ -1083,8 +1083,8 @@ public class CruceC implements Initializable {
         String queryClean;
 
         if (fecha != null) {
-            queryReset = "UPDATE "+Var.dbNameTestra+".captura SET estado_cruce=0 where fecha=" + Varios.entrecomillar(Dates.imprimeFecha(fecha));
-            queryClean = "DELETE from "+Var.dbNameTestra+".multa where fecha_publicacion=" + Varios.entrecomillar(Dates.imprimeFecha(fecha));
+            queryReset = "UPDATE "+Var.dbNameTestra+".captura SET estado_cruce=0 where fecha=" + Varios.comillas(Dates.imprimeFecha(fecha));
+            queryClean = "DELETE from "+Var.dbNameTestra+".multa where fecha_publicacion=" + Varios.comillas(Dates.imprimeFecha(fecha));
             try {
                 Sql bd = new Sql(Var.con);
                 bd.ejecutar(queryReset);

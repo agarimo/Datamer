@@ -40,10 +40,10 @@ public class Estructuras {
     private List getBol(boolean pendientes) {
         if (pendientes) {
             return Query.listaBoletin("SELECT * FROM " + Var.dbNameBoes + ".boletin where isEstructura<1 and idBoe in "
-                    + "(SELECT id FROM " + Var.dbNameBoes + ".boe where fecha=" + Varios.entrecomillar(Dates.imprimeFecha(this.fecha)) + ")");
+                    + "(SELECT id FROM " + Var.dbNameBoes + ".boe where fecha=" + Varios.comillas(Dates.imprimeFecha(this.fecha)) + ")");
         } else {
             return Query.listaBoletin("SELECT * FROM " + Var.dbNameBoes + ".boletin where idBoe in "
-                    + "(SELECT id FROM " + Var.dbNameBoes + ".boe where fecha=" + Varios.entrecomillar(Dates.imprimeFecha(this.fecha)) + ")");
+                    + "(SELECT id FROM " + Var.dbNameBoes + ".boe where fecha=" + Varios.comillas(Dates.imprimeFecha(this.fecha)) + ")");
         }
     }
 
@@ -68,7 +68,7 @@ public class Estructuras {
     }
 
     private List getEstructuras() {
-        return Query.listaEstructuras("SELECT * FROM boes.estructura order by estructura");
+        return Query.listaEstructuras("SELECT * FROM "+Var.dbNameBoes+".estructura order by estructura");
     }
 
     public List getBoletines() {

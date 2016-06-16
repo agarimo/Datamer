@@ -129,18 +129,18 @@ public class Captura {
     
     public static String SQLBuscar(Date fecha) {
         return "SELECT id,codigo,fecha,csv,datos,estado_cruce FROM " + Var.dbNameTestra + ".captura "
-                + "where fecha=" + Varios.entrecomillar(Dates.imprimeFecha(fecha)) + " "
+                + "where fecha=" + Varios.comillas(Dates.imprimeFecha(fecha)) + " "
                 + "and estado_cruce <5";
     }
 
     public String SQLCrear() {
         return "INSERT into " + Var.dbNameTestra + ".captura (codigo,parametros,csv,fecha,estado,datos,estado_cruce) values("
-                + Varios.entrecomillar(this.codigo) + ","
-                + Varios.entrecomillar(this.parametros) + ","
-                + Varios.entrecomillar(this.csv) + ","
-                + Varios.entrecomillar(Dates.imprimeFecha(fecha)) + ","
+                + Varios.comillas(this.codigo) + ","
+                + Varios.comillas(this.parametros) + ","
+                + Varios.comillas(this.csv) + ","
+                + Varios.comillas(Dates.imprimeFecha(fecha)) + ","
                 + this.estado + ","
-                + Varios.entrecomillar(this.datos) + ","
+                + Varios.comillas(this.datos) + ","
                 + this.estadoCruce
                 + ");";
     }
@@ -159,11 +159,11 @@ public class Captura {
 
     public String SQLsetDatos() {
         return "UPDATE " + Var.dbNameTestra + ".captura SET "
-                + "codigo=" + Varios.entrecomillar(this.codigo) + ","
-                + "csv=" + Varios.entrecomillar(this.csv) + ","
+                + "codigo=" + Varios.comillas(this.codigo) + ","
+                + "csv=" + Varios.comillas(this.csv) + ","
                 + "estado=" + this.estado + ","
                 + "estado_cruce=" + this.estadoCruce + ","
-                + "datos=" + Varios.entrecomillar(this.datos) + " "
+                + "datos=" + Varios.comillas(this.datos) + " "
                 + "WHERE id=" + this.id;
     }
 }

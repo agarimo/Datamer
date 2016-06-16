@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import sql.Sql;
+import tools.Download;
+import tools.Pdf;
 import tools.Util;
 
 /**
@@ -112,8 +114,8 @@ public class Insercion {
 
     private boolean descarga(String link) {
         try {
-            tools.Download.downloadFILE(link, pdf);
-            tools.Pdf.convertPDF(pdf, txt);
+            Download.downloadFILE(link, pdf);
+            Pdf.convertPDF(pdf, txt);
             return true;
         } catch (Exception ex) {
             Logger.getLogger(Insercion.class.getName()).log(Level.SEVERE, null, ex);

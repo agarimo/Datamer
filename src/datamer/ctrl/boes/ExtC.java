@@ -243,11 +243,11 @@ public class ExtC implements Initializable {
         }
     }
 
-    private void clearWindow() {
-        dpFecha.setValue(null);
-        procesarList.clear();
-        previewList.clear();
-    }
+//    private void clearWindow() {
+//        dpFecha.setValue(null);
+//        procesarList.clear();
+//        previewList.clear();
+//    }
 
     @FXML
     void eliminarLineaPreview(ActionEvent event) {

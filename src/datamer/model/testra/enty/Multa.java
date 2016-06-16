@@ -6,9 +6,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
-import util.CalculaNif;
-import util.Dates;
-import util.Varios;
+import tools.CalculaNif;
+import tools.Dates;
+import tools.Util;
 
 /**
  *
@@ -257,34 +257,34 @@ public class Multa {
     }
 
     public static String SQLBuscar(Date fecha) {
-        return "SELECT * FROM "+Var.dbNameTestra+".multa where fecha_publicacion=" + Varios.comillas(Dates.imprimeFecha(fecha));
+        return "SELECT * FROM "+Var.dbNameTestra+".multa where fecha_publicacion=" + Util.comillas(Dates.imprimeFecha(fecha));
     }
 
     public String SQLCrear() {
         if (fechaMulta == null) {
             return "INSERT into "+Var.dbNameTestra+".multa (id_captura,fecha_publicacion,codigo,n_edicto,origen,expediente,nif,matricula,linea) values("
                     + this.id_captura + ","
-                    + Varios.comillas(this.fechaPublicacion) + ","
-                    + Varios.comillas(this.codigoBoletin) + ","
-                    + Varios.comillas(this.boletin) + ","
-                    + Varios.comillas(this.origen) + ","
-                    + Varios.comillas(this.expediente) + ","
-                    + Varios.comillas(this.nif) + ","
-                    + Varios.comillas(this.matricula) + ","
-                    + Varios.comillas(this.linea)
+                    + Util.comillas(this.fechaPublicacion) + ","
+                    + Util.comillas(this.codigoBoletin) + ","
+                    + Util.comillas(this.boletin) + ","
+                    + Util.comillas(this.origen) + ","
+                    + Util.comillas(this.expediente) + ","
+                    + Util.comillas(this.nif) + ","
+                    + Util.comillas(this.matricula) + ","
+                    + Util.comillas(this.linea)
                     + ")";
         } else {
             return "INSERT into "+Var.dbNameTestra+".multa (id_captura,fecha_publicacion,codigo,n_edicto,origen,expediente,fecha_multa,nif,matricula,linea) values("
                     + this.id_captura + ","
-                    + Varios.comillas(this.fechaPublicacion) + ","
-                    + Varios.comillas(this.codigoBoletin) + ","
-                    + Varios.comillas(this.boletin) + ","
-                    + Varios.comillas(this.origen) + ","
-                    + Varios.comillas(this.expediente) + ","
-                    + Varios.comillas(Dates.imprimeFecha(this.fechaMulta)) + ","
-                    + Varios.comillas(this.nif) + ","
-                    + Varios.comillas(this.matricula) + ","
-                    + Varios.comillas(this.linea)
+                    + Util.comillas(this.fechaPublicacion) + ","
+                    + Util.comillas(this.codigoBoletin) + ","
+                    + Util.comillas(this.boletin) + ","
+                    + Util.comillas(this.origen) + ","
+                    + Util.comillas(this.expediente) + ","
+                    + Util.comillas(Dates.imprimeFecha(this.fechaMulta)) + ","
+                    + Util.comillas(this.nif) + ","
+                    + Util.comillas(this.matricula) + ","
+                    + Util.comillas(this.linea)
                     + ")";
         }
     }

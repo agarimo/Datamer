@@ -13,8 +13,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import util.Dates;
-import util.Varios;
+import tools.Dates;
+import tools.Util;
 
 /**
  *
@@ -174,18 +174,18 @@ public class Boe {
 
     public String SQLCrear() {
         return "INSERT into " + Var.dbNameBoes + ".boe (fecha,link,isClas) values("
-                + Varios.comillas(Dates.imprimeFecha(this.fecha)) + ","
-                + Varios.comillas(this.link) + ","
+                + Util.comillas(Dates.imprimeFecha(this.fecha)) + ","
+                + Util.comillas(this.link) + ","
                 + this.isClas
                 + ");";
     }
 
     public String SQLBuscar() {
-        return "SELECT * FROM " + Var.dbNameBoes + ".boe WHERE fecha=" + util.Varios.comillas(Dates.imprimeFecha(this.fecha));
+        return "SELECT * FROM " + Var.dbNameBoes + ".boe WHERE fecha=" + tools.Util.comillas(Dates.imprimeFecha(this.fecha));
     }
 
     public String SQLSetClas() {
-        return "UPDATE " + Var.dbNameBoes + ".boe SET isClas=1 where fecha=" + Varios.comillas(Dates.imprimeFecha(fecha));
+        return "UPDATE " + Var.dbNameBoes + ".boe SET isClas=1 where fecha=" + Util.comillas(Dates.imprimeFecha(fecha));
     }
 
 }

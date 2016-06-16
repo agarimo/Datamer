@@ -6,9 +6,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import datamer.Regex;
 import datamer.Var;
-import util.CalculaNif;
-import util.Dates;
-import util.Varios;
+import tools.CalculaNif;
+import tools.Dates;
+import tools.Util;
 
 /**
  *
@@ -385,57 +385,57 @@ public class Multa {
         if (this.fechaMulta != null) {
             return "INSERT into " + Var.dbNameBoes + ".multa (idBoletin,codigoSancion,fechaPublicacion,idOrganismo,organismo,boe,fase,tipoJuridico,plazo,expediente,fechaMulta,articulo,nif,sancionado,localidad,matricula,cuantia,puntos,reqObs,linea) values("
                     + this.idBoletin + ","
-                    + Varios.comillas(this.codigoSancion) + ","
-                    + Varios.comillas(Dates.imprimeFecha(fechaPublicacion)) + ","
+                    + Util.comillas(this.codigoSancion) + ","
+                    + Util.comillas(Dates.imprimeFecha(fechaPublicacion)) + ","
                     + this.idOrganismo + ","
-                    + Varios.comillas(this.organismo) + ","
-                    + Varios.comillas(this.boe) + ","
-                    + Varios.comillas(this.fase) + ","
-                    + Varios.comillas(this.tipoJuridico) + ","
-                    + Varios.comillas(this.plazo) + ","
-                    + Varios.comillas(this.expediente) + ","
-                    + Varios.comillas(Dates.imprimeFecha(this.fechaMulta)) + ","
-                    + Varios.comillas(this.articulo) + ","
-                    + Varios.comillas(this.nif) + ","
-                    + Varios.comillas(this.sancionado) + ","
-                    + Varios.comillas(this.localidad) + ","
-                    + Varios.comillas(this.matricula) + ","
-                    + Varios.comillas(this.cuantia) + ","
-                    + Varios.comillas(this.puntos) + ","
-                    + Varios.comillas(this.reqObs) + ","
-                    + Varios.comillas(this.linea)
+                    + Util.comillas(this.organismo) + ","
+                    + Util.comillas(this.boe) + ","
+                    + Util.comillas(this.fase) + ","
+                    + Util.comillas(this.tipoJuridico) + ","
+                    + Util.comillas(this.plazo) + ","
+                    + Util.comillas(this.expediente) + ","
+                    + Util.comillas(Dates.imprimeFecha(this.fechaMulta)) + ","
+                    + Util.comillas(this.articulo) + ","
+                    + Util.comillas(this.nif) + ","
+                    + Util.comillas(this.sancionado) + ","
+                    + Util.comillas(this.localidad) + ","
+                    + Util.comillas(this.matricula) + ","
+                    + Util.comillas(this.cuantia) + ","
+                    + Util.comillas(this.puntos) + ","
+                    + Util.comillas(this.reqObs) + ","
+                    + Util.comillas(this.linea)
                     + ");";
         } else {
             return "INSERT into " + Var.dbNameBoes + ".multa (idBoletin,codigoSancion,fechaPublicacion,idOrganismo,organismo,boe,fase,tipoJuridico,plazo,expediente,fechaMulta,articulo,nif,sancionado,localidad,matricula,cuantia,puntos,reqObs,linea) values("
                     + this.idBoletin + ","
-                    + Varios.comillas(this.codigoSancion) + ","
-                    + Varios.comillas(Dates.imprimeFecha(fechaPublicacion)) + ","
+                    + Util.comillas(this.codigoSancion) + ","
+                    + Util.comillas(Dates.imprimeFecha(fechaPublicacion)) + ","
                     + this.idOrganismo + ","
-                    + Varios.comillas(this.organismo) + ","
-                    + Varios.comillas(this.boe) + ","
-                    + Varios.comillas(this.fase) + ","
-                    + Varios.comillas(this.tipoJuridico) + ","
-                    + Varios.comillas(this.plazo) + ","
-                    + Varios.comillas(this.expediente) + ","
+                    + Util.comillas(this.organismo) + ","
+                    + Util.comillas(this.boe) + ","
+                    + Util.comillas(this.fase) + ","
+                    + Util.comillas(this.tipoJuridico) + ","
+                    + Util.comillas(this.plazo) + ","
+                    + Util.comillas(this.expediente) + ","
                     + null + ","
-                    + Varios.comillas(this.articulo) + ","
-                    + Varios.comillas(this.nif) + ","
-                    + Varios.comillas(this.sancionado) + ","
-                    + Varios.comillas(this.localidad) + ","
-                    + Varios.comillas(this.matricula) + ","
-                    + Varios.comillas(this.cuantia) + ","
-                    + Varios.comillas(this.puntos) + ","
-                    + Varios.comillas(this.reqObs) + ","
-                    + Varios.comillas(this.linea)
+                    + Util.comillas(this.articulo) + ","
+                    + Util.comillas(this.nif) + ","
+                    + Util.comillas(this.sancionado) + ","
+                    + Util.comillas(this.localidad) + ","
+                    + Util.comillas(this.matricula) + ","
+                    + Util.comillas(this.cuantia) + ","
+                    + Util.comillas(this.puntos) + ","
+                    + Util.comillas(this.reqObs) + ","
+                    + Util.comillas(this.linea)
                     + ");";
         }
     }
     
     public String SQLEditarOrganismo(String organismo){
-        return "UPDATE boes.multa SET organismo="+Varios.comillas(organismo)+" WHERE id="+this.id;
+        return "UPDATE boes.multa SET organismo="+Util.comillas(organismo)+" WHERE id="+this.id;
     }
     
     public String SQLEditarFase(String fase){
-        return "UPDATE boes.multa SET fase="+Varios.comillas(fase)+" WHERE id="+this.id;
+        return "UPDATE boes.multa SET fase="+Util.comillas(fase)+" WHERE id="+this.id;
     }
 }

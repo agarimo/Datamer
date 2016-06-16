@@ -1,7 +1,7 @@
 package datamer.model.boes.enty;
 
 import datamer.Var;
-import util.Varios;
+import tools.Util;
 
 /**
  *
@@ -58,13 +58,13 @@ public class OrigenArticulo {
     }
 
     public String SQLScript() {
-        return "UPDATE " + Var.dbNameBoes + ".multa SET fase=" + Varios.comillas(this.nuevaFase) + " "
+        return "UPDATE " + Var.dbNameBoes + ".multa SET fase=" + Util.comillas(this.nuevaFase) + " "
                 + "WHERE "
                 + "idOrganismo=" + this.idOrigen + " "
                 + "AND "
-                + "fase=" + Varios.comillas(this.fase) + " "
+                + "fase=" + Util.comillas(this.fase) + " "
                 + "AND "
-                + "articulo=" + Varios.comillas(articulo) + ";";
+                + "articulo=" + Util.comillas(articulo) + ";";
 
     }
 }

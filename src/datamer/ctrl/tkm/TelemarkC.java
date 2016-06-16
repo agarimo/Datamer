@@ -20,7 +20,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
-import util.CalculaNif;
+import tools.CalculaNif;
 
 /**
  * FXML Controller class

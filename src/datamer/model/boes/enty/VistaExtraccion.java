@@ -4,7 +4,7 @@ import datamer.Var;
 import datamer.model.boes.Plazo;
 import java.util.Calendar;
 import java.util.Date;
-import util.Varios;
+import tools.Util;
 
 /**
  *
@@ -145,6 +145,6 @@ public class VistaExtraccion {
     }
 
     public static String SQLBuscar(String codigo) {
-        return "SELECT * FROM "+Var.dbNameBoes+".vista_extraccion where codigo=" + Varios.comillas(codigo);
+        return "SELECT * FROM "+Var.dbNameBoes+".vista_extraccion where codigo=" + Util.comillas(codigo);
     }
 }

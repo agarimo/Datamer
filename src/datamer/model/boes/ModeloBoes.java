@@ -2,7 +2,7 @@ package datamer.model.boes;
 
 import datamer.Var;
 import javafx.beans.property.SimpleStringProperty;
-import util.Varios;
+import tools.Util;
 
 /**
  *
@@ -92,7 +92,7 @@ public class ModeloBoes {
     public String SQLUpdate(){
         return "UPDATE "+Var.dbNameServer+".publicacion SET "
                 + "selected="+this.selected+","
-                + "status="+Varios.comillas(this.status.toString())+" "
-                + "WHERE codigo="+Varios.comillas(this.codigo.get())+";";
+                + "status="+Util.comillas(this.status.toString())+" "
+                + "WHERE codigo="+Util.comillas(this.codigo.get())+";";
     }
 }

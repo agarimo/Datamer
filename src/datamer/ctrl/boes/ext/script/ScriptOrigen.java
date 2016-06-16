@@ -9,9 +9,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import util.Dates;
+import tools.Dates;
 import sql.Sql;
-import util.Varios;
+import tools.Util;
 
 /**
  *
@@ -28,7 +28,7 @@ public class ScriptOrigen {
     }
 
     public ScriptOrigen(Date fecha) {
-        query = "SELECT * FROM "+Var.dbNameBoes+".vista_boletines where idOrigen=372 and fecha=" + Varios.comillas(Dates.imprimeFecha(fecha));
+        query = "SELECT * FROM "+Var.dbNameBoes+".vista_boletines where idOrigen=372 and fecha=" + Util.comillas(Dates.imprimeFecha(fecha));
         list = Query.listaModeloBoletines(query);
     }
 
@@ -78,6 +78,6 @@ public class ScriptOrigen {
     }
 
     private String getQuery(int idBoletin, String organismo) {
-        return "UPDATE " + Var.dbNameBoes + ".multa SET organismo=" + Varios.comillas(organismo) + " WHERE idBoletin=" + idBoletin;
+        return "UPDATE " + Var.dbNameBoes + ".multa SET organismo=" + Util.comillas(organismo) + " WHERE idBoletin=" + idBoletin;
     }
 }

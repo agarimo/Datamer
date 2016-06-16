@@ -6,7 +6,7 @@ import datamer.model.boes.enty.Boletin;
 import datamer.model.boes.enty.Entidad;
 import datamer.model.boes.enty.Origen;
 import datamer.model.boes.enty.Publicacion;
-import files.LoadFile;
+import tools.LoadFile;
 import java.io.File;
 import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import sql.Sql;
-import util.Varios;
+import tools.Util;
 
 /**
  *
@@ -99,13 +99,12 @@ public class Insercion {
     }
 
     private int getIdBoe(String fecha) throws SQLException {
-        return bd.getInt("SELECT * FROM " + Var.dbNameBoes + ".boe where fecha=" + Varios.comillas(fecha));
+        return bd.getInt("SELECT * FROM " + Var.dbNameBoes + ".boe where fecha=" + Util.comillas(fecha));
     }
 
     private String getDatos(String link) {
         if (descarga(link)) {
-            LoadFile lf = new LoadFile(txt);
-            return lf.getFileData();
+            return LoadFile.readFile(txt);
         } else {
             return "ERROR EN DESCARGA Y CONVERSIÓN.";
         }
@@ -113,8 +112,8 @@ public class Insercion {
 
     private boolean descarga(String link) {
         try {
-            files.Download.downloadFILE(link, pdf);
-            files.Pdf.convertPDF(pdf, txt);
+            tools.Download.downloadFILE(link, pdf);
+            tools.Pdf.convertPDF(pdf, txt);
             return true;
         } catch (Exception ex) {
             Logger.getLogger(Insercion.class.getName()).log(Level.SEVERE, null, ex);

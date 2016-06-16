@@ -10,8 +10,8 @@ import datamer.model.boes.ModeloUnion;
 import datamer.model.boes.ModeloBoletines;
 import datamer.model.boes.enty.Procesar;
 import org.apache.commons.collections4.map.MultiValueMap;
-import util.Dates;
-import util.Varios;
+import tools.Dates;
+import tools.Util;
 
 /**
  *
@@ -35,12 +35,12 @@ public class Union {
 
         if (estructura == null) {
             it = Query.listaUnion("SELECT * FROM " + Var.dbNameBoes + ".vista_union "
-                    + "where fecha=" + Varios.comillas(Dates.imprimeFecha(fecha)) + " "
+                    + "where fecha=" + Util.comillas(Dates.imprimeFecha(fecha)) + " "
                     + "and isEstructura is null").iterator();
         } else {
             it = Query.listaUnion("SELECT * FROM " + Var.dbNameBoes + ".vista_union "
-                    + "where fecha=" + Varios.comillas(Dates.imprimeFecha(fecha)) + " "
-                    + "and isEstructura=" + Varios.comillas(estructura)).iterator();
+                    + "where fecha=" + Util.comillas(Dates.imprimeFecha(fecha)) + " "
+                    + "and isEstructura=" + Util.comillas(estructura)).iterator();
         }
 
         while (it.hasNext()) {

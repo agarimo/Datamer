@@ -2,7 +2,7 @@ package datamer.model.boes.enty;
 
 import java.util.Objects;
 import datamer.Var;
-import util.Varios;
+import tools.Util;
 
 /**
  *
@@ -75,15 +75,15 @@ public class Estructura {
 
     public String SQLCrear() {
         return "INSERT into " + Var.dbNameBoes + ".estructura (nombre,estructura) values("
-                + Varios.comillas(this.nombre) + ","
-                + Varios.comillas(this.estructura)
+                + Util.comillas(this.nombre) + ","
+                + Util.comillas(this.estructura)
                 + ");";
     }
 
     public String SQLEditar() {
         return "UPDATE " + Var.dbNameBoes + ".estructura SET "
-                + "nombre=" + Varios.comillas(this.nombre) + ","
-                + "estructura=" + Varios.comillas(this.estructura) + " "
+                + "nombre=" + Util.comillas(this.nombre) + ","
+                + "estructura=" + Util.comillas(this.estructura) + " "
                 + "WHERE id=" + this.id;
     }
 
@@ -92,11 +92,11 @@ public class Estructura {
     }
 
     public String SQLBuscarEstructura() {
-        return "SELECT * from " + Var.dbNameBoes + ".estructura where estructura=" + Varios.comillas(this.estructura);
+        return "SELECT * from " + Var.dbNameBoes + ".estructura where estructura=" + Util.comillas(this.estructura);
     }
 
     public String SQLBuscarNombre() {
-        return "SELECT * from " + Var.dbNameBoes + ".estructura where nombre=" + Varios.comillas(this.nombre);
+        return "SELECT * from " + Var.dbNameBoes + ".estructura where nombre=" + Util.comillas(this.nombre);
     }
 
 }

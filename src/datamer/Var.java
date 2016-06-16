@@ -39,7 +39,7 @@ import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 import sql.Conexion;
-import files.Util;
+import tools.Files;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -188,7 +188,7 @@ public class Var {
     }
 
     public static void xit() {
-        Util.borraDirectorio(runtimeData);
+        Files.deleteDir(runtimeData);
         XMLSave(configFile);
     }
 

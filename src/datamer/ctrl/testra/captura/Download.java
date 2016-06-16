@@ -4,6 +4,7 @@ import datamer.Var;
 import datamer.ctrl.tkm.Query;
 import datamer.model.testra.ModeloCaptura;
 import datamer.model.testra.enty.Captura;
+import tools.LoadFile;
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -28,14 +29,14 @@ public class Download {
             cap.setId(aux.getId());
             cap.setParametros(aux.getParametros());
 
-            String datos = files.Download.downloadURL(generaEnlace(cap.getParametros(), false));
+            String datos = tools.Download.downloadURL(generaEnlace(cap.getParametros(), false));
             cap.setCodigo(getId(datos));
             cap.setCsv(getCsv(datos));
 
-            files.Download.downloadFILE(generaEnlace(cap.getParametros(), true), pdf);
-            files.Pdf.convertPDF(pdf, file);
+            tools.Download.downloadFILE(generaEnlace(cap.getParametros(), true), pdf);
+            tools.Pdf.convertPDF(pdf, file);
 
-            datos = files.Util.leeArchivo(file);
+            datos = LoadFile.readFile(file);
 
             cap.setDatos(datos);
             cap.setEstado(2);

@@ -1,7 +1,7 @@
 package datamer.model.boes.enty;
 
 import datamer.Var;
-import util.Varios;
+import tools.Util;
 
 /**
  *
@@ -48,22 +48,22 @@ public class Tipo {
 
     public String SQLCrear() {
         return "INSERT into " + Var.dbNameBoes + ".tipo (id, nombre) values("
-                + Varios.comillas(this.id) + ","
-                + Varios.comillas(this.nombre)
+                + Util.comillas(this.id) + ","
+                + Util.comillas(this.nombre)
                 + ")";
     }
 
     public String SQLEditar() {
         return "UPDATE " + Var.dbNameBoes + ".tipo SET "
-                + "nombre=" + Varios.comillas(this.nombre)
-                + "WHERE id=" + Varios.comillas(this.id);
+                + "nombre=" + Util.comillas(this.nombre)
+                + "WHERE id=" + Util.comillas(this.id);
     }
 
     public String SQLBorrar() {
-        return "DELETE FROM " + Var.dbNameBoes + ".tipo WHERE id=" + Varios.comillas(this.id);
+        return "DELETE FROM " + Var.dbNameBoes + ".tipo WHERE id=" + Util.comillas(this.id);
     }
 
     public String SQLBuscar() {
-        return "SELECT * FROM " + Var.dbNameBoes + ".tipo WHERE id=" + Varios.comillas(this.id);
+        return "SELECT * FROM " + Var.dbNameBoes + ".tipo WHERE id=" + Util.comillas(this.id);
     }
 }

@@ -18,8 +18,9 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import datamer.Var;
-import util.Dates;
-import files.Util;
+import tools.Dates;
+import tools.Files;
+import tools.LoadFile;
 
 /**
  *
@@ -182,8 +183,7 @@ public class Pdf {
     }
 
     private void fixTxt(File txt) {
-        String datos = Util.leeArchivo(txt);
-        Util.escribeArchivo(txt, datos);
+        LoadFile.writeFile(txt, LoadFile.readFile(txt));
     }
 
     @Override

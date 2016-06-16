@@ -29,8 +29,8 @@ import datamer.model.boes.enty.StrucData;
 import datamer.model.boes.enty.Tipo;
 import datamer.model.boes.enty.VistaExtraccion;
 import java.util.Date;
-import util.Dates;
-import util.Varios;
+import tools.Dates;
+import tools.Util;
 
 /**
  *
@@ -41,8 +41,8 @@ public class Query extends sql.Query {
     public static void eliminaBoletin(String codigo) {
         try {
             bd = new Sql(Var.con);
-            bd.ejecutar("DELETE FROM " + Var.dbNameBoes + ".boletin where codigo=" + Varios.comillas(codigo));
-            bd.ejecutar("UPDATE " + Var.dbNameServer + ".publicacion set status='DELETED', selected=false where codigo=" + Varios.comillas(codigo));
+            bd.ejecutar("DELETE FROM " + Var.dbNameBoes + ".boletin where codigo=" + Util.comillas(codigo));
+            bd.ejecutar("UPDATE " + Var.dbNameServer + ".publicacion set status='DELETED', selected=false where codigo=" + Util.comillas(codigo));
             bd.close();
         } catch (SQLException ex) {
             error(ex.getMessage());
@@ -52,7 +52,7 @@ public class Query extends sql.Query {
 
     public static void eliminarMultasBoletin(String codigo) {
         String query = "DELETE FROM " + Var.dbNameBoes + ".multa WHERE idBoletin="
-                + "(SELECT id FROM " + Var.dbNameBoes + ".procesar WHERE codigo=" + Varios.comillas(codigo) + ");";
+                + "(SELECT id FROM " + Var.dbNameBoes + ".procesar WHERE codigo=" + Util.comillas(codigo) + ");";
 
         try {
             bd = new Sql(Var.con);
@@ -66,7 +66,7 @@ public class Query extends sql.Query {
 
     public static Boe getBoe(Date fecha) {
         Boe aux = null;
-        String query = "SELECT * from " + Var.dbNameBoes + ".boe where fecha=" + Varios.comillas(Dates.imprimeFecha(fecha));
+        String query = "SELECT * from " + Var.dbNameBoes + ".boe where fecha=" + Util.comillas(Dates.imprimeFecha(fecha));
 
         try {
             bd = new Sql(Var.con);
@@ -106,7 +106,7 @@ public class Query extends sql.Query {
     }
 
     public static String getDesData(String codigo) {
-        String query = "SELECT datos FROM " + Var.dbNameServer + ".publicacion where codigo=" + Varios.comillas(codigo);
+        String query = "SELECT datos FROM " + Var.dbNameServer + ".publicacion where codigo=" + Util.comillas(codigo);
         String aux = "";
 
         try {
@@ -141,7 +141,7 @@ public class Query extends sql.Query {
     
     public static Publicacion getPublicacion(String codigo) {
         Publicacion aux = null;
-        String query = "SELECT * FROM " + Var.dbNameServer + ".publicacion where codigo=" + Varios.comillas(codigo);
+        String query = "SELECT * FROM " + Var.dbNameServer + ".publicacion where codigo=" + Util.comillas(codigo);
 
         try {
             bd = new Sql(Var.con);
@@ -172,7 +172,7 @@ public class Query extends sql.Query {
     }
     
     public static String getPublicacionData(String codigo){
-        String query = "SELECT datos FROM " + Var.dbNameServer + ".publicacion where codigo=" + Varios.comillas(codigo);
+        String query = "SELECT datos FROM " + Var.dbNameServer + ".publicacion where codigo=" + Util.comillas(codigo);
         String aux = "";
 
         try {
@@ -188,7 +188,7 @@ public class Query extends sql.Query {
 
     public static ModeloBoletines getModeloBoletines(String codigo) {
         ModeloBoletines aux = null;
-        String query = "SELECT * FROM " + Var.dbNameBoes + ".vista_boletines where codigo=" + Varios.comillas(codigo);
+        String query = "SELECT * FROM " + Var.dbNameBoes + ".vista_boletines where codigo=" + Util.comillas(codigo);
 
         try {
             bd = new Sql(Var.con);
@@ -219,7 +219,7 @@ public class Query extends sql.Query {
     }
 
     public static Procesar getProcesar(String codigo) {
-        String query = "SELECT * FROM " + Var.dbNameBoes + ".procesar where codigo=" + Varios.comillas(codigo);
+        String query = "SELECT * FROM " + Var.dbNameBoes + ".procesar where codigo=" + Util.comillas(codigo);
         Procesar aux = null;
 
         try {
@@ -352,7 +352,7 @@ public class Query extends sql.Query {
     public static List listaEstructurasDia(Date fecha) {
         List list = new ArrayList();
         String query = "select isEstructura from " + Var.dbNameBoes + ".vista_union "
-                + "where fecha=" + Varios.comillas(Dates.imprimeFecha(fecha)) + " "
+                + "where fecha=" + Util.comillas(Dates.imprimeFecha(fecha)) + " "
                 + "group by isEstructura;";
         String aux;
 
@@ -900,7 +900,7 @@ public class Query extends sql.Query {
         List list = new ArrayList();
         String query = "select a.id,a.codigo,b.link,a.isEstructura from "+Var.dbNameBoes+".boletin a "
                 + "left join "+Var.dbNameServer+".publicacion b on a.codigo=b.codigo "
-                + "where a.idBoe=(select id from "+Var.dbNameBoes+".boe where fecha=" + Varios.comillas(Dates.imprimeFecha(fecha)) + ") "
+                + "where a.idBoe=(select id from "+Var.dbNameBoes+".boe where fecha=" + Util.comillas(Dates.imprimeFecha(fecha)) + ") "
                 + "and a.id not in (select id from "+Var.dbNameBoes+".procesar)";
         Procesar aux;
 
@@ -1037,8 +1037,8 @@ public class Query extends sql.Query {
     public static void eliminaBoletinFase(String codigo) {
         try {
             bd = new Sql(Var.con);
-            bd.ejecutar("DELETE FROM " + Var.dbNameBoes + ".boletin where codigo=" + Varios.comillas(codigo));
-            bd.ejecutar("UPDATE " + Var.dbNameServer + ".publicacion set status='DELETED', selected=false where codigo=" + Varios.comillas(codigo));
+            bd.ejecutar("DELETE FROM " + Var.dbNameBoes + ".boletin where codigo=" + Util.comillas(codigo));
+            bd.ejecutar("UPDATE " + Var.dbNameServer + ".publicacion set status='DELETED', selected=false where codigo=" + Util.comillas(codigo));
             bd.close();
         } catch (SQLException ex) {
             error(ex.getMessage());
@@ -1047,7 +1047,7 @@ public class Query extends sql.Query {
     }
 
     public static List<Pattern> listaPattern(Date fecha) {
-        String query = "SELECT * FROM " + Var.dbNameBoes + ".vista_pattern where fechaPublicacion=" + Varios.comillas(Dates.imprimeFecha(fecha));
+        String query = "SELECT * FROM " + Var.dbNameBoes + ".vista_pattern where fechaPublicacion=" + Util.comillas(Dates.imprimeFecha(fecha));
         List list = new ArrayList();
         Pattern aux;
 
@@ -1072,7 +1072,7 @@ public class Query extends sql.Query {
     }
 
     public static String getLink(String codigo) {
-        String query = "SELECT link FROM " + Var.dbNameServer + ".publicacion where codigo=" + Varios.comillas(codigo);
+        String query = "SELECT link FROM " + Var.dbNameServer + ".publicacion where codigo=" + Util.comillas(codigo);
         String aux = null;
 
         try {

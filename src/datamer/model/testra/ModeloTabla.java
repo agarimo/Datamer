@@ -3,7 +3,7 @@ package datamer.model.testra;
 import java.util.Date;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
-import util.Dates;
+import tools.Dates;
 
 /**
  *

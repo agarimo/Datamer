@@ -7,6 +7,7 @@ import datamer.model.boes.Status;
 import datamer.model.boes.enty.Publicacion;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.materialicons.MaterialIcon;
+import tools.LoadFile;
 import java.awt.Desktop;
 import java.io.IOException;
 import java.net.URI;
@@ -50,7 +51,7 @@ import javafx.scene.text.Text;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import sql.Sql;
-import util.Varios;
+import tools.Util;
 
 /**
  * FXML Controller class
@@ -329,7 +330,7 @@ public class ClasificacionC implements Initializable {
     @FXML
     void pdfShow(ActionEvent event) {
         ModeloBoes aux = tvBoes.getSelectionModel().getSelectedItem();
-        files.Util.escribeArchivo(Var.temporal, Query.getPublicacionData(aux.getCodigo()));
+        LoadFile.writeFile(Var.temporal, Query.getPublicacionData(aux.getCodigo()));
         try {
             Desktop.getDesktop().browse(Var.temporal.toURI());
         } catch (IOException ex) {
@@ -372,7 +373,7 @@ public class ClasificacionC implements Initializable {
 
             Publicacion aux;
             LocalDate fecha = dpFechaC.getValue();
-            String query = "SELECT * FROM " + Var.dbNameServer + ".publicacion WHERE fecha=" + Varios.comillas(fecha.format(DateTimeFormatter.ISO_DATE)) + " and selected=true;";
+            String query = "SELECT * FROM " + Var.dbNameServer + ".publicacion WHERE fecha=" + Util.comillas(fecha.format(DateTimeFormatter.ISO_DATE)) + " and selected=true;";
 
             Platform.runLater(() -> {
                 setProcesandoC(true);
@@ -441,7 +442,7 @@ public class ClasificacionC implements Initializable {
 
     private void procesarTaskPreClean(LocalDate fecha) {
         try {
-            String query = "DELETE FROM " + Var.dbNameBoes + ".boletin WHERE idBoe=(SELECT id FROM " + Var.dbNameBoes + ".boe WHERE fecha=" + Varios.comillas(fecha.format(DateTimeFormatter.ISO_DATE)) + ")";
+            String query = "DELETE FROM " + Var.dbNameBoes + ".boletin WHERE idBoe=(SELECT id FROM " + Var.dbNameBoes + ".boe WHERE fecha=" + Util.comillas(fecha.format(DateTimeFormatter.ISO_DATE)) + ")";
             Sql bd = new Sql(Var.con);
             bd.ejecutar(query);
             bd.close();
@@ -530,7 +531,7 @@ public class ClasificacionC implements Initializable {
 
         if (aux != null) {
             Thread a = new Thread(() -> {
-                String query = "SELECT fecha,codigo,entidad,origen,descripcion,link,selected,status FROM " + Var.dbNameServer + ".publicacion WHERE fecha=" + Varios.comillas(aux.format(DateTimeFormatter.ISO_DATE));
+                String query = "SELECT fecha,codigo,entidad,origen,descripcion,link,selected,status FROM " + Var.dbNameServer + ".publicacion WHERE fecha=" + Util.comillas(aux.format(DateTimeFormatter.ISO_DATE));
 
                 Platform.runLater(() -> {
                     rootPane.getScene().setCursor(Cursor.WAIT);

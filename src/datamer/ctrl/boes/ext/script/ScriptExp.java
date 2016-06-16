@@ -14,9 +14,9 @@ import java.util.stream.Collectors;
 import datamer.Var;
 import datamer.ctrl.boes.Query;
 import org.apache.commons.collections4.map.MultiValueMap;
-import util.Dates;
+import tools.Dates;
 import sql.Sql;
-import util.Varios;
+import tools.Util;
 
 /**
  *
@@ -117,7 +117,7 @@ public final class ScriptExp {
 
     private List cargaMultas(Date fecha, int idOrigen) {
         List aux = Query.listaMultas("SELECT * FROM " + Var.dbNameBoes + ".multa where "
-                + "fechaPublicacion=" + Varios.comillas(Dates.imprimeFecha(fecha)) + " "
+                + "fechaPublicacion=" + Util.comillas(Dates.imprimeFecha(fecha)) + " "
                 + "and idOrganismo=" + idOrigen);
         return aux;
     }
@@ -125,7 +125,7 @@ public final class ScriptExp {
     private List cargaMultas(String codigoBoletin) {
         List aux = Query.listaMultas("SELECT * FROM " + Var.dbNameBoes + ".multa where "
                 + "idBoletin IN"
-                + "(SELECT id FROM " + Var.dbNameBoes + ".procesar WHERE codigo=" + Varios.comillas(codigoBoletin) + ") "
+                + "(SELECT id FROM " + Var.dbNameBoes + ".procesar WHERE codigo=" + Util.comillas(codigoBoletin) + ") "
                 + "AND "
                 + "idOrganismo IN "
                 + "(select idOrigen from " + Var.dbNameBoes + ".origen_expediente group by idOrigen)");

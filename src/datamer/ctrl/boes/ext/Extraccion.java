@@ -18,8 +18,8 @@ import java.time.LocalDate;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import util.Dates;
-import util.Varios;
+import tools.Dates;
+import tools.Util;
 
 /**
  *
@@ -48,7 +48,7 @@ public class Extraccion {
 
     private List<Procesar> cargaBoletines() {
         return Query.listaProcesar("SELECT * FROM " + Var.dbNameBoes + ".procesar "
-                + "where fecha=" + Varios.comillas(Dates.imprimeFecha(fecha)) + " "
+                + "where fecha=" + Util.comillas(Dates.imprimeFecha(fecha)) + " "
                 + "and estado=1");
     }
 

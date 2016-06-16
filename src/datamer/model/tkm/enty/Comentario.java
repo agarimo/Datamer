@@ -1,7 +1,7 @@
 package datamer.model.tkm.enty;
 
 import datamer.Var;
-import util.Varios;
+import tools.Util;
 
 /**
  *
@@ -49,7 +49,7 @@ public class Comentario {
     public String SQLCrear(){
         return "INSERT into " + Var.dbNameTkm + ".comentario (id_cliente,comentario,fecha) values("
                 + this.idCliente + ","
-                + Varios.comillas(this.comentario) + ","
+                + Util.comillas(this.comentario) + ","
                 + "CURDATE()"
                 + ");";
     }

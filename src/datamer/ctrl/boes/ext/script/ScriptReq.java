@@ -9,9 +9,9 @@ import java.util.logging.Logger;
 import datamer.Var;
 import datamer.ctrl.boes.Query;
 import datamer.model.boes.enty.ReqObs;
-import util.Dates;
+import tools.Dates;
 import sql.Sql;
-import util.Varios;
+import tools.Util;
 
 /**
  *
@@ -24,7 +24,7 @@ public class ScriptReq {
     public ScriptReq(Date fecha) {
         this.list = Query.listaReqObs("SELECT * FROM boes.reqobs WHERE idOrigen in "
                 + "(select idOrganismo from boes.multa "
-                + "WHERE fechaPublicacion=" + Varios.comillas(Dates.imprimeFecha(fecha)) + ")");
+                + "WHERE fechaPublicacion=" + Util.comillas(Dates.imprimeFecha(fecha)) + ")");
     }
 
     public void run() {

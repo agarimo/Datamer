@@ -1,7 +1,6 @@
 package datamer.ctrl.boes;
 
 import datamer.Var;
-import datamer.ctrl.boes.boe.Download;
 import datamer.ctrl.boes.ext.BB0;
 import datamer.ctrl.boes.ext.INS;
 import datamer.ctrl.boes.ext.Extraccion;
@@ -16,6 +15,7 @@ import datamer.model.boes.ModeloPreview;
 import datamer.model.boes.ModeloProcesar;
 import datamer.model.boes.enty.Multa;
 import datamer.model.boes.enty.Procesar;
+import tools.Download;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
@@ -54,9 +54,10 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
-import util.Dates;
+import tools.Dates;
 import sql.Sql;
-import util.Varios;
+import tools.Pdf;
+import tools.Util;
 
 /**
  *
@@ -178,7 +179,7 @@ public class ExtC implements Initializable {
             Date fecha = Dates.asDate(dpFecha.getValue());
 
             if (fecha != null) {
-                String query = "SELECT * FROM boes.procesar where fecha=" + Varios.comillas(Dates.imprimeFecha(fecha));
+                String query = "SELECT * FROM boes.procesar where fecha=" + Util.comillas(Dates.imprimeFecha(fecha));
                 cargarDatosProcesar(Query.listaProcesar(query));
             }
         } catch (NullPointerException ex) {
@@ -350,7 +351,7 @@ public class ExtC implements Initializable {
         Date fecha = Dates.asDate(dpFecha.getValue());
 
         if (fecha != null) {
-            String query = "SELECT * FROM " + Var.dbNameBoes + ".procesar where fecha=" + Varios.comillas(Dates.imprimeFecha(fecha));
+            String query = "SELECT * FROM " + Var.dbNameBoes + ".procesar where fecha=" + Util.comillas(Dates.imprimeFecha(fecha));
             File fichero = new File(Var.ficheroEx, Dates.imprimeFecha(fecha));
             fichero.mkdirs();
 
@@ -380,7 +381,13 @@ public class ExtC implements Initializable {
                     });
                     aux = (Procesar) list.get(i);
                     destino = new File(fichero, aux.getCodigo() + ".pdf");
-                    Download.descargaPDF(aux.getLink(), destino);
+                    
+                    try {
+                        Download.downloadFILE(aux.getLink(), destino);
+                    } catch (IOException ex) {
+                        Logger.getLogger(ExtC.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    
                     aux.SQLSetEstado(Estado.LISTO_PROCESAR.getValue());
                 }
 
@@ -418,7 +425,7 @@ public class ExtC implements Initializable {
                     btGenerarPdf.setDisable(true);
                     piProgreso.setProgress(0);
                     lbProgreso.setText("");
-                    lbProceso.setText("GENERANDO PDFs");
+                    lbProceso.setText("GENERANDO PDF");
                 });
 
                 File destino;
@@ -438,7 +445,12 @@ public class ExtC implements Initializable {
                     });
                     aux = (ModeloProcesar) list.get(i);
                     destino = new File(fichero, aux.getCodigo() + ".pdf");
-                    Download.descargaPDF(aux.getLink(), destino);
+                    
+                    try {
+                        Download.downloadFILE(aux.getLink(), destino);
+                    } catch (IOException ex) {
+                        Logger.getLogger(ExtC.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
 
                 Platform.runLater(() -> {
@@ -793,8 +805,8 @@ public class ExtC implements Initializable {
     }
 
     private void procesarPreClean(LocalDate fecha) {
-        String queryMultas = "DELETE FROM " + Var.dbNameBoes + ".multa WHERE fechaPublicacion=" + Varios.comillas(fecha.format(DateTimeFormatter.ISO_DATE));
-        String queryProcesar = "UPDATE " + Var.dbNameBoes + ".procesar SET estado=1 WHERE fecha=" + Varios.comillas(fecha.format(DateTimeFormatter.ISO_DATE));
+        String queryMultas = "DELETE FROM " + Var.dbNameBoes + ".multa WHERE fechaPublicacion=" + Util.comillas(fecha.format(DateTimeFormatter.ISO_DATE));
+        String queryProcesar = "UPDATE " + Var.dbNameBoes + ".procesar SET estado=1 WHERE fecha=" + Util.comillas(fecha.format(DateTimeFormatter.ISO_DATE));
 
         try {
             Sql bd = new Sql(Var.con);

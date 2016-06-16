@@ -12,10 +12,11 @@ import java.util.logging.Logger;
 import datamer.model.boes.ModeloBoletines;
 import datamer.Var;
 import datamer.ctrl.boes.Query;
-import util.Dates;
-import files.Util;
+import tools.Dates;
+import tools.Files;
+import tools.LoadFile;
 import sql.Sql;
-import util.Varios;
+import tools.Util;
 
 /**
  *
@@ -44,7 +45,7 @@ public class Archivos {
     }
 
     private void cargaBoletines() {
-        String query = "SELECT * FROM boes.vista_boletines where fecha=" + Varios.comillas(Dates.imprimeFecha(this.fecha));
+        String query = "SELECT * FROM boes.vista_boletines where fecha=" + Util.comillas(Dates.imprimeFecha(this.fecha));
         boletines = Query.listaModeloBoletines(query);
     }
 
@@ -57,7 +58,7 @@ public class Archivos {
     }
 
     public void creaArchivos(List bol, Date fecha, String struc, String codigoUn) {
-        dir=new File(Var.ficheroUnion, Dates.imprimeFecha(fecha));
+        dir = new File(Var.ficheroUnion, Dates.imprimeFecha(fecha));
         if (struc == null) {
             caIn(bol, fecha);
         } else {
@@ -75,7 +76,7 @@ public class Archivos {
         Iterator<ModeloBoletines> it = bol.iterator();
 
         try {
-            
+
             file = new File(dir, getNombreArchivoUn(struc, fecha, codigoUn) + ".txt");
             file.createNewFile();
 
@@ -103,7 +104,7 @@ public class Archivos {
 
             buffer.append("-------------------------------------------------");
 
-            Util.escribeArchivo(file, buffer.toString());
+            LoadFile.writeFile(file, buffer.toString());
 
         } catch (IOException ex) {
             Logger.getLogger(Archivos.class.getName()).log(Level.SEVERE, null, ex);
@@ -123,7 +124,7 @@ public class Archivos {
                 aux = it.next();
                 file = new File(dir, getNombreArchivo(aux.getCodigo(), fecha, aux.getEntidad()) + ".txt");
                 file.createNewFile();
-                Util.escribeArchivo(file, getDataArchivo(aux));
+                LoadFile.writeFile(file, getDataArchivo(aux));
             }
 
         } catch (IOException ex) {
@@ -261,7 +262,7 @@ public class Archivos {
 
         try {
             bd = new Sql(Var.con);
-            aux = bd.getString("SELECT codigo FROM boes.entidad where nombre=" + Varios.comillas(entidad));
+            aux = bd.getString("SELECT codigo FROM boes.entidad where nombre=" + Util.comillas(entidad));
             bd.close();
         } catch (SQLException ex) {
             Logger.getLogger(Archivos.class.getName()).log(Level.SEVERE, null, ex);
@@ -276,7 +277,7 @@ public class Archivos {
 
         try {
             bd = new Sql(Var.con);
-            aux = bd.getString("SELECT datos from " + Var.dbNameServer + ".publicacion where codigo=" + Varios.comillas(codigo));
+            aux = bd.getString("SELECT datos from " + Var.dbNameServer + ".publicacion where codigo=" + Util.comillas(codigo));
             bd.close();
         } catch (SQLException ex) {
             aux = "ERROR AL GENERAR EL ARCHIVO ----- " + ex.getMessage();
@@ -292,7 +293,7 @@ public class Archivos {
 
         try {
             bd = new Sql(Var.con);
-            aux = bd.getString("SELECT fase FROM boes.boletin where codigo=" + Varios.comillas(codigo));
+            aux = bd.getString("SELECT fase FROM boes.boletin where codigo=" + Util.comillas(codigo));
             bd.close();
         } catch (SQLException ex) {
             Logger.getLogger(Archivos.class.getName()).log(Level.SEVERE, null, ex);
@@ -307,10 +308,10 @@ public class Archivos {
 
         try {
             bd = new Sql(Var.con);
-            aux = bd.getString("SELECT codigoAy FROM boes.origen where nombre=" + Varios.comillas(nombre));
+            aux = bd.getString("SELECT codigoAy FROM boes.origen where nombre=" + Util.comillas(nombre));
             bd.close();
         } catch (SQLException ex) {
-            System.out.println("SELECT codigoAy FROM boes.origen where nombre=" + Varios.comillas(nombre));
+            System.out.println("SELECT codigoAy FROM boes.origen where nombre=" + Util.comillas(nombre));
             Logger.getLogger(Archivos.class.getName()).log(Level.SEVERE, null, ex);
         }
 

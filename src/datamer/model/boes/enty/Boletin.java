@@ -1,7 +1,7 @@
 package datamer.model.boes.enty;
 
 import datamer.Var;
-import util.Varios;
+import tools.Util;
 
 /**
  *
@@ -115,9 +115,9 @@ public class Boletin {
         return "INSERT into " + Var.dbNameBoes + ".boletin (idOrigen,idBoe,codigo,tipo,fase,isFase,isEstructura,idioma) values("
                 + this.idOrigen + ","
                 + this.idBoe + ","
-                + Varios.comillas(this.codigo) + ","
-                + Varios.comillas(this.tipo) + ","
-                + Varios.comillas(this.fase) + ","
+                + Util.comillas(this.codigo) + ","
+                + Util.comillas(this.tipo) + ","
+                + Util.comillas(this.fase) + ","
                 + this.isFase + ","
                 + this.isEstructura + ","
                 + this.idioma
@@ -126,8 +126,8 @@ public class Boletin {
     
     public String SQLEditar(){
         return "UPDATE " + Var.dbNameBoes + ".boletin SET "
-                + "tipo=" + Varios.comillas(this.tipo) + ","
-                + "fase=" + Varios.comillas(this.fase) + ","
+                + "tipo=" + Util.comillas(this.tipo) + ","
+                + "fase=" + Util.comillas(this.fase) + ","
                 + "isFase=" + this.isFase + ","
                 + "isEstructura=" + this.isEstructura + ","
                 + "idioma=" + this.idioma + " "
@@ -135,12 +135,12 @@ public class Boletin {
     }
     
     public String SQLBuscar(){
-        return "SELECT * from "+Var.dbNameBoes+".boletin where codigo="+Varios.comillas(this.codigo);
+        return "SELECT * from "+Var.dbNameBoes+".boletin where codigo="+Util.comillas(this.codigo);
     }
 
     public String SQLUpdateData(String datos) {
         return "UPDATE " + Var.dbNameServer + ".publicacion SET "
-                + "datos=" + Varios.comillas(datos) + " "
-                + "WHERE codigo=" + Varios.comillas(this.codigo);
+                + "datos=" + Util.comillas(datos) + " "
+                + "WHERE codigo=" + Util.comillas(this.codigo);
     }
 }

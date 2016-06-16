@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import sql.Sql;
-import util.Varios;
+import tools.Util;
 
 /**
  *
@@ -92,31 +92,31 @@ public class Cliente {
     }
 
     public static String SQLBuscarCif(String aux) {
-        return "SELECT * FROM " + Var.dbNameTkm + ".cliente WHERE cif=" + Varios.comillas(aux);
+        return "SELECT * FROM " + Var.dbNameTkm + ".cliente WHERE cif=" + Util.comillas(aux);
     }
 
     public static String SQLBuscarTelf(String aux) {
-        return "SELECT * FROM " + Var.dbNameTkm + ".cliente WHERE telefono=" + Varios.comillas(aux);
+        return "SELECT * FROM " + Var.dbNameTkm + ".cliente WHERE telefono=" + Util.comillas(aux);
     }
 
     public String SQLCrear() {
         return "INSERT into " + Var.dbNameTkm + ".cliente (estado,cif,nombre,telefono,contacto,mail) values("
                 + this.estado + ","
-                + Varios.comillas(this.cif) + ","
-                + Varios.comillas(this.nombre) + ","
-                + Varios.comillas(this.telefono) + ","
-                + Varios.comillas(this.contacto) + ","
-                + Varios.comillas(this.mail)
+                + Util.comillas(this.cif) + ","
+                + Util.comillas(this.nombre) + ","
+                + Util.comillas(this.telefono) + ","
+                + Util.comillas(this.contacto) + ","
+                + Util.comillas(this.mail)
                 + ");";
     }
 
     public String SQLEditar() {
         return "UPDATE " + Var.dbNameTkm + ".cliente SET "
-                + "nombre=" + Varios.comillas(this.nombre) + ","
+                + "nombre=" + Util.comillas(this.nombre) + ","
                 + "estado=" + this.estado + ","
-                + "telefono=" + Varios.comillas(this.telefono) + ","
-                + "contacto=" + Varios.comillas(this.contacto) + ","
-                + "mail=" + Varios.comillas(this.mail) + " "
+                + "telefono=" + Util.comillas(this.telefono) + ","
+                + "contacto=" + Util.comillas(this.contacto) + ","
+                + "mail=" + Util.comillas(this.mail) + " "
                 + "WHERE id=" + this.id;
     }
     

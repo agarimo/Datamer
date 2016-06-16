@@ -41,10 +41,11 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
-import util.Dates;
-import files.Util;
+import tools.Dates;
+import tools.Files;
+import tools.LoadFile;
 import sql.Sql;
-import util.Varios;
+import tools.Util;
 
 /**
  * FXML Controller class
@@ -219,7 +220,7 @@ public class BoletinesC implements Initializable {
 
     void cargaDatosTablaBoletines(Date fecha) {
         ModeloBoletines aux;
-        String query = "SELECT * FROM " + Var.dbNameBoes + ".vista_boletines where fecha=" + Varios.comillas(Dates.imprimeFecha(fecha)) + " order by codigo";
+        String query = "SELECT * FROM " + Var.dbNameBoes + ".vista_boletines where fecha=" + Util.comillas(Dates.imprimeFecha(fecha)) + " order by codigo";
         Iterator it = Query.listaModeloBoletines(query).iterator();
 
         while (it.hasNext()) {
@@ -244,7 +245,7 @@ public class BoletinesC implements Initializable {
 
         try {
             bd = new Sql(Var.con);
-            bd.ejecutar("DELETE FROM boes.procesar where fecha=" + Varios.comillas(Dates.imprimeFecha(fecha)));
+            bd.ejecutar("DELETE FROM boes.procesar where fecha=" + Util.comillas(Dates.imprimeFecha(fecha)));
 
             it = Query.listaProcesarPendiente(fecha).iterator();
 
@@ -480,7 +481,7 @@ public class BoletinesC implements Initializable {
         Date fecha = Dates.asDate(dpFechaB.getValue());
 
         File dir = new File(Var.ficheroUnion, Dates.imprimeFecha(fecha));
-        Util.borraDirectorio(dir);
+        Files.deleteDir(dir);
         dir.mkdirs();
 
         Thread a = new Thread(() -> {
@@ -549,7 +550,7 @@ public class BoletinesC implements Initializable {
 
                 ModeloBoletines aux;
                 String query = "SELECT * FROM " + Var.dbNameBoes + ".vista_boletines where "
-                        + "fecha=" + Varios.comillas(Dates.imprimeFecha(fecha)) + " "
+                        + "fecha=" + Util.comillas(Dates.imprimeFecha(fecha)) + " "
                         + "AND tipo='*DSC*'";
                 Iterator<ModeloBoletines> it = Query.listaModeloBoletines(query).iterator();
 
@@ -632,13 +633,13 @@ public class BoletinesC implements Initializable {
         if (aux != null) {
             try {
                 bd = new Sql(Var.con);
-                datos = bd.getString("SELECT datos FROM " + Var.dbNameServer + ".publicacion WHERE codigo=" + Varios.comillas(aux.getCodigo()));
+                datos = bd.getString("SELECT datos FROM " + Var.dbNameServer + ".publicacion WHERE codigo=" + Util.comillas(aux.getCodigo()));
                 bd.close();
             } catch (SQLException ex) {
                 Logger.getLogger(BoletinesC.class.getName()).log(Level.SEVERE, null, ex);
             }
 
-            Util.escribeArchivo(file, datos);
+            LoadFile.writeFile(file, datos);
 
             try {
                 Desktop.getDesktop().browse(file.toURI());

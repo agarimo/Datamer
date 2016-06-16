@@ -1,6 +1,6 @@
 package datamer.model.boes.enty;
 
-import util.Varios;
+import tools.Util;
 
 /**
  *
@@ -27,9 +27,9 @@ public class ReqObs {
     }
 
     public String SQLEjecutar() {
-        return "UPDATE boes.multa SET fase=" + Varios.comillas(this.nuevaFase) + " WHERE "
+        return "UPDATE boes.multa SET fase=" + Util.comillas(this.nuevaFase) + " WHERE "
                 + "idOrganismo=" + this.idOrigen + " "
-                + "AND fase=" + Varios.comillas(this.fase) + " "
-                + "AND reqObs=" + Varios.comillas(this.reqObs);
+                + "AND fase=" + Util.comillas(this.fase) + " "
+                + "AND reqObs=" + Util.comillas(this.reqObs);
     }
 }

@@ -12,9 +12,10 @@ import datamer.ctrl.boes.Query;
 import datamer.ctrl.boes.boletines.Archivos;
 import datamer.ctrl.boes.boletines.Union;
 import datamer.model.boes.ModeloBoletines;
-import util.Dates;
-import files.Util;
-import util.Varios;
+import tools.Dates;
+import tools.Files;
+import tools.LoadFile;
+import tools.Util;
 
 /**
  *
@@ -36,11 +37,11 @@ public final class BB0 {
         data = new ArrayList();
         this.boletines = Query
                 .listaProcesar("SELECT * FROM " + Var.dbNameBoes + ".procesar "
-                        + "WHERE fecha=" + Varios.comillas(Dates.imprimeFecha(this.fecha))
+                        + "WHERE fecha=" + Util.comillas(Dates.imprimeFecha(this.fecha))
                         + " AND estado!=1");
         this.boletinesD = Query
                 .listaModeloBoletines("SELECT * FROM "+Var.dbNameBoes+".vista_boletines "
-                        + "where fecha=" + Varios.comillas(Dates.imprimeFecha(this.fecha)) + " "
+                        + "where fecha=" + Util.comillas(Dates.imprimeFecha(this.fecha)) + " "
                         + "and codigo in (select codigo from "+Var.dbNameBoes+".procesar where estructura=-1 and estado=1)");
         fichero = new File(Var.ficheroTxt, Dates.imprimeFecha(fecha));
         fichero.mkdirs();
@@ -199,7 +200,7 @@ public final class BB0 {
         File archivoBB0 = new File(fichero, Dates.imprimeFechaSinFormato(fecha) + ".bb0");
 //        File archivoBB1 = new File(fichero, Dates.imprimeFechaSinFormato(fecha) + ".bb1");
 
-        Util.escribeArchivo(archivoBB0, getDataArchivos(BB0));
+        LoadFile.writeFile(archivoBB0, getDataArchivos(BB0));
 //        Files.escribeArchivo(archivoBB1, getDataArchivos(BB1));
 
         crearArchivosD(fichero);
@@ -239,6 +240,6 @@ public final class BB0 {
         }
 
         File archivo = new File(fichero, struc + codigoUn + ".bb0");
-        Util.escribeArchivo(archivo, getDataArchivos(BB0));
+        LoadFile.writeFile(archivo, getDataArchivos(BB0));
     }
 }

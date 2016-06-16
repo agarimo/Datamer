@@ -10,9 +10,9 @@ import datamer.Var;
 import datamer.ctrl.boes.Query;
 import datamer.model.boes.enty.Multa;
 import datamer.model.boes.enty.Procesar;
-import util.Dates;
-import files.Util;
-import util.Varios;
+import tools.Dates;
+import tools.LoadFile;
+import tools.Util;
 
 /**
  *
@@ -33,11 +33,11 @@ public class INS {
         docData = new ArrayList();
         this.boletines = Query
                 .listaProcesar("SELECT * FROM " + Var.dbNameBoes + ".procesar "
-                        + "WHERE fecha=" + Varios.comillas(Dates.imprimeFecha(this.fecha))
+                        + "WHERE fecha=" + Util.comillas(Dates.imprimeFecha(this.fecha))
                         + " AND estado!=1");
         this.doc = Query
                 .listaProcesar("SELECT * FROM " + Var.dbNameBoes + ".procesar "
-                        + "WHERE fecha=" + Varios.comillas(Dates.imprimeFecha(this.fecha)));
+                        + "WHERE fecha=" + Util.comillas(Dates.imprimeFecha(this.fecha)));
         fichero = new File(Var.ficheroTxt, Dates.imprimeFecha(fecha));
         fichero.mkdirs();
     }
@@ -163,6 +163,6 @@ public class INS {
 
     private void crearArchivos() {
         File archivoBB1 = new File(fichero, Dates.imprimeFechaSinFormato(fecha) + ".ins");
-        Util.escribeArchivo(archivoBB1, getDataArchivos());
+        LoadFile.writeFile(archivoBB1, getDataArchivos());
     }
 }

@@ -3,8 +3,8 @@ package datamer.model.testra.enty;
 import datamer.Var;
 import java.util.Date;
 import java.util.Objects;
-import util.Dates;
-import util.Varios;
+import tools.Dates;
+import tools.Util;
 
 /**
  *
@@ -129,18 +129,18 @@ public class Captura {
     
     public static String SQLBuscar(Date fecha) {
         return "SELECT id,codigo,fecha,csv,datos,estado_cruce FROM " + Var.dbNameTestra + ".captura "
-                + "where fecha=" + Varios.comillas(Dates.imprimeFecha(fecha)) + " "
+                + "where fecha=" + Util.comillas(Dates.imprimeFecha(fecha)) + " "
                 + "and estado_cruce <5";
     }
 
     public String SQLCrear() {
         return "INSERT into " + Var.dbNameTestra + ".captura (codigo,parametros,csv,fecha,estado,datos,estado_cruce) values("
-                + Varios.comillas(this.codigo) + ","
-                + Varios.comillas(this.parametros) + ","
-                + Varios.comillas(this.csv) + ","
-                + Varios.comillas(Dates.imprimeFecha(fecha)) + ","
+                + Util.comillas(this.codigo) + ","
+                + Util.comillas(this.parametros) + ","
+                + Util.comillas(this.csv) + ","
+                + Util.comillas(Dates.imprimeFecha(fecha)) + ","
                 + this.estado + ","
-                + Varios.comillas(this.datos) + ","
+                + Util.comillas(this.datos) + ","
                 + this.estadoCruce
                 + ");";
     }
@@ -159,11 +159,11 @@ public class Captura {
 
     public String SQLsetDatos() {
         return "UPDATE " + Var.dbNameTestra + ".captura SET "
-                + "codigo=" + Varios.comillas(this.codigo) + ","
-                + "csv=" + Varios.comillas(this.csv) + ","
+                + "codigo=" + Util.comillas(this.codigo) + ","
+                + "csv=" + Util.comillas(this.csv) + ","
                 + "estado=" + this.estado + ","
                 + "estado_cruce=" + this.estadoCruce + ","
-                + "datos=" + Varios.comillas(this.datos) + " "
+                + "datos=" + Util.comillas(this.datos) + " "
                 + "WHERE id=" + this.id;
     }
 }

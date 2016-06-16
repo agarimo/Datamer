@@ -47,10 +47,11 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.util.Callback;
-import util.Dates;
-import files.Util;
+import tools.Dates;
+import tools.Files;
+import tools.LoadFile;
 import sql.Sql;
-import util.Varios;
+import tools.Util;
 
 /**
  *
@@ -513,7 +514,7 @@ public class CruceC implements Initializable {
                 sb.append(System.lineSeparator());
             }
 
-            Util.escribeArchivo(aux, sb.toString().trim());
+            LoadFile.writeFile(aux, sb.toString().trim());
 
             Platform.runLater(() -> {
                 piProgreso.setProgress(1);
@@ -1039,7 +1040,7 @@ public class CruceC implements Initializable {
         ModeloTabla mt = (ModeloTabla) tabla.getSelectionModel().getSelectedItem();
 
         if (mt != null) {
-            Util.escribeArchivo(Var.temporal, mt.getDatos());
+            LoadFile.writeFile(Var.temporal, mt.getDatos());
             try {
                 Desktop.getDesktop().browse(Var.temporal.toURI());
             } catch (IOException ex) {
@@ -1062,7 +1063,7 @@ public class CruceC implements Initializable {
 
         if (mt != null) {
             queryReset = "UPDATE "+Var.dbNameTestra+".captura SET estado_cruce=0 where id=" + mt.getId();
-            queryClean = "DELETE from "+Var.dbNameTestra+".multa where id_edicto=" + Varios.comillas(mt.getCodigo());
+            queryClean = "DELETE from "+Var.dbNameTestra+".multa where id_edicto=" + Util.comillas(mt.getCodigo());
             try {
                 Sql bd = new Sql(Var.con);
                 bd.ejecutar(queryReset);
@@ -1083,8 +1084,8 @@ public class CruceC implements Initializable {
         String queryClean;
 
         if (fecha != null) {
-            queryReset = "UPDATE "+Var.dbNameTestra+".captura SET estado_cruce=0 where fecha=" + Varios.comillas(Dates.imprimeFecha(fecha));
-            queryClean = "DELETE from "+Var.dbNameTestra+".multa where fecha_publicacion=" + Varios.comillas(Dates.imprimeFecha(fecha));
+            queryReset = "UPDATE "+Var.dbNameTestra+".captura SET estado_cruce=0 where fecha=" + Util.comillas(Dates.imprimeFecha(fecha));
+            queryClean = "DELETE from "+Var.dbNameTestra+".multa where fecha_publicacion=" + Util.comillas(Dates.imprimeFecha(fecha));
             try {
                 Sql bd = new Sql(Var.con);
                 bd.ejecutar(queryReset);

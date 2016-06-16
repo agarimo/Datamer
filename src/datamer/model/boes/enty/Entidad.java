@@ -1,7 +1,7 @@
 package datamer.model.boes.enty;
 
 import datamer.Var;
-import util.Varios;
+import tools.Util;
 
 /**
  *
@@ -54,8 +54,8 @@ public class Entidad {
 
     public String SQLCrear() {
         return "INSERT into " + Var.dbNameBoes + ".entidad (nombre,codigo) values("
-                + Varios.comillas(this.nombre) + ","
-                + Varios.comillas(this.codigo)
+                + Util.comillas(this.nombre) + ","
+                + Util.comillas(this.codigo)
                 + ");";
     }
 
@@ -65,7 +65,7 @@ public class Entidad {
     }
 
     public String SQLBuscar() {
-        return "SELECT * from " + Var.dbNameBoes + ".entidad where nombre=" + Varios.comillas(this.nombre);
+        return "SELECT * from " + Var.dbNameBoes + ".entidad where nombre=" + Util.comillas(this.nombre);
     }
 
 }

@@ -10,9 +10,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import util.Dates;
+import tools.Dates;
 import sql.Sql;
-import util.Varios;
+import tools.Util;
 
 /**
  *
@@ -31,7 +31,7 @@ public class Fases {
 
     private List getBol() {
         return Query.listaBoletin("SELECT * FROM " + Var.dbNameBoes + ".boletin where idBoe in "
-                + "(SELECT id FROM " + Var.dbNameBoes + ".boe where fecha=" + Varios.comillas(Dates.imprimeFecha(this.fecha)) + ")");
+                + "(SELECT id FROM " + Var.dbNameBoes + ".boe where fecha=" + Util.comillas(Dates.imprimeFecha(this.fecha)) + ")");
     }
 
     public List getBoletines() {
@@ -58,7 +58,7 @@ public class Fases {
         String str = null;
 
         try {
-            str = bd.getString("SELECT datos FROM " + Var.dbNameServer + ".publicacion where codigo=" + Varios.comillas(codigo));
+            str = bd.getString("SELECT datos FROM " + Var.dbNameServer + ".publicacion where codigo=" + Util.comillas(codigo));
         } catch (SQLException ex) {
             Logger.getLogger(Fases.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -7,9 +7,9 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import datamer.Var;
-import util.Dates;
+import tools.Dates;
 import sql.Sql;
-import util.Varios;
+import tools.Util;
 
 /**
  *
@@ -134,9 +134,9 @@ public class Procesar {
     public String SQLCrear() {
         return "INSERT into " + Var.dbNameBoes + ".procesar (id,fecha,codigo,link,estructura,estado) values("
                 + this.id + ","
-                + Varios.comillas(Dates.imprimeFecha(this.fecha)) + ","
-                + Varios.comillas(this.codigo) + ","
-                + Varios.comillas(this.link) + ","
+                + Util.comillas(Dates.imprimeFecha(this.fecha)) + ","
+                + Util.comillas(this.codigo) + ","
+                + Util.comillas(this.link) + ","
                 + this.estructura + ","
                 + 1
                 + ");";

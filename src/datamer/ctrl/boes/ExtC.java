@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -43,7 +44,9 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
@@ -248,7 +251,6 @@ public class ExtC implements Initializable {
 //        procesarList.clear();
 //        previewList.clear();
 //    }
-
     @FXML
     void eliminarLineaPreview(ActionEvent event) {
         System.out.println("Eliminando");
@@ -381,13 +383,13 @@ public class ExtC implements Initializable {
                     });
                     aux = (Procesar) list.get(i);
                     destino = new File(fichero, aux.getCodigo() + ".pdf");
-                    
+
                     try {
                         Download.downloadFILE(aux.getLink(), destino);
                     } catch (IOException ex) {
                         Logger.getLogger(ExtC.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                    
+
                     aux.SQLSetEstado(Estado.LISTO_PROCESAR.getValue());
                 }
 
@@ -445,7 +447,7 @@ public class ExtC implements Initializable {
                     });
                     aux = (ModeloProcesar) list.get(i);
                     destino = new File(fichero, aux.getCodigo() + ".pdf");
-                    
+
                     try {
                         Download.downloadFILE(aux.getLink(), destino);
                     } catch (IOException ex) {
@@ -729,6 +731,20 @@ public class ExtC implements Initializable {
 
     @FXML
     void procesar(ActionEvent event) {
+
+        Alert alert = new Alert(AlertType.CONFIRMATION);
+        alert.setTitle("PROCESAR EXTRACCIÓN");
+        alert.setHeaderText("Se va a procesar el día completo.");
+        alert.setContentText("¿Desea CONTINUAR?");
+
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if (result.get() == ButtonType.OK) {
+            procesarRun();
+        }
+    }
+
+    private void procesarRun() {
         cambioEnDatePicker(new ActionEvent());
         Date fecha = Dates.asDate(dpFecha.getValue());
         List<ModeloProcesar> list = getBoletinesProcesar();
@@ -744,7 +760,7 @@ public class ExtC implements Initializable {
                     lbProceso.setText("PREPARANDO BBDD");
                 });
 
-                procesarPreClean(Dates.asLocalDate(fecha));
+                procesarRunPreClean(Dates.asLocalDate(fecha));
 
                 Platform.runLater(() -> {
                     lbProgreso.setText("");
@@ -804,7 +820,7 @@ public class ExtC implements Initializable {
         }
     }
 
-    private void procesarPreClean(LocalDate fecha) {
+    private void procesarRunPreClean(LocalDate fecha) {
         String queryMultas = "DELETE FROM " + Var.dbNameBoes + ".multa WHERE fechaPublicacion=" + Util.comillas(fecha.format(DateTimeFormatter.ISO_DATE));
         String queryProcesar = "UPDATE " + Var.dbNameBoes + ".procesar SET estado=1 WHERE fecha=" + Util.comillas(fecha.format(DateTimeFormatter.ISO_DATE));
 

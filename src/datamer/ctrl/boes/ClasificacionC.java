@@ -354,7 +354,7 @@ public class ClasificacionC implements Initializable {
             Var.boesIsClasificando = false;
             procesarTask();
         } else {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            Alert alert = new Alert(AlertType.INFORMATION);
             alert.setTitle("ACEPTAR BOLETINES");
             alert.setHeaderText("Todavía quedan Boletines sin clasificar");
             alert.setContentText("¿Desea CONTINUAR?");

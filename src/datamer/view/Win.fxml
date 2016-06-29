@@ -49,7 +49,7 @@
             </Menu>
         </menus>
       </MenuBar>
-      <TabPane fx:id="tabPane" style="-fx-background-color: linear-gradient(to bottom, rgba(212,228,239,1) 0%, rgba(134,174,204,1) 100%);;" VBox.vgrow="ALWAYS" />
+      <TabPane fx:id="tabPane" rotateGraphic="true" style="-fx-background-color: linear-gradient(to bottom, rgba(212,228,239,1) 0%, rgba(134,174,204,1) 100%);;" VBox.vgrow="ALWAYS" />
       <HBox prefHeight="22.0" prefWidth="1000.0" style="-fx-background-color: linear-gradient(to bottom, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%);" VBox.vgrow="NEVER">
          <children>
             <Label fx:id="leftStatus" alignment="CENTER" prefHeight="20.0" text="Left Status">

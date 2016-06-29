@@ -740,7 +740,7 @@ public class ExtC implements Initializable {
         Optional<ButtonType> result = alert.showAndWait();
 
         if (result.get() == ButtonType.OK) {
-            procesarRun();
+            procesarRun(); 
         }
     }
 
@@ -829,6 +829,7 @@ public class ExtC implements Initializable {
             bd.ejecutar(queryMultas);
             bd.ejecutar(queryProcesar);
             bd.close();
+            cambioEnDatePicker(new ActionEvent());
         } catch (SQLException ex) {
             Logger.getLogger(ExtC.class.getName()).log(Level.SEVERE, null, ex);
         }

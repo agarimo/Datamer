@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.shape.*?>
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
@@ -10,9 +16,9 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="datamer.ctrl.WinC">
+<AnchorPane fx:id="rootPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="datamer.ctrl.WinC">
    <children>
-      <MenuBar>
+      <MenuBar minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="1000.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <menus>
           <Menu mnemonicParsing="false" text="Datamer">
             <items>
@@ -49,24 +55,45 @@
             </Menu>
         </menus>
       </MenuBar>
-      <TabPane fx:id="tabPane" rotateGraphic="true" style="-fx-background-color: linear-gradient(to bottom, rgba(212,228,239,1) 0%, rgba(134,174,204,1) 100%);;" VBox.vgrow="ALWAYS" />
-      <HBox prefHeight="22.0" prefWidth="1000.0" style="-fx-background-color: linear-gradient(to bottom, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%);" VBox.vgrow="NEVER">
+      <TabPane fx:id="tabPane" layoutY="25.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="545.0" prefWidth="1000.0" rotateGraphic="true" style="-fx-background-color: linear-gradient(to bottom, rgba(212,228,239,1) 0%, rgba(134,174,204,1) 100%);;" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0" VBox.vgrow="ALWAYS" />
+      <AnchorPane fx:id="taskPane" cache="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="500.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="-150.0" AnchorPane.leftAnchor="0.0">
          <children>
-            <Label fx:id="leftStatus" alignment="CENTER" prefHeight="20.0" text="Left Status">
-               <HBox.margin>
-                  <Insets left="10.0" />
-               </HBox.margin>
-            </Label>
-            <Pane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
-            <Label fx:id="rigthStatus" alignment="CENTER" prefHeight="20.0" text="Rigth Status">
-               <HBox.margin>
-                  <Insets right="10.0" />
-               </HBox.margin>
-            </Label>
+            <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
+            <TableView fx:id="tabla" focusTraversable="false" prefHeight="150.0" prefWidth="470.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="28.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <columns>
+                  <TableColumn fx:id="tareaCL" editable="false" prefWidth="109.0" sortable="false" text="Tarea" />
+                  <TableColumn fx:id="propietarioCL" editable="false" prefWidth="116.0" sortable="false" text="Propietario" />
+                  <TableColumn fx:id="porcentajeCL" editable="false" prefWidth="35.0" sortable="false" text="\%" />
+                  <TableColumn fx:id="estadoCL" editable="false" minWidth="220.0" prefWidth="-1.0" sortable="false" text="Estado" />
+               </columns>
+            </TableView>
          </children>
+         <effect>
+            <DropShadow />
+         </effect>
+      </AnchorPane>
+      <HBox alignment="CENTER_LEFT" layoutY="578.0" maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="1000.0" spacing="10.0" style="-fx-background-color: linear-gradient(to bottom, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%);" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" VBox.vgrow="NEVER">
          <padding>
             <Insets top="1.0" />
          </padding>
+         <children>
+            <Button fx:id="taskButton" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="29.0" prefWidth="29.0" text="..." textOverrun="WORD_ELLIPSIS">
+               <HBox.margin>
+                  <Insets bottom="2.0" />
+               </HBox.margin>
+               <effect>
+                  <Blend />
+               </effect>
+            </Button>
+            <Label fx:id="taskStatus" focusTraversable="false" prefHeight="30.0" text="No hay tareas en ejecución" />
+            <Pane prefHeight="29.0" HBox.hgrow="ALWAYS" />
+            <Label fx:id="serverStatus" focusTraversable="false" prefHeight="30.0" text="Off-Line" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="RED" height="10.0" stroke="BLACK" strokeType="INSIDE" width="10.0">
+               <HBox.margin>
+                  <Insets right="10.0" />
+               </HBox.margin>
+            </Rectangle>
+         </children>
       </HBox>
    </children>
-</VBox>
+</AnchorPane>

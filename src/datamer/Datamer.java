@@ -1,7 +1,5 @@
 package datamer;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -18,11 +16,11 @@ public class Datamer extends Application {
     @Override
     public void init() {
         Var.initVar();
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(Datamer.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        try {
+//            Thread.sleep(5000);
+//        } catch (InterruptedException ex) {
+//            Logger.getLogger(Datamer.class.getName()).log(Level.SEVERE, null, ex);
+//        }
     }
 
     @Override

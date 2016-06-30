@@ -203,9 +203,14 @@ public class ClasificacionC implements Initializable {
             }
         });
 
-        codigoCL.prefWidthProperty().bind(tvBoes.widthProperty().multiply(0.10));
-        origenCL.prefWidthProperty().bind(tvBoes.widthProperty().multiply(0.20));
-        descripcionCL.prefWidthProperty().bind(tvBoes.widthProperty().multiply(0.67));
+        tvBoes.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        codigoCL.setMaxWidth(1f * Integer.MAX_VALUE * 10); // 50% width
+        origenCL.setMaxWidth(1f * Integer.MAX_VALUE * 20); // 30% width
+        descripcionCL.setMaxWidth(1f * Integer.MAX_VALUE * 70); // 20% width
+
+//        codigoCL.prefWidthProperty().bind(tvBoes.widthProperty().multiply(0.10));
+//        origenCL.prefWidthProperty().bind(tvBoes.widthProperty().multiply(0.20));
+//        descripcionCL.prefWidthProperty().bind(tvBoes.widthProperty().multiply(0.67));
 
         publicacion = FXCollections.observableArrayList();
         tvBoes.setItems(publicacion);

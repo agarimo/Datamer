@@ -23,21 +23,18 @@
  */
 package datamer;
 
-import com.sun.javafx.application.HostServicesDelegate;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.stage.Stage;
-import org.jdom2.Document;
-import org.jdom2.Element;
-import org.jdom2.JDOMException;
-import org.jdom2.input.SAXBuilder;
-import org.jdom2.output.Format;
-import org.jdom2.output.XMLOutputter;
 import sql.Conexion;
 import tools.Files;
 import java.util.concurrent.ExecutorService;
@@ -49,20 +46,18 @@ import java.util.concurrent.Executors;
  */
 public class Var {
 
+    private static Properties config;
+
     public static Stage stage;
     public static Stage popup;
-    public static HostServicesDelegate hostServices;
-    
+
     public static ExecutorService executor;
 
     public static Conexion con;
+    public static String socketClientHost;
+    public static int socketClientPort;
 
     public static String configFile = "config.xml";
-    public static String defaultFile = "/resources/default.xml";
-
-    public static boolean modoAdmin;
-    public static String passwordAdmin;
-    public static String queryLimit;
 
     public static File runtimeData;
     public static boolean isRunning;
@@ -70,11 +65,9 @@ public class Var {
     /**
      * BOES
      */
-    public static String dbNameServer="server";
+    public static String dbNameServer = "server";
     public static String dbNameBoes = "boes";
-//    public static String dbNameBoesStats = "boes_stats";
-    
-    
+
     public static File fileSystem;
     public static File ficheroPdf;
     public static File ficheroTxt;
@@ -96,7 +89,7 @@ public class Var {
     public static List<String> strucFecha;
     public static File fichero;
     public static File temporal;
-    
+
     public static String testraUrl = "https://sedeapl.dgt.gob.es/WEB_TTRA_CONSULTA/ServletVisualizacion?params=";
     public static String testraHtml = "&formato=HTML";
     public static String testraPdf = "%26subidioma%3Des&formato=PDF";
@@ -109,12 +102,13 @@ public class Var {
     public static void initVar() {
         initVarDriver();
         initVarLoadConfig();
+        initConnection();
         initVarFiles();
         initVarStrucFecha();
         initVarKeyStore();
         boesIsClasificando = false;
         boesIsDownloading = false;
-//        executor = Executors.newFixedThreadPool(3);
+        executor = Executors.newFixedThreadPool(4);
     }
 
     private static void initVarDriver() {
@@ -133,7 +127,7 @@ public class Var {
         ficheroTxt = new File(fileSystem, "txtData");
         ficheroEx = new File(fileSystem, "exData");
         ficheroUnion = new File(fileSystem, "unionData");
-        
+
         if (!fileSystem.exists()) {
             fileSystem.mkdirs();
         }
@@ -167,7 +161,7 @@ public class Var {
 //        System.setProperty("javax.net.ssl.trustStore", "keystore");
 //        System.setProperty("javax.net.ssl.trustStorePassword", "Carras-24");
 //        System.setProperty("javax.net.ssl.trustStoreType", "JKS");
-        
+
         System.setProperty("javax.net.ssl.keyStore", "keystore");
         System.setProperty("javax.net.ssl.keyStorePassword", "Carras-24");
 //        System.setProperty("javax.net.ssl.keyStoreType", "JKS");
@@ -184,64 +178,39 @@ public class Var {
     }
 
     private static void initVarLoadConfig() {
-        XMLLoad(configFile);
+        loadConfig();
+    }
+
+    private static void initConnection() {
+        con = new Conexion();
+        con.setDireccion(config.getProperty("con_host"));
+        con.setPuerto(config.getProperty("con_port"));
+        con.setUsuario(config.getProperty("con_user"));
+        con.setPass(config.getProperty("con_pass"));
+
+        socketClientHost = config.getProperty("socketClient_host");
+        socketClientPort = Integer.parseInt(config.getProperty("socketClient_port"));
     }
 
     public static void xit() {
         Files.deleteDir(runtimeData);
-        XMLSave(configFile);
+        saveConfig();
     }
 
-    //<editor-fold defaultstate="collapsed" desc="XML">
-    private static void XMLLoad(String ruta) {
-        try {
-            con = new Conexion();
-            SAXBuilder builder = new SAXBuilder();
-            File xmlFile = new File(ruta);
-
-            Document document = (Document) builder.build(xmlFile);
-            Element config = document.getRootElement();
-
-            Element conexion = config.getChild("conexion");
-            con.setDireccion(conexion.getChildText("db-host"));
-            con.setPuerto(conexion.getChildText("db-port"));
-            con.setUsuario(conexion.getChildText("db-username"));
-            con.setPass(conexion.getChildText("db-password"));
-
-        } catch (JDOMException | IOException ex) {
+    private static void loadConfig() {
+        config = new Properties();
+        try (InputStream in = new FileInputStream("config.xml")) {
+            config.loadFromXML(in);
+        } catch (IOException ex) {
             Logger.getLogger(Var.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    private static void XMLSave(String ruta) {
-        try {
-            Element ele;
-            SAXBuilder builder = new SAXBuilder();
-            File xmlFile = new File(ruta);
-
-            Document document = (Document) builder.build(xmlFile);
-            Element config = document.getRootElement();
-
-            Element conexion = config.getChild("conexion");
-            ele = conexion.getChild("db-host");
-            ele.setText(con.getDireccion());
-            ele = conexion.getChild("db-port");
-            ele.setText(con.getPuerto());
-            ele = conexion.getChild("db-username");
-            ele.setText(con.getUsuario());
-            ele = conexion.getChild("db-password");
-            ele.setText(con.getPass());
-
-            XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
-            try {
-                outputter.output(document, new FileOutputStream(configFile));
-            } catch (Exception e) {
-                e.getMessage();
-            }
-
-        } catch (JDOMException | IOException ex) {
+    public static void saveConfig() {
+        try (OutputStream out = new FileOutputStream("config.xml")) {
+            config.storeToXML(out, "Archivo de propiedades XML de Datamer_server");
+        } catch (IOException ex) {
             Logger.getLogger(Var.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-//</editor-fold>
 }

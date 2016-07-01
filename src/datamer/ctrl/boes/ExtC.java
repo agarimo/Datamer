@@ -246,11 +246,6 @@ public class ExtC implements Initializable {
         }
     }
 
-//    private void clearWindow() {
-//        dpFecha.setValue(null);
-//        procesarList.clear();
-//        previewList.clear();
-//    }
     @FXML
     void eliminarLineaPreview(ActionEvent event) {
         System.out.println("Eliminando");
@@ -312,7 +307,7 @@ public class ExtC implements Initializable {
                 cambioEnDatePicker(new ActionEvent());
             });
         });
-        a.start();
+        Var.executor.execute(a);
     }
 
     @FXML
@@ -343,7 +338,7 @@ public class ExtC implements Initializable {
                     mostrarPanel(this.wait_to_procesar);
                 });
             });
-            a.start();
+            Var.executor.execute(a);
         }
 
     }
@@ -403,7 +398,7 @@ public class ExtC implements Initializable {
                     cambioEnDatePicker(new ActionEvent());
                 });
             });
-            a.start();
+            Var.executor.execute(a);
         }
     }
 
@@ -464,7 +459,7 @@ public class ExtC implements Initializable {
                     cambioEnDatePicker(new ActionEvent());
                 });
             });
-            a.start();
+            Var.executor.execute(a);
         }
     }
 
@@ -703,7 +698,7 @@ public class ExtC implements Initializable {
                                 });
                             }
                         });
-                        a.start();
+                        Var.executor.execute(a);
 
                     } else {
                         Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -816,7 +811,7 @@ public class ExtC implements Initializable {
                     cambioEnDatePicker(new ActionEvent());
                 });
             });
-            a.start();
+            Var.executor.execute(a);
         }
     }
 
@@ -998,7 +993,7 @@ public class ExtC implements Initializable {
                     cambioEnDatePicker(new ActionEvent());
                 });
             });
-            a.start();
+            Var.executor.execute(a);
         }
     }
 

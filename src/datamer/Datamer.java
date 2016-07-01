@@ -6,6 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 /**
  *
@@ -37,6 +38,11 @@ public class Datamer extends Application {
         Var.stage.setScene(scene);
         Var.stage.setMaximized(true);
         Var.stage.show();
+
+        stage.setOnCloseRequest((WindowEvent event) -> {
+            event.consume();
+            stage.setIconified(true);
+        });
     }
 
     /**

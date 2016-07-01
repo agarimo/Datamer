@@ -1,29 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.effect.*?>
-<?import javafx.scene.shape.*?>
-<?import java.lang.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.effect.Blend?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
 
-<AnchorPane fx:id="rootPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="datamer.ctrl.WinC">
+<AnchorPane fx:id="rootPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="datamer.ctrl.WinC">
    <children>
       <MenuBar minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="1000.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <menus>
           <Menu mnemonicParsing="false" text="Datamer">
             <items>
                   <MenuItem mnemonicParsing="false" text="Configuración" />
-              <MenuItem mnemonicParsing="false" text="Salir" />
+              <MenuItem mnemonicParsing="false" onAction="#exitApp" text="Salir" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Boes">
@@ -54,12 +55,18 @@
               </items>
             </Menu>
         </menus>
+         <effect>
+            <DropShadow />
+         </effect>
       </MenuBar>
-      <TabPane fx:id="tabPane" layoutY="25.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="545.0" prefWidth="1000.0" rotateGraphic="true" style="-fx-background-color: linear-gradient(to bottom, rgba(212,228,239,1) 0%, rgba(134,174,204,1) 100%);;" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0" VBox.vgrow="ALWAYS" />
+      <TabPane fx:id="tabPane" layoutY="25.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="545.0" prefWidth="1000.0" rotateGraphic="true" style="-fx-background-color: linear-gradient(to bottom, rgba(212,228,239,1) 0%, rgba(134,174,204,1) 100%);;" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0" VBox.vgrow="ALWAYS">
+         <padding>
+            <Insets bottom="2.0" />
+         </padding></TabPane>
       <AnchorPane fx:id="taskPane" cache="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="500.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="-150.0" AnchorPane.leftAnchor="0.0">
          <children>
-            <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
-            <TableView fx:id="tabla" focusTraversable="false" prefHeight="150.0" prefWidth="470.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="28.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="30.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
+            <TableView fx:id="tabla" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="472.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="28.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <columns>
                   <TableColumn fx:id="tareaCL" editable="false" prefWidth="109.0" sortable="false" text="Tarea" />
                   <TableColumn fx:id="propietarioCL" editable="false" prefWidth="116.0" sortable="false" text="Propietario" />
@@ -88,7 +95,7 @@
             <Label fx:id="taskStatus" focusTraversable="false" prefHeight="30.0" text="No hay tareas en ejecución" />
             <Pane prefHeight="29.0" HBox.hgrow="ALWAYS" />
             <Label fx:id="serverStatus" focusTraversable="false" prefHeight="30.0" text="Off-Line" />
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="RED" height="10.0" stroke="BLACK" strokeType="INSIDE" width="10.0">
+            <Rectangle fx:id="conected" arcHeight="5.0" arcWidth="5.0" fill="RED" height="10.0" stroke="BLACK" strokeType="INSIDE" width="10.0">
                <HBox.margin>
                   <Insets right="10.0" />
                </HBox.margin>

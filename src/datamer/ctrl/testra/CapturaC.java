@@ -290,7 +290,7 @@ public class CapturaC implements Initializable {
             });
 
         });
-        a.start();
+        Var.executor.execute(a);
     }
 
     @FXML
@@ -331,6 +331,6 @@ public class CapturaC implements Initializable {
             });
 
         });
-        a.start();
+        Var.executor.execute(a);
     }
 }

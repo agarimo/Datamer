@@ -442,7 +442,7 @@ public class ClasificacionC implements Initializable {
                 initializeClear();
             });
         });
-        a.start();
+        Var.executor.execute(a);
     }
 
     private void procesarTaskPreClean(LocalDate fecha) {
@@ -551,7 +551,7 @@ public class ClasificacionC implements Initializable {
                     tableFocus();
                 });
             });
-            a.start();
+            Var.executor.execute(a);
         }
 
     }

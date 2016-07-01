@@ -1,6 +1,7 @@
 package datamer.ctrl.boes;
 
 import datamer.Regex;
+import datamer.Var;
 import datamer.model.boes.ModeloPattern;
 import datamer.model.boes.enty.Pattern;
 import java.awt.Desktop;
@@ -196,7 +197,7 @@ public class PatternC implements Initializable {
                         dpFecha.setDisable(false);
                     });
                 });
-                a.start();
+                Var.executor.execute(a);
             }
         } catch (NullPointerException ex) {
             //

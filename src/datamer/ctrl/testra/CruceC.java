@@ -285,7 +285,7 @@ public class CruceC implements Initializable {
             });
 
         });
-        a.start();
+        Var.executor.execute(a);
     }
 
     @FXML
@@ -321,7 +321,7 @@ public class CruceC implements Initializable {
                         btCruce.setDisable(comprobarBoletines());
                     });
                 });
-                a.start();
+                Var.executor.execute(a);
             }
 
         } catch (NullPointerException ex) {
@@ -525,7 +525,7 @@ public class CruceC implements Initializable {
                 mostrarPanel(this.PANEL_PRINCIPAL);
             });
         });
-        a.start();
+        Var.executor.execute(a);
     }
 
     private List<ModeloTabla> getBoletinesToProcess() {
@@ -640,7 +640,7 @@ public class CruceC implements Initializable {
                 lbCountIdbl.setText(Integer.toString(this.procesoCruce.getTotalIdbl()));
             });
         });
-        a.start();
+        Var.executor.execute(a);
     }
 
     @Override
@@ -883,7 +883,7 @@ public class CruceC implements Initializable {
                 cambioEnDatePicker(new ActionEvent());
             });
         });
-        a.start();
+        Var.executor.execute(a);
     }
 
     private String limpiar(String datos, String csv) {

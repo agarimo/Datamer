@@ -334,7 +334,7 @@ public class BoletinesC implements Initializable {
                     recargarBoletines(new ActionEvent());
                 });
             });
-            a.start();
+            Var.executor.execute(a);
         }
     }
 
@@ -380,7 +380,7 @@ public class BoletinesC implements Initializable {
                     recargarBoletines(new ActionEvent());
                 });
             });
-            a.start();
+            Var.executor.execute(a);
         }
     }
 
@@ -426,7 +426,7 @@ public class BoletinesC implements Initializable {
                     recargarBoletines(new ActionEvent());
                 });
             });
-            a.start();
+            Var.executor.execute(a);
         }
     }
 
@@ -472,7 +472,7 @@ public class BoletinesC implements Initializable {
                     recargarBoletines(new ActionEvent());
                 });
             });
-            a.start();
+            Var.executor.execute(a);
         }
     }
 
@@ -531,7 +531,7 @@ public class BoletinesC implements Initializable {
                 alert.showAndWait();
             });
         });
-        a.start();
+        Var.executor.execute(a);
     }
 
     @FXML
@@ -569,7 +569,7 @@ public class BoletinesC implements Initializable {
                     recargarBoletines(new ActionEvent());
                 });
             });
-            a.start();
+            Var.executor.execute(a);
         }
     }
 
@@ -610,7 +610,7 @@ public class BoletinesC implements Initializable {
                     boletinesList.remove(aux);
                     Query.eliminaBoletin(aux.getCodigo());
                 });
-                a.start();
+                Var.executor.execute(a);
 
             }
         } else {

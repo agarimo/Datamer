@@ -4,6 +4,7 @@ import datamer.Nav;
 import datamer.Var;
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -34,6 +35,7 @@ import javafx.scene.text.Text;
 import javafx.util.Duration;
 import org.apache.poi.hssf.util.HSSFColor;
 import socket.ClientSocket;
+import socket.enty.ModelTask;
 import socket.enty.ModeloTarea;
 import socket.enty.Request;
 import socket.enty.Response;
@@ -53,7 +55,7 @@ public class WinC implements Initializable {
 
     @FXML
     private Label serverStatus;
-    
+
     @FXML
     private Rectangle conected;
 
@@ -91,6 +93,7 @@ public class WinC implements Initializable {
         initTable();
         prepareSlideMenuAnimation();
         initSocketClient();
+        initRefresh();
     }
 
     public void initTable() {
@@ -189,7 +192,7 @@ public class WinC implements Initializable {
         client = new ClientSocket();
         client.setHost(Var.socketClientHost);
         client.setPort(Var.socketClientPort);
-        if(client.conect()){
+        if (client.conect()) {
             serverStatus.setText("On-Line");
             conected.setFill(Color.GREENYELLOW);
         }
@@ -198,14 +201,29 @@ public class WinC implements Initializable {
     public void initRefresh() {
         keepRefresh = true;
         Runnable refresh = () -> {
+            List<ModelTask> list;
             Thread.currentThread().setName("Refresh Thread");
-            
-            
+
             while (keepRefresh) {
-                Request request=new Request(ServerRequest.STATUS);
-                Response response=client.sendRequest(request);
-                
-                
+                Request request = new Request(ServerRequest.STATUS);
+                Response response = client.sendRequest(request);
+                list = (List<ModelTask>) response.getParametros().get(0);
+                taskList.clear();
+
+                list.stream().forEach((aux) -> {
+                    taskList.add(aux.toModeloTarea());
+                });
+
+                Platform.runLater(() -> {
+                    if (taskList.isEmpty()) {
+                        taskStatus.setText("No hay tareas en ejecución");
+                    } else if (taskList.size() > 1) {
+                        taskStatus.setText(taskList.size() + " tareas en ejecución");
+                    } else {
+                        taskStatus.setText(taskList.size() + " tarea en ejecución");
+                    }
+                });
+
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException ex) {
@@ -213,13 +231,13 @@ public class WinC implements Initializable {
                 }
             }
         };
-
+        Var.executor.execute(refresh);
     }
 
     @FXML
     void exitApp(ActionEvent event) {
         keepRefresh = false;
-        if(client.disconect()){
+        if (client.disconect()) {
             serverStatus.setText("Off-Line");
             conected.setFill(Color.RED);
         }

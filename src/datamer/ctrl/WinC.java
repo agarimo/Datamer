@@ -4,6 +4,7 @@ import datamer.Nav;
 import datamer.Var;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -264,21 +265,20 @@ public class WinC implements Initializable {
         popOver.hide();
 
         Runnable launch = () -> {
-            List<ModelTask> list;
+            List<ModelTask> list = new ArrayList();
             Thread.currentThread().setName("Launch Thread");
 
-            while (keepRefresh) {
-                Request request = new Request(ServerRequest.RUN_TASK);
-                request.setParametros((List) new ModelTask(mt));
-                Response response = client.sendRequest(request);
+            Request request = new Request(ServerRequest.RUN_TASK);
+            list.add(new ModelTask(mt));
+            request.setParametros(list);
+            Response response = client.sendRequest(request);
 
-                if (response.getResponse() != ServerResponse.OK) {
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("ERROR");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Existe otro proceso ejecutando la tarea.");
-                    alert.showAndWait();
-                }
+            if (response.getResponse() != ServerResponse.OK) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("ERROR");
+                alert.setHeaderText(null);
+                alert.setContentText("Existe otro proceso ejecutando la tarea.");
+                alert.showAndWait();
             }
         };
         Var.executor.execute(launch);

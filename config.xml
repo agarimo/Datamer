@@ -7,6 +7,6 @@
 <entry key="dbName">server</entry>
 <entry key="con_pass">IkuinenK@@m.s84</entry>
 <entry key="con_host">oficina.redcedeco.net</entry>
-<entry key="socketClient_host">oficina.redcedeco.net</entry>
+<entry key="socketClient_host">localhost</entry>
 <entry key="socketClient_port">10987</entry>
 </properties>

@@ -13,11 +13,13 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
@@ -28,18 +30,18 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
-import static javafx.scene.paint.Color.GREEN;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
-import org.apache.poi.hssf.util.HSSFColor;
+import org.controlsfx.control.PopOver;
+import org.controlsfx.control.PopOver.ArrowLocation;
 import socket.ClientSocket;
 import socket.enty.ModelTask;
 import socket.enty.ModeloTarea;
 import socket.enty.Request;
 import socket.enty.Response;
 import socket.enty.ServerRequest;
+import socket.enty.ServerResponse;
 
 /**
  *
@@ -61,6 +63,9 @@ public class WinC implements Initializable {
 
     @FXML
     private Label taskStatus;
+
+    @FXML
+    private Label lbEjecutar;
 
     @FXML
     private AnchorPane taskPane;
@@ -87,6 +92,7 @@ public class WinC implements Initializable {
 
     private ClientSocket client;
     private boolean keepRefresh;
+    PopOver popOver;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -173,9 +179,9 @@ public class WinC implements Initializable {
     }
 
     private void prepareSlideMenuAnimation() {
-        TranslateTransition openNav = new TranslateTransition(new Duration(1500), taskPane);
+        TranslateTransition openNav = new TranslateTransition(new Duration(350), taskPane);
         openNav.setToY(0);
-        TranslateTransition closeNav = new TranslateTransition(new Duration(1500), taskPane);
+        TranslateTransition closeNav = new TranslateTransition(new Duration(350), taskPane);
 
         taskButton.setOnAction((ActionEvent evt) -> {
             if (taskPane.getTranslateY() != 0) {
@@ -195,6 +201,9 @@ public class WinC implements Initializable {
         if (client.conect()) {
             serverStatus.setText("On-Line");
             conected.setFill(Color.GREENYELLOW);
+        } else {
+            serverStatus.setText("Off-Line");
+            conected.setFill(Color.RED);
         }
     }
 
@@ -235,12 +244,55 @@ public class WinC implements Initializable {
     }
 
     @FXML
+    void launchTask(Event event) {
+        popOver = new PopOver();
+        popOver.setDetachable(false);
+        popOver.setDetached(false);
+        popOver.arrowSizeProperty().setValue(12);
+        popOver.arrowIndentProperty().setValue(13);
+        popOver.arrowLocationProperty().setValue(ArrowLocation.LEFT_BOTTOM);
+        popOver.cornerRadiusProperty().setValue(7);
+        popOver.headerAlwaysVisibleProperty().setValue(false);
+        popOver.setAnimated(true);
+
+        popOver.setContentNode(loadNode("/datamer/view/LaunchTask.fxml", "CLIENTES"));
+
+        popOver.show(lbEjecutar);
+    }
+
+    public void launchTask(ModeloTarea mt) {
+        popOver.hide();
+
+        Runnable launch = () -> {
+            List<ModelTask> list;
+            Thread.currentThread().setName("Launch Thread");
+
+            while (keepRefresh) {
+                Request request = new Request(ServerRequest.RUN_TASK);
+                request.setParametros((List) new ModelTask(mt));
+                Response response = client.sendRequest(request);
+
+                if (response.getResponse() != ServerResponse.OK) {
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("ERROR");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Existe otro proceso ejecutando la tarea.");
+                    alert.showAndWait();
+                }
+            }
+        };
+        Var.executor.execute(launch);
+
+    }
+
+    @FXML
     void exitApp(ActionEvent event) {
         keepRefresh = false;
         if (client.disconect()) {
             serverStatus.setText("Off-Line");
             conected.setFill(Color.RED);
         }
+        Var.executor.shutdown();
         Platform.exit();
     }
 
@@ -258,6 +310,17 @@ public class WinC implements Initializable {
             tab.setContent(node);
 
             return tab;
+        } catch (IOException ex) {
+            Logger.getLogger(WinC.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
+
+    private Node loadNode(String pane, String nombre) {
+        try {
+            Node node = FXMLLoader.load(getClass().getResource(pane));
+
+            return node;
         } catch (IOException ex) {
             Logger.getLogger(WinC.class.getName()).log(Level.SEVERE, null, ex);
             return null;

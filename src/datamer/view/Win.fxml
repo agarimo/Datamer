@@ -16,6 +16,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane fx:id="rootPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="datamer.ctrl.WinC">
    <children>
@@ -65,7 +66,6 @@
          </padding></TabPane>
       <AnchorPane fx:id="taskPane" cache="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="500.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="-150.0" AnchorPane.leftAnchor="0.0">
          <children>
-            <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="30.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
             <TableView fx:id="tabla" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="472.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="28.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <columns>
                   <TableColumn fx:id="tareaCL" editable="false" prefWidth="109.0" sortable="false" text="Tarea" />
@@ -74,6 +74,11 @@
                   <TableColumn fx:id="estadoCL" editable="false" minWidth="220.0" prefWidth="-1.0" sortable="false" text="Estado" />
                </columns>
             </TableView>
+            <Label fx:id="lbEjecutar" alignment="CENTER" contentDisplay="CENTER" layoutX="-61.0" layoutY="60.0" onMouseClicked="#launchTask" prefHeight="30.0" prefWidth="150.0" rotate="-90.0" style="-fx-background-color: linear-gradient(to bottom, rgba(212,228,239,1) 0%, rgba(134,174,204,1) 100%); -fx-border-color: black;" text="EJECUTAR" textAlignment="CENTER" textFill="RED" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="-61.0" AnchorPane.rightAnchor="411.0" AnchorPane.topAnchor="60.0">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
          </children>
          <effect>
             <DropShadow />

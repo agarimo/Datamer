@@ -27,8 +27,12 @@ public class Datamer extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         Var.stage = stage;
-        Parent root = FXMLLoader.load(getClass().getResource("/datamer/view/Win.fxml"));
 
+        FXMLLoader loader = new FXMLLoader();
+        Parent root = loader.load(getClass().getResourceAsStream("/datamer/view/Win.fxml"));
+        Var.mainController = loader.getController();
+
+//        Parent root = FXMLLoader.load(getClass().getResource("/datamer/view/Win.fxml"));
         Image icon = new Image(getClass().getResourceAsStream("/datamer/resources/DeathStar.png"));
         Var.stage.getIcons().add(icon);
         Var.stage.setTitle("DataFest 1.2");
@@ -36,7 +40,9 @@ public class Datamer extends Application {
         Scene scene = new Scene(root);
 //        scene.getStylesheets().setAll(getClass().getResource("/datamer/resources/modena.css").toExternalForm());
         Var.stage.setScene(scene);
-        Var.stage.setMaximized(true);
+        Var.stage.setMinHeight(800);
+        Var.stage.setMinWidth(1200);
+//        Var.stage.setMaximized(true);
         Var.stage.show();
 
         stage.setOnCloseRequest((WindowEvent event) -> {

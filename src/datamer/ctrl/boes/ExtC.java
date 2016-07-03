@@ -59,7 +59,6 @@ import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import tools.Dates;
 import sql.Sql;
-import tools.Pdf;
 import tools.Util;
 
 /**

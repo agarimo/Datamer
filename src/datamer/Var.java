@@ -23,6 +23,7 @@
  */
 package datamer;
 
+import datamer.ctrl.WinC;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -49,6 +50,7 @@ public class Var {
     private static Properties config;
 
     public static Stage stage;
+    public static WinC mainController;
     public static Stage popup;
 
     public static ExecutorService executor;

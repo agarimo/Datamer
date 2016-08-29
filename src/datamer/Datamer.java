@@ -40,7 +40,7 @@ public class Datamer extends Application {
         Scene scene = new Scene(root);
 //        scene.getStylesheets().setAll(getClass().getResource("/datamer/resources/modena.css").toExternalForm());
         Var.stage.setScene(scene);
-        Var.stage.setMinHeight(800);
+        Var.stage.setMinHeight(700);
         Var.stage.setMinWidth(1200);
 //        Var.stage.setMaximized(true);
         Var.stage.show();

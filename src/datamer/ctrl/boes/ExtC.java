@@ -627,9 +627,14 @@ public class ExtC implements Initializable {
             };
         });
 
-        clCodigo.prefWidthProperty().bind(tvProcesar.widthProperty().multiply(0.34));
-        clEstructura.prefWidthProperty().bind(tvProcesar.widthProperty().multiply(0.33));
-        clEstado.prefWidthProperty().bind(tvProcesar.widthProperty().multiply(0.32));
+//        clCodigo.prefWidthProperty().bind(tvProcesar.widthProperty().multiply(0.34));
+//        clEstructura.prefWidthProperty().bind(tvProcesar.widthProperty().multiply(0.33));
+//        clEstado.prefWidthProperty().bind(tvProcesar.widthProperty().multiply(0.32));
+        
+        tvProcesar.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        clCodigo.setMaxWidth(1f * Integer.MAX_VALUE * 40); 
+        clEstructura.setMaxWidth(1f * Integer.MAX_VALUE * 40); 
+        clEstado.setMaxWidth(1f * Integer.MAX_VALUE * 20); 
 
         procesarList = FXCollections.observableArrayList();
         tvProcesar.setItems(procesarList);

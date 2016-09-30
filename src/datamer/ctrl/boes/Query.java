@@ -38,11 +38,79 @@ import tools.Util;
  */
 public class Query extends sql.Query {
 
+    public static boolean isNota(int estructura) {
+        try {
+            int a;
+            bd = new Sql(Var.con);
+            a = bd.buscar("SELECT id FROM " + Var.dbNameBoes + ".notas where id=" + estructura);
+            bd.close();
+
+            return a > 0;
+        } catch (SQLException ex) {
+            error(ex.getMessage());
+            Logger.getLogger(Query.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+    }
+
+    public static String getNota(int estructura) {
+        String aux = null;
+        String query = "SELECT datos FROM " + Var.dbNameBoes + ".notas where id=" + estructura;
+
+        try {
+            bd = new Sql(Var.con);
+            rs = bd.ejecutarQueryRs(query);
+
+            if (rs.next()) {
+                aux = rs.getString("datos");
+            }
+            rs.close();
+            bd.close();
+        } catch (SQLException ex) {
+            error(ex.getMessage());
+            Logger.getLogger(Query.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return aux;
+    }
+
+    public static void setNota(String datos, int estructura) {
+        try {
+            bd = new Sql(Var.con);
+            bd.ejecutar("UPDATE " + Var.dbNameBoes + ".notas SET datos=" + Util.comillas(datos) + " where id=" + estructura);
+            bd.close();
+        } catch (SQLException ex) {
+            error(ex.getMessage());
+            Logger.getLogger(Query.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public static void eliminaNota(int estructura) {
+        try {
+            bd = new Sql(Var.con);
+            bd.ejecutar("DELETE FROM " + Var.dbNameBoes + ".notas where id=" + estructura);
+            bd.close();
+        } catch (SQLException ex) {
+            error(ex.getMessage());
+            Logger.getLogger(Query.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
     public static void eliminaBoletin(String codigo) {
         try {
             bd = new Sql(Var.con);
             bd.ejecutar("DELETE FROM " + Var.dbNameBoes + ".boletin where codigo=" + Util.comillas(codigo));
             bd.ejecutar("UPDATE " + Var.dbNameServer + ".publicacion set status='DELETED', selected=false where codigo=" + Util.comillas(codigo));
+            bd.close();
+        } catch (SQLException ex) {
+            error(ex.getMessage());
+            Logger.getLogger(Query.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public static void setBoletinDSC(String codigo) {
+        try {
+            bd = new Sql(Var.con);
+            bd.ejecutar("UPDATE " + Var.dbNameBoes + ".boletin SET tipo='*DSC*' WHERE codigo=" + Util.comillas(codigo));
             bd.close();
         } catch (SQLException ex) {
             error(ex.getMessage());
@@ -138,7 +206,7 @@ public class Query extends sql.Query {
         }
         return aux;
     }
-    
+
     public static Publicacion getPublicacion(String codigo) {
         Publicacion aux = null;
         String query = "SELECT * FROM " + Var.dbNameServer + ".publicacion where codigo=" + Util.comillas(codigo);
@@ -170,8 +238,8 @@ public class Query extends sql.Query {
         }
         return aux;
     }
-    
-    public static String getPublicacionData(String codigo){
+
+    public static String getPublicacionData(String codigo) {
         String query = "SELECT datos FROM " + Var.dbNameServer + ".publicacion where codigo=" + Util.comillas(codigo);
         String aux = "";
 
@@ -468,7 +536,7 @@ public class Query extends sql.Query {
         }
         return list;
     }
-    
+
     public static List<Publicacion> listaPublicacion(String query) {
         List<Publicacion> list = new ArrayList();
         Publicacion aux;
@@ -490,7 +558,7 @@ public class Query extends sql.Query {
                 aux.setCve(rs.getString("cve"));
                 aux.setSelected(rs.getBoolean("selected"));
                 aux.setStatus(rs.getString("status"));
-                
+
                 list.add(aux);
             }
             rs.close();
@@ -898,10 +966,10 @@ public class Query extends sql.Query {
 
     public static List listaProcesarPendiente(Date fecha) {
         List list = new ArrayList();
-        String query = "select a.id,a.codigo,b.link,a.isEstructura from "+Var.dbNameBoes+".boletin a "
-                + "left join "+Var.dbNameServer+".publicacion b on a.codigo=b.codigo "
-                + "where a.idBoe=(select id from "+Var.dbNameBoes+".boe where fecha=" + Util.comillas(Dates.imprimeFecha(fecha)) + ") "
-                + "and a.id not in (select id from "+Var.dbNameBoes+".procesar)";
+        String query = "select a.id,a.codigo,b.link,a.isEstructura from " + Var.dbNameBoes + ".boletin a "
+                + "left join " + Var.dbNameServer + ".publicacion b on a.codigo=b.codigo "
+                + "where a.idBoe=(select id from " + Var.dbNameBoes + ".boe where fecha=" + Util.comillas(Dates.imprimeFecha(fecha)) + ") "
+                + "and a.id not in (select id from " + Var.dbNameBoes + ".procesar)";
         Procesar aux;
 
         try {

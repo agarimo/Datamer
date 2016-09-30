@@ -63,11 +63,11 @@
                <children>
                   <VBox fx:id="panelProcesar" alignment="TOP_CENTER" visible="false">
                      <children>
-                        <TableView fx:id="tvProcesar" layoutX="14.0" layoutY="14.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="750.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0" VBox.vgrow="ALWAYS">
+                        <TableView fx:id="tvProcesar" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0" VBox.vgrow="ALWAYS">
                           <columns>
-                            <TableColumn fx:id="clCodigo" maxWidth="400.0" minWidth="250.0" prefWidth="-1.0" resizable="false" text="CÓDIGO" />
-                            <TableColumn fx:id="clEstructura" maxWidth="400.0" minWidth="250.0" prefWidth="-1.0" resizable="false" text="ESTRUCTURA" />
-                              <TableColumn fx:id="clEstado" maxWidth="400.0" minWidth="250.0" prefWidth="-1.0" resizable="false" text="ESTADO" />
+                            <TableColumn fx:id="clCodigo" maxWidth="800.0" minWidth="250.0" prefWidth="-1.0" text="CÓDIGO" />
+                            <TableColumn fx:id="clEstructura" maxWidth="800.0" minWidth="250.0" prefWidth="-1.0" text="ESTRUCTURA" />
+                              <TableColumn fx:id="clEstado" maxWidth="800.0" minWidth="250.0" prefWidth="-1.0" text="ESTADO" />
                           </columns>
                            <contextMenu>
                               <ContextMenu>
@@ -93,6 +93,9 @@
                            <VBox.margin>
                               <Insets />
                            </VBox.margin>
+                           <columnResizePolicy>
+                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
                         </TableView>
                         <AnchorPane>
                            <children>

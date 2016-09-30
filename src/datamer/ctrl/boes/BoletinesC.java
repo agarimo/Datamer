@@ -605,13 +605,13 @@ public class BoletinesC implements Initializable {
             Optional<ButtonType> result = alert.showAndWait();
 
             if (result.get() == ButtonType.OK) {
+                boletinesList.remove(aux);
+                tvBoletines.refresh();
 
                 Thread a = new Thread(() -> {
-                    boletinesList.remove(aux);
                     Query.eliminaBoletin(aux.getCodigo());
                 });
                 Var.executor.execute(a);
-
             }
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);

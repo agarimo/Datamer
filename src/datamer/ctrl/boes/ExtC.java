@@ -106,8 +106,6 @@ public class ExtC implements Initializable {
     @FXML
     private Button btGenerarPdf;
     @FXML
-    private Button btReqObs;
-    @FXML
     private Button btFolderPDF;
     @FXML
     private Button btFolderFiles;
@@ -332,6 +330,53 @@ public class ExtC implements Initializable {
 
                 Platform.runLater(() -> {
                     mostrarPanel(this.procesar_to_wait);
+                    piProgreso.setProgress(-1);
+                    lbProgreso.setText("");
+                    lbProceso.setText("EJECUTANDO SCRIPT REQ/OBS");
+                });
+
+                ScriptReq sr = new ScriptReq(fecha);
+                sr.run();
+
+                Platform.runLater(() -> {
+                    lbProgreso.setText("");
+                    lbProceso.setText("EJECUTANDO SCRIPT EXPEDIENTE");
+                });
+                ScriptExp se = new ScriptExp(fecha);
+                se.run();
+
+                Platform.runLater(() -> {
+                    lbProgreso.setText("");
+                    lbProceso.setText("EJECUTANDO SCRIPT FASE");
+                });
+                ScriptFase sf = new ScriptFase();
+                sf.run();
+
+                Platform.runLater(() -> {
+                    lbProgreso.setText("");
+                    lbProceso.setText("EJECUTANDO SCRIPT ORIGEN");
+                });
+                ScriptOrigen so = new ScriptOrigen(fecha);
+                so.run();
+
+                Platform.runLater(() -> {
+                    lbProgreso.setText("");
+                    lbProceso.setText("EJECUTANDO SCRIPT ARTICULO");
+                });
+                ScriptArticulo sa = new ScriptArticulo();
+                sa.run();
+
+                Platform.runLater(() -> {
+                    piProgreso.setProgress(1);
+                    lbProgreso.setText("");
+                    lbProceso.setText("");
+                    mostrarPanel(this.wait_to_procesar);
+
+                    cambioEnDatePicker(new ActionEvent());
+                });
+
+                Platform.runLater(() -> {
+                    mostrarPanel(this.procesar_to_wait);
                     btGenerarArchivos.setDisable(true);
                     piProgreso.setProgress(-1);
                     lbProgreso.setText("");
@@ -512,7 +557,7 @@ public class ExtC implements Initializable {
         final ObservableList<ModeloPreview> ls2 = tvPreview.getSelectionModel().getSelectedItems();
         ls2.addListener(selectorTablaPreview);
     }
-    
+
     private void initializeIcons() {
         String green = "#008000";
         String red = "#FF0000";
@@ -526,9 +571,9 @@ public class ExtC implements Initializable {
         text = GlyphsDude.createIcon(MaterialIcon.FOLDER, "16");
         text.setFill(Paint.valueOf(orange));
         btFolderFiles.setGraphic(text);
-        
-        btReqObs.setVisible(false);
-        btReqObs.setManaged(false);
+
+//        btReqObs.setVisible(false);
+//        btReqObs.setManaged(false);
 //
 //        text = GlyphsDude.createIcon(MaterialIcon.CACHED, "32");
 //        text.setFill(Paint.valueOf(orange));
@@ -693,7 +738,6 @@ public class ExtC implements Initializable {
 
     @FXML
     void verNotas(ActionEvent event) {
-
         popOver = new PopOver();
         popOver.setDetachable(false);
         popOver.setDetached(false);
@@ -1015,66 +1059,6 @@ public class ExtC implements Initializable {
     }
 
     @FXML
-    void reqObs(ActionEvent event) {
-        Date fecha = Dates.asDate(dpFecha.getValue());
-
-        if (fecha != null) {
-            Thread a = new Thread(() -> {
-
-                Platform.runLater(() -> {
-                    mostrarPanel(this.procesar_to_wait);
-                    btReqObs.setDisable(true);
-                    piProgreso.setProgress(-1);
-                    lbProgreso.setText("");
-                    lbProceso.setText("EJECUTANDO SCRIPT REQ/OBS");
-                });
-
-                ScriptReq sr = new ScriptReq(fecha);
-                sr.run();
-
-                Platform.runLater(() -> {
-                    lbProgreso.setText("");
-                    lbProceso.setText("EJECUTANDO SCRIPT EXPEDIENTE");
-                });
-                ScriptExp se = new ScriptExp(fecha);
-                se.run();
-
-                Platform.runLater(() -> {
-                    lbProgreso.setText("");
-                    lbProceso.setText("EJECUTANDO SCRIPT FASE");
-                });
-                ScriptFase sf = new ScriptFase();
-                sf.run();
-
-                Platform.runLater(() -> {
-                    lbProgreso.setText("");
-                    lbProceso.setText("EJECUTANDO SCRIPT ORIGEN");
-                });
-                ScriptOrigen so = new ScriptOrigen(fecha);
-                so.run();
-
-                Platform.runLater(() -> {
-                    lbProgreso.setText("");
-                    lbProceso.setText("EJECUTANDO SCRIPT ARTICULO");
-                });
-                ScriptArticulo sa = new ScriptArticulo();
-                sa.run();
-
-                Platform.runLater(() -> {
-                    piProgreso.setProgress(1);
-                    lbProgreso.setText("");
-                    lbProceso.setText("");
-                    btReqObs.setDisable(false);
-                    mostrarPanel(this.wait_to_procesar);
-
-                    cambioEnDatePicker(new ActionEvent());
-                });
-            });
-            Var.executor.execute(a);
-        }
-    }
-
-    @FXML
     void resetearEstado(ActionEvent event) {
         ModeloProcesar aux = (ModeloProcesar) tvProcesar.getSelectionModel().getSelectedItem();
         Procesar pr = Query.getProcesar(aux.getCodigo());
@@ -1102,7 +1086,6 @@ public class ExtC implements Initializable {
     void switchControles(boolean aux) {
         dpFecha.setDisable(aux);
         btGenerarPdf.setDisable(aux);
-        btReqObs.setDisable(aux);
         btFolderPDF.setDisable(aux);
         btProcesar.setDisable(aux);
         btFolderFiles.setDisable(aux);
@@ -1157,13 +1140,13 @@ public class ExtC implements Initializable {
 
                         if (notasC.setNota(aux.getEstructura())) {
                             btNotas.setText("VER NOTAS");
-                            btNotas.setTextFill(Color.ORANGE);
+                            btNotas.setTextFill(Color.ORANGERED);
                         } else {
                             btNotas.setText("CREAR NOTA");
                             btNotas.setTextFill(Color.GREEN);
                         }
                     }
-                }else{
+                } else {
                     btNotas.setVisible(false);
                 }
 

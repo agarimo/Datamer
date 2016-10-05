@@ -38,7 +38,7 @@
                      </font>
                   </Label>
                   <Button fx:id="btProcesar" layoutX="14.0" layoutY="365.0" mnemonicParsing="false" onAction="#procesar" prefHeight="30.0" prefWidth="150.0" text="Procesar" />
-                  <Button fx:id="btReqObs" layoutX="14.0" layoutY="405.0" mnemonicParsing="false" onAction="#reqObs" prefHeight="30.0" prefWidth="150.0" text="Req/Obs" />
+                  <Button fx:id="btReqObs" layoutX="14.0" layoutY="405.0" mnemonicParsing="false" onAction="#reqObs" prefHeight="30.0" prefWidth="150.0" text="Req / Obs" />
                   <Separator prefWidth="200.0" />
                   <Button fx:id="btPreview" layoutX="14.0" layoutY="264.0" mnemonicParsing="false" onAction="#previsualizar" prefHeight="30.0" prefWidth="150.0" text="Previsualizar Extracción" />
                   <Separator layoutX="14.0" layoutY="335.0" prefWidth="200.0" />
@@ -47,16 +47,43 @@
                         <Font name="System Bold" size="12.0" />
                      </font>
                   </Label>
-                  <Button fx:id="btGenerarPdf" layoutX="14.0" layoutY="60.0" mnemonicParsing="false" onAction="#generarPdf" prefHeight="30.0" prefWidth="150.0" text="Generar PDFs" />
-                  <Button fx:id="btAbrirCarpeta" layoutX="14.0" layoutY="100.0" mnemonicParsing="false" onAction="#abrirCarpeta" prefHeight="30.0" prefWidth="150.0" text="Abrir Carpeta PDF" />
-                  <Separator layoutX="14.0" layoutY="514.0" prefWidth="200.0" />
+                  <HBox spacing="5.0">
+                     <children>
+                        <Button fx:id="btGenerarPdf" mnemonicParsing="false" onAction="#generarPdf" prefHeight="30.0" prefWidth="115.0" text="Generar" HBox.hgrow="ALWAYS" />
+                        <Button fx:id="btFolderPDF" mnemonicParsing="false" onAction="#abrirCarpeta" prefHeight="30.0" prefWidth="30.0" HBox.hgrow="ALWAYS" />
+                     </children>
+                  </HBox>
+                  <Separator layoutX="14.0" layoutY="514.0" prefWidth="200.0">
+                     <VBox.margin>
+                        <Insets top="5.0" />
+                     </VBox.margin></Separator>
                   <Label text="ARCHIVOS">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>
                   </Label>
-                  <Button fx:id="btGenerarArchivos" layoutX="14.0" layoutY="445.0" mnemonicParsing="false" onAction="#generarArchivos" prefHeight="30.0" prefWidth="150.0" text="Generar Archivos" />
-                  <Button fx:id="btAbrirCarpetaAr" layoutX="14.0" layoutY="484.0" mnemonicParsing="false" onAction="#abrirCarpetaAr" prefHeight="30.0" prefWidth="150.0" text="Abrir Carpeta Generados" />
+                  <HBox spacing="5.0">
+                     <children>
+                        <Button fx:id="btGenerarArchivos" mnemonicParsing="false" onAction="#generarArchivos" prefHeight="30.0" prefWidth="115.0" text="Generar" />
+                        <Button fx:id="btFolderFiles" mnemonicParsing="false" onAction="#abrirCarpetaAr" prefHeight="30.0" prefWidth="30.0" />
+                     </children>
+                  </HBox>
+                  <Separator prefWidth="200.0">
+                     <VBox.margin>
+                        <Insets top="5.0" />
+                     </VBox.margin>
+                  </Separator>
+                  <Label text="NOTAS">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <Button fx:id="btNotas" mnemonicParsing="false" onAction="#verNotas" prefHeight="30.0" prefWidth="150.0" text="Ver nota" />
+                  <Separator prefWidth="200.0">
+                     <VBox.margin>
+                        <Insets top="5.0" />
+                     </VBox.margin>
+                  </Separator>
                </children>
             </VBox>
             <StackPane fx:id="spTablas" minHeight="-Infinity" minWidth="-Infinity" prefHeight="560.0" prefWidth="815.0" AnchorPane.bottomAnchor="-2.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">

@@ -2,6 +2,7 @@ package datamer.ctrl.boes;
 
 import datamer.Var;
 import datamer.ctrl.boes.boe.Boe;
+import datamer.model.Nota;
 import datamer.model.boes.ModeloBoes;
 import datamer.model.boes.enty.ReqObs;
 import datamer.model.boes.ModeloBoletines;
@@ -38,23 +39,19 @@ import tools.Util;
  */
 public class Query extends sql.Query {
 
-    public static boolean isNota(int estructura) {
+    public static void ejecutar(String query) {
         try {
-            int a;
             bd = new Sql(Var.con);
-            a = bd.buscar("SELECT id FROM " + Var.dbNameBoes + ".notas where id=" + estructura);
+            bd.ejecutar(query);
             bd.close();
-
-            return a > 0;
         } catch (SQLException ex) {
             error(ex.getMessage());
             Logger.getLogger(Query.class.getName()).log(Level.SEVERE, null, ex);
-            return false;
         }
     }
 
-    public static String getNota(int estructura) {
-        String aux = null;
+    public static Nota getNota(int estructura) {
+        Nota aux = null;
         String query = "SELECT datos FROM " + Var.dbNameBoes + ".notas where id=" + estructura;
 
         try {
@@ -62,8 +59,10 @@ public class Query extends sql.Query {
             rs = bd.ejecutarQueryRs(query);
 
             if (rs.next()) {
-                aux = rs.getString("datos");
+                aux = new Nota(estructura);
+                aux.setDatos(rs.getString("datos"));
             }
+
             rs.close();
             bd.close();
         } catch (SQLException ex) {
@@ -71,28 +70,6 @@ public class Query extends sql.Query {
             Logger.getLogger(Query.class.getName()).log(Level.SEVERE, null, ex);
         }
         return aux;
-    }
-
-    public static void setNota(String datos, int estructura) {
-        try {
-            bd = new Sql(Var.con);
-            bd.ejecutar("UPDATE " + Var.dbNameBoes + ".notas SET datos=" + Util.comillas(datos) + " where id=" + estructura);
-            bd.close();
-        } catch (SQLException ex) {
-            error(ex.getMessage());
-            Logger.getLogger(Query.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    public static void eliminaNota(int estructura) {
-        try {
-            bd = new Sql(Var.con);
-            bd.ejecutar("DELETE FROM " + Var.dbNameBoes + ".notas where id=" + estructura);
-            bd.close();
-        } catch (SQLException ex) {
-            error(ex.getMessage());
-            Logger.getLogger(Query.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 
     public static void eliminaBoletin(String codigo) {
@@ -1159,4 +1136,5 @@ public class Query extends sql.Query {
         }
         return aux;
     }
+
 }

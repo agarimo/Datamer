@@ -1,6 +1,7 @@
 package datamer.ctrl.boes;
 
 import datamer.Var;
+import datamer.ctrl.NotasC;
 import datamer.ctrl.boes.ext.BB0;
 import datamer.ctrl.boes.ext.INS;
 import datamer.ctrl.boes.ext.Extraccion;
@@ -15,6 +16,8 @@ import datamer.model.boes.ModeloPreview;
 import datamer.model.boes.ModeloProcesar;
 import datamer.model.boes.enty.Multa;
 import datamer.model.boes.enty.Procesar;
+import de.jensd.fx.glyphs.GlyphsDude;
+import de.jensd.fx.glyphs.materialicons.MaterialIcon;
 import tools.Download;
 import java.awt.Desktop;
 import java.io.File;
@@ -40,9 +43,11 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -56,7 +61,10 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import javafx.scene.text.Text;
 import javafx.util.Duration;
+import org.controlsfx.control.PopOver;
 import tools.Dates;
 import sql.Sql;
 import tools.Util;
@@ -66,6 +74,10 @@ import tools.Util;
  * @author Agarimo
  */
 public class ExtC implements Initializable {
+
+    Node notas;
+    NotasC notasC;
+    PopOver popOver;
 
     int PanelPreview = 1;
     int PanelProcesar = 2;
@@ -96,13 +108,15 @@ public class ExtC implements Initializable {
     @FXML
     private Button btReqObs;
     @FXML
-    private Button btAbrirCarpeta;
+    private Button btFolderPDF;
     @FXML
-    private Button btAbrirCarpetaAr;
+    private Button btFolderFiles;
     @FXML
     private Button btProcesar;
     @FXML
     private Button btForzarProcesar;
+    @FXML
+    private Button btNotas;
     @FXML
     private TableView tvProcesar;
     @FXML
@@ -486,14 +500,55 @@ public class ExtC implements Initializable {
         panelProcesar.setVisible(true);
         panelEspera.setOpacity(0.0);
         panelEspera.setVisible(false);
+        btNotas.setVisible(false);
+        initializeIcons();
         iniciarTablaProcesar();
         iniciarTablaPreview();
+        iniciarNotas();
 
         final ObservableList<ModeloProcesar> ls1 = tvProcesar.getSelectionModel().getSelectedItems();
         ls1.addListener(selectorTablaProcesar);
 
         final ObservableList<ModeloPreview> ls2 = tvPreview.getSelectionModel().getSelectedItems();
         ls2.addListener(selectorTablaPreview);
+    }
+    
+    private void initializeIcons() {
+        String green = "#008000";
+        String red = "#FF0000";
+        String orange = "#FFA500";
+        Text text;
+
+        text = GlyphsDude.createIcon(MaterialIcon.FOLDER, "16");
+        text.setFill(Paint.valueOf(orange));
+        btFolderPDF.setGraphic(text);
+
+        text = GlyphsDude.createIcon(MaterialIcon.FOLDER, "16");
+        text.setFill(Paint.valueOf(orange));
+        btFolderFiles.setGraphic(text);
+        
+        btReqObs.setVisible(false);
+        btReqObs.setManaged(false);
+//
+//        text = GlyphsDude.createIcon(MaterialIcon.CACHED, "32");
+//        text.setFill(Paint.valueOf(orange));
+//        btRecargarClasificacion.setGraphic(text);
+//
+//        GlyphsDude.setIcon(btSelectAll, MaterialIcon.PLAYLIST_ADD, "32");
+//        GlyphsDude.setIcon(btRecoverS, MaterialIcon.INPUT, "32");
+//        GlyphsDude.setIcon(btRecoverD, MaterialIcon.INPUT, "32");
+//        GlyphsDude.setIcon(btVerBoletinC, MaterialIcon.FIND_IN_PAGE, "32");
+    }
+
+    private void iniciarNotas() {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            notas = loader.load(getClass().getResourceAsStream("/datamer/view/Notas.fxml"));
+            notasC = loader.getController();
+            notasC.setController(this);
+        } catch (IOException ex) {
+            Logger.getLogger(ExtC.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private void iniciarTablaPreview() {
@@ -627,17 +682,35 @@ public class ExtC implements Initializable {
             };
         });
 
-//        clCodigo.prefWidthProperty().bind(tvProcesar.widthProperty().multiply(0.34));
-//        clEstructura.prefWidthProperty().bind(tvProcesar.widthProperty().multiply(0.33));
-//        clEstado.prefWidthProperty().bind(tvProcesar.widthProperty().multiply(0.32));
-        
         tvProcesar.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        clCodigo.setMaxWidth(1f * Integer.MAX_VALUE * 40); 
-        clEstructura.setMaxWidth(1f * Integer.MAX_VALUE * 40); 
-        clEstado.setMaxWidth(1f * Integer.MAX_VALUE * 20); 
+        clCodigo.setMaxWidth(1f * Integer.MAX_VALUE * 40);
+        clEstructura.setMaxWidth(1f * Integer.MAX_VALUE * 40);
+        clEstado.setMaxWidth(1f * Integer.MAX_VALUE * 20);
 
         procesarList = FXCollections.observableArrayList();
         tvProcesar.setItems(procesarList);
+    }
+
+    @FXML
+    void verNotas(ActionEvent event) {
+
+        popOver = new PopOver();
+        popOver.setDetachable(false);
+        popOver.setDetached(false);
+        popOver.arrowSizeProperty().setValue(12);
+        popOver.arrowIndentProperty().setValue(13);
+        popOver.arrowLocationProperty().setValue(PopOver.ArrowLocation.LEFT_BOTTOM);
+        popOver.cornerRadiusProperty().setValue(7);
+        popOver.headerAlwaysVisibleProperty().setValue(false);
+        popOver.setAnimated(true);
+
+        popOver.setContentNode(notas);
+        popOver.show(btNotas);
+    }
+
+    public void cerrarPopOver() {
+        popOver.hide();
+        tvProcesar.getSelectionModel().clearSelection();
     }
 
     @FXML
@@ -739,7 +812,7 @@ public class ExtC implements Initializable {
         Optional<ButtonType> result = alert.showAndWait();
 
         if (result.get() == ButtonType.OK) {
-            procesarRun(); 
+            procesarRun();
         }
     }
 
@@ -1030,9 +1103,9 @@ public class ExtC implements Initializable {
         dpFecha.setDisable(aux);
         btGenerarPdf.setDisable(aux);
         btReqObs.setDisable(aux);
-        btAbrirCarpeta.setDisable(aux);
+        btFolderPDF.setDisable(aux);
         btProcesar.setDisable(aux);
-        btAbrirCarpetaAr.setDisable(aux);
+        btFolderFiles.setDisable(aux);
         btGenerarArchivos.setDisable(aux);
     }
 
@@ -1074,7 +1147,26 @@ public class ExtC implements Initializable {
      */
     private final ListChangeListener<ModeloProcesar> selectorTablaProcesar
             = (ListChangeListener.Change<? extends ModeloProcesar> c) -> {
-//                cargaDatosFase();
+                ModeloProcesar aux = (ModeloProcesar) tvProcesar.getSelectionModel().getSelectedItem();
+
+                if (aux != null) {
+                    if (aux.getEstructura() == -1) {
+                        btNotas.setVisible(false);
+                    } else {
+                        btNotas.setVisible(true);
+
+                        if (notasC.setNota(aux.getEstructura())) {
+                            btNotas.setText("VER NOTAS");
+                            btNotas.setTextFill(Color.ORANGE);
+                        } else {
+                            btNotas.setText("CREAR NOTA");
+                            btNotas.setTextFill(Color.GREEN);
+                        }
+                    }
+                }else{
+                    btNotas.setVisible(false);
+                }
+
             };
 
     /**

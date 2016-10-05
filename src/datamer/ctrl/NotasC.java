@@ -5,7 +5,9 @@
  */
 package datamer.ctrl;
 
-import datamer.Var;
+import datamer.ctrl.boes.ExtC;
+import datamer.ctrl.boes.Query;
+import datamer.model.Nota;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -21,59 +23,78 @@ import javafx.scene.control.TextArea;
  * @author agari
  */
 public class NotasC implements Initializable {
-    
-    private int estructura;
-    
+
+    private ExtC controller;
+
+    private Nota nota;
+
     @FXML
     private TextArea textArea;
-    
+
     @FXML
     private Button btCerrar;
-    
+
     @FXML
     private Button btBorrar;
-    
+
     @FXML
     private Label lbEstructura;
-    
 
     /**
      * Initializes the controller class.
+     *
      * @param url
      * @param rb
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        estructura = 0;
+        nota = null;
         textArea.setText("");
         lbEstructura.setText("");
     }
 
-    public void setEstructura(int a){
-        lbEstructura.setText("Estructura - "+a);
-        textArea.setText(getData(a));
+    public void setController(ExtC controller) {
+        this.controller = controller;
     }
-    
-    private String getData(int a){
-        return "";
-    }
-    
-    private void setData(String data){
-        if(data==null){
-            
-        }else{
-            
+
+    public boolean setNota(int a) {
+        nota = Query.getNota(a);
+
+        if (nota != null) {
+            lbEstructura.setText("Estructura - " + nota.getId());
+            textArea.setText(nota.getDatos());
+            return true;
+        } else {
+            nota = new Nota(a);
+            lbEstructura.setText("Estructura - " + a);
+            textArea.setText("");
+            return false;
         }
     }
-    
+
+    private void setData(String data) {
+        String query;
+
+        if (data == null) {
+            query = nota.SQLEliminar();
+        } else {
+            nota.setDatos(data);
+            query = nota.SQLCrear();
+        }
+
+        Query.ejecutar(query);
+    }
+
     @FXML
-    void cerrar(ActionEvent event){
+    void cerrar(ActionEvent event) {
         String data = textArea.getText();
         setData(data);
+        controller.cerrarPopOver();
     }
-    
+
     @FXML
-    void borrar(ActionEvent event){
+    void borrar(ActionEvent event) {
         setData(null);
+        controller.cerrarPopOver();
     }
 }

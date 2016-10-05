@@ -204,13 +204,9 @@ public class ClasificacionC implements Initializable {
         });
 
         tvBoes.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        codigoCL.setMaxWidth(1f * Integer.MAX_VALUE * 10); 
-        origenCL.setMaxWidth(1f * Integer.MAX_VALUE * 20); 
-        descripcionCL.setMaxWidth(1f * Integer.MAX_VALUE * 70); 
-
-//        codigoCL.prefWidthProperty().bind(tvBoes.widthProperty().multiply(0.10));
-//        origenCL.prefWidthProperty().bind(tvBoes.widthProperty().multiply(0.20));
-//        descripcionCL.prefWidthProperty().bind(tvBoes.widthProperty().multiply(0.67));
+        codigoCL.setMaxWidth(1f * Integer.MAX_VALUE * 10);
+        origenCL.setMaxWidth(1f * Integer.MAX_VALUE * 20);
+        descripcionCL.setMaxWidth(1f * Integer.MAX_VALUE * 70);
 
         publicacion = FXCollections.observableArrayList();
         tvBoes.setItems(publicacion);
@@ -326,9 +322,10 @@ public class ClasificacionC implements Initializable {
                 aux.setStatus(Status.USER);
                 aux.setSelected(true);
                 selectedList.add(0, aux);
-                publicacion.remove(aux);
                 selectedCount++;
             }
+            
+            publicacion.clear();
             setContadores();
         }
     }

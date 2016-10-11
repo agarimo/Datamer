@@ -93,14 +93,20 @@ public class WinC implements Initializable {
 
     private ClientSocket client;
     private boolean keepRefresh;
+    private boolean isConected;
     PopOver popOver;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         initTable();
+        System.out.print(".");
         prepareSlideMenuAnimation();
-        initSocketClient();
-        initRefresh();
+        System.out.print(".");
+        if (initSocketClient()) {
+            System.out.print(".");
+            initRefresh();
+            System.out.print(".");
+        }
     }
 
     public void initTable() {
@@ -195,16 +201,27 @@ public class WinC implements Initializable {
 
     }
 
-    private void initSocketClient() {
-        client = new ClientSocket();
-        client.setHost(Var.socketClientHost);
-        client.setPort(Var.socketClientPort);
-        if (client.conect()) {
+    private boolean initSocketClient() {
+        try {
+            client = new ClientSocket();
+            client.setHost(Var.socketClientHost);
+            client.setPort(Var.socketClientPort);
+
+            client.conect();
             serverStatus.setText("On-Line");
             conected.setFill(Color.GREENYELLOW);
-        } else {
+            isConected = true;
+            taskButton.setDisable(false);
+            return true;
+
+        } catch (IOException | ClassNotFoundException ex) {
+            System.out.println("Error en conexión - " + ex.getMessage());
             serverStatus.setText("Off-Line");
             conected.setFill(Color.RED);
+            isConected = false;
+            taskButton.setDisable(true);
+            taskStatus.setText("Sin conexión");
+            return false;
         }
     }
 
@@ -288,10 +305,15 @@ public class WinC implements Initializable {
     @FXML
     void exitApp(ActionEvent event) {
         keepRefresh = false;
-        if (client.disconect()) {
-            serverStatus.setText("Off-Line");
-            conected.setFill(Color.RED);
+
+        if (isConected) {
+            if (client.disconect()) {
+                serverStatus.setText("Off-Line");
+                conected.setFill(Color.RED);
+                isConected = false;
+            }
         }
+
         Var.executor.shutdown();
         Platform.exit();
     }

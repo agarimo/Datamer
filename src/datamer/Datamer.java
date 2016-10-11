@@ -17,11 +17,6 @@ public class Datamer extends Application {
     @Override
     public void init() {
         Var.initVar();
-//        try {
-//            Thread.sleep(5000);
-//        } catch (InterruptedException ex) {
-//            Logger.getLogger(Datamer.class.getName()).log(Level.SEVERE, null, ex);
-//        }
     }
 
     @Override
@@ -32,7 +27,6 @@ public class Datamer extends Application {
         Parent root = loader.load(getClass().getResourceAsStream("/datamer/view/Win.fxml"));
         Var.mainController = loader.getController();
 
-//        Parent root = FXMLLoader.load(getClass().getResource("/datamer/view/Win.fxml"));
         Image icon = new Image(getClass().getResourceAsStream("/datamer/resources/DeathStar.png"));
         Var.stage.getIcons().add(icon);
         Var.stage.setTitle("DataFest 1.2");

@@ -439,6 +439,7 @@ public class ExtC implements Initializable {
 
                     try {
                         Download.downloadFILE(aux.getLink(), destino);
+
                     } catch (IOException ex) {
                         Logger.getLogger(ExtC.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -559,17 +560,14 @@ public class ExtC implements Initializable {
     }
 
     private void initializeIcons() {
-        String green = "#008000";
-        String red = "#FF0000";
-        String orange = "#FFA500";
         Text text;
 
         text = GlyphsDude.createIcon(MaterialIcon.FOLDER, "16");
-        text.setFill(Paint.valueOf(orange));
+        text.setFill(Color.DARKORANGE);
         btFolderPDF.setGraphic(text);
 
         text = GlyphsDude.createIcon(MaterialIcon.FOLDER, "16");
-        text.setFill(Paint.valueOf(orange));
+        text.setFill(Color.DARKORANGE);
         btFolderFiles.setGraphic(text);
 
 //        btReqObs.setVisible(false);

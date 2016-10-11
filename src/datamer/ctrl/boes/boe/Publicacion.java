@@ -80,21 +80,6 @@ public class Publicacion {
         }
     }
 
-    public void listarPdf() {
-        Pdf pd;
-        Iterator it = pdfs.iterator();
-
-        while (it.hasNext()) {
-            pd = (Pdf) it.next();
-            System.out.println(pd.getEntidad());
-            System.out.println(pd.getCodigo());
-            System.out.println(pd.getOrigen());
-            System.out.println(pd.getDescripcion());
-            System.out.println(pd.getLink());
-            System.out.println("------------------------------------------------");
-        }
-    }
-
     public String getOrigen() {
         return origen;
     }

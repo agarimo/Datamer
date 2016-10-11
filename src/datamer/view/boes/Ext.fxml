@@ -38,7 +38,6 @@
                      </font>
                   </Label>
                   <Button fx:id="btProcesar" layoutX="14.0" layoutY="365.0" mnemonicParsing="false" onAction="#procesar" prefHeight="30.0" prefWidth="150.0" text="Procesar" />
-                  <Button fx:id="btReqObs" layoutX="14.0" layoutY="405.0" mnemonicParsing="false" onAction="#reqObs" prefHeight="30.0" prefWidth="150.0" text="Req / Obs" />
                   <Separator prefWidth="200.0" />
                   <Button fx:id="btPreview" layoutX="14.0" layoutY="264.0" mnemonicParsing="false" onAction="#previsualizar" prefHeight="30.0" prefWidth="150.0" text="Previsualizar Extracción" />
                   <Separator layoutX="14.0" layoutY="335.0" prefWidth="200.0" />
@@ -88,7 +87,7 @@
             </VBox>
             <StackPane fx:id="spTablas" minHeight="-Infinity" minWidth="-Infinity" prefHeight="560.0" prefWidth="815.0" AnchorPane.bottomAnchor="-2.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <VBox fx:id="panelProcesar" alignment="TOP_CENTER" visible="false">
+                  <VBox fx:id="panelProcesar" alignment="TOP_CENTER">
                      <children>
                         <TableView fx:id="tvProcesar" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0" VBox.vgrow="ALWAYS">
                           <columns>
@@ -131,7 +130,7 @@
                         </AnchorPane>
                      </children>
                   </VBox>
-                  <VBox fx:id="panelPreview" alignment="TOP_CENTER">
+                  <VBox fx:id="panelPreview" alignment="TOP_CENTER" visible="false">
                      <children>
                         <TableView fx:id="tvPreview" layoutX="14.0" layoutY="14.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="460.0" prefWidth="782.0" tableMenuButtonVisible="true" AnchorPane.bottomAnchor="86.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0" VBox.vgrow="ALWAYS">
                            <columns>

@@ -70,15 +70,33 @@ public class Var {
     public static String dbNameServer = "server";
     public static String dbNameBoes = "boes";
 
+    
+    /**
+     * Fichero principal datos de programa.
+     */
     public static File fileSystem;
-    public static File ficheroPdf;
+    
+    /**
+     * Fichero remoto datos de programa.
+     */
+    public static File fileRemote;
+    
+    /**
+     * Fichero almacenaje salida de datos (BB0,BB1).
+     */
     public static File ficheroTxt;
+    
+    /**
+     * Fichero almacenaje PDF y Excell.
+     */
     public static File ficheroEx;
+    
+    /**
+     * Fichero almacenaje Union.
+     */
     public static File ficheroUnion;
 
-    public static boolean boesIsDownloading;
-    public static boolean boesIsClasificando;
-
+    
     /**
      * TKM
      */
@@ -108,8 +126,6 @@ public class Var {
         initVarFiles();
         initVarStrucFecha();
         initVarKeyStore();
-        boesIsClasificando = false;
-        boesIsDownloading = false;
         executor = Executors.newFixedThreadPool(4);
     }
 
@@ -123,9 +139,9 @@ public class Var {
 
     private static void initVarFiles() {
         fileSystem = new File("data");
+        fileRemote = new File("////SERVER/Domain$/appData");
         fichero = new File(fileSystem, "testraData");
         temporal = new File(fileSystem, "temp.txt");
-        ficheroPdf = new File(fileSystem, "pdfData");
         ficheroTxt = new File(fileSystem, "txtData");
         ficheroEx = new File(fileSystem, "exData");
         ficheroUnion = new File(fileSystem, "unionData");
@@ -134,9 +150,6 @@ public class Var {
             fileSystem.mkdirs();
         }
 
-        if (!ficheroPdf.exists()) {
-            ficheroPdf.mkdirs();
-        }
         if (!ficheroTxt.exists()) {
             ficheroTxt.mkdirs();
         }
@@ -166,7 +179,6 @@ public class Var {
 
         System.setProperty("javax.net.ssl.keyStore", "keystore");
         System.setProperty("javax.net.ssl.keyStorePassword", "Carras-24");
-//        System.setProperty("javax.net.ssl.keyStoreType", "JKS");
     }
 
     private static void initVarStrucFecha() {

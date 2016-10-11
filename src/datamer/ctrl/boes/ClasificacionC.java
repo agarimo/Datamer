@@ -324,7 +324,7 @@ public class ClasificacionC implements Initializable {
                 selectedList.add(0, aux);
                 selectedCount++;
             }
-            
+
             publicacion.clear();
             setContadores();
         }
@@ -354,7 +354,6 @@ public class ClasificacionC implements Initializable {
     @FXML
     void procesar(ActionEvent event) {
         if (publicacion.isEmpty()) {
-            Var.boesIsClasificando = false;
             procesarTask();
         } else {
             Alert alert = new Alert(AlertType.INFORMATION);
@@ -365,7 +364,6 @@ public class ClasificacionC implements Initializable {
             Optional<ButtonType> result = alert.showAndWait();
 
             if (result.get() == ButtonType.OK) {
-                Var.boesIsClasificando = false;
                 procesarTask();
             }
         }
@@ -541,7 +539,6 @@ public class ClasificacionC implements Initializable {
                 });
 
                 List list = Query.listaModeloBoes(query);
-                Var.boesIsClasificando = true;
 
                 Platform.runLater(() -> {
                     tableLoadData(list);

@@ -588,7 +588,7 @@ public class ExtC implements Initializable {
             FXMLLoader loader = new FXMLLoader();
             notas = loader.load(getClass().getResourceAsStream("/datamer/view/Notas.fxml"));
             notasC = loader.getController();
-            notasC.setController(this);
+            notasC.setParentController(this);
         } catch (IOException ex) {
             Logger.getLogger(ExtC.class.getName()).log(Level.SEVERE, null, ex);
         }

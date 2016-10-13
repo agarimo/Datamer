@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import datamer.Regex;
+import tools.Regex;
 import datamer.Var;
 import tools.CalculaNif;
 import tools.Dates;

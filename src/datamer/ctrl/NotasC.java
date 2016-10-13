@@ -53,7 +53,7 @@ public class NotasC implements Initializable {
         lbEstructura.setText("");
     }
 
-    public void setController(ExtC controller) {
+    public void setParentController(ExtC controller) {
         this.controller = controller;
     }
 

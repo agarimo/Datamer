@@ -12,7 +12,6 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
-import datamer.Regex;
 import datamer.Var;
 import datamer.ctrl.boes.Query;
 import org.apache.poi.ss.usermodel.Cell;
@@ -49,7 +48,6 @@ public class XLSXProcess {
     }
 
     public List<Multa> splitXLSX() {
-        Regex rx = new Regex();
         List<Multa> multas = new ArrayList();
         String estructura = Query.getEstructura(pr.getEstructura());
         Multa multa;
@@ -79,7 +77,6 @@ public class XLSXProcess {
                 } catch (IndexOutOfBoundsException ex) {
                     multa = new Multa();
                     multas.add(multa);
-//                    ex.printStackTrace();
                 }
             }
         }

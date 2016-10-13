@@ -41,7 +41,6 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TitledPane;
-import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -51,6 +50,7 @@ import javafx.scene.text.Text;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import sql.Sql;
+import tools.Files;
 import tools.Util;
 
 /**
@@ -123,11 +123,9 @@ public class ClasificacionC implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         initializeIcons();
-        Tooltip a = new Tooltip();
-        a.setText("Seleccionar todos");
-        btSelectAll.setTooltip(a);
         initializeTable();
         initializeClear();
+        
         autoScroll = true;
         cbAutoScroll.setSelected(autoScroll);
         setProcesandoC(false);
@@ -333,12 +331,8 @@ public class ClasificacionC implements Initializable {
     @FXML
     void pdfShow(ActionEvent event) {
         ModeloBoes aux = tvBoes.getSelectionModel().getSelectedItem();
-        LoadFile.writeFile(Var.temporal, Query.getPublicacionData(aux.getCodigo()));
-        try {
-            Desktop.getDesktop().browse(Var.temporal.toURI());
-        } catch (IOException ex) {
-            LOG.error("[pdfShowOnWeb]" + ex);
-        }
+        LoadFile.writeFile(Var.temporalTxt, Query.getPublicacionData(aux.getCodigo()));
+        Files.openFile(Var.temporalTxt);
     }
 
     @FXML

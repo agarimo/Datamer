@@ -1,11 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package datamer.ctrl;
 
-import datamer.Var;
 import java.net.InetAddress;
 import java.net.URL;
 import java.net.UnknownHostException;
@@ -35,6 +29,8 @@ import socket.enty.ServerTask;
  * @author Agarimo
  */
 public class LaunchTaskC implements Initializable {
+    
+    private WinC mainController;
 
     @FXML
     private Accordion acordeon;
@@ -110,6 +106,10 @@ public class LaunchTaskC implements Initializable {
         mt.setFechaInicio(LocalDateTime.now());
         listado.add(mt);
     }
+    
+    public void setParentController(WinC mainController){
+        this.mainController=mainController;
+    }
 
     private ModeloTarea getData() {
         ModeloTarea mt = lista.getSelectionModel().getSelectedItem();
@@ -135,7 +135,7 @@ public class LaunchTaskC implements Initializable {
         ModeloTarea mt = getData();
 
         if (mt != null) {
-            Var.mainController.launchTask(mt);
+            mainController.launchTask(mt);
         } else {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("ERROR");

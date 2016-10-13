@@ -63,6 +63,9 @@ public class Insercion {
             bd.ejecutar(bol.SQLUpdateData(getDatos(aux.getLink())));
             bd.ejecutar(bol.SQLCrear());
             bd.close();
+            
+            //COMPROBAR EXISTENCIA CARPETA DE DÍA.
+            //COPIAR ARCHIVO A SERVER.
 
         } catch (SQLException ex) {
             Logger.getLogger(Insercion.class.getName()).log(Level.SEVERE, null, ex);

@@ -1,10 +1,11 @@
 package datamer.ctrl;
 
-import datamer.Nav;
+import static datamer.Modulos.*;
 import datamer.Var;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -50,6 +51,7 @@ import socket.enty.ServerResponse;
  */
 public class WinC implements Initializable {
 
+    //<editor-fold defaultstate="collapsed" desc="FXML VAR">
     @FXML
     private AnchorPane rootPane;
 
@@ -88,28 +90,52 @@ public class WinC implements Initializable {
 
     @FXML
     private Button taskButton;
+    //</editor-fold>
 
+    private PopOver popOver;
+    private Node tasker;
+    private LaunchTaskC taskerController;
+    private static String MAIN_TASKER = "/datamer/view/LaunchTask.fxml";
     private ObservableList<ModeloTarea> taskList;
 
     private ClientSocket client;
     private boolean keepRefresh;
     private boolean isConected;
-    PopOver popOver;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        initTable();
-        System.out.print(".");
-        prepareSlideMenuAnimation();
-        System.out.print(".");
-        if (initSocketClient()) {
-            System.out.print(".");
-            initRefresh();
-            System.out.print(".");
+        try {
+            initTasker();
+            if (initSocketClient()) {
+                initRefresh();
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(WinC.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    public void initTable() {
+    private void initTasker() throws IOException {
+        initTable();
+        prepareSlideMenuAnimation();
+
+        FXMLLoader loader = new FXMLLoader();
+        tasker = loader.load(getClass().getResourceAsStream(MAIN_TASKER));
+        taskerController = loader.getController();
+        taskerController.setParentController(this);
+
+        popOver = new PopOver();
+        popOver.setDetachable(false);
+        popOver.setDetached(false);
+        popOver.arrowSizeProperty().setValue(12);
+        popOver.arrowIndentProperty().setValue(13);
+        popOver.arrowLocationProperty().setValue(ArrowLocation.LEFT_BOTTOM);
+        popOver.cornerRadiusProperty().setValue(7);
+        popOver.headerAlwaysVisibleProperty().setValue(false);
+        popOver.setAnimated(true);
+        popOver.setContentNode(tasker);
+    }
+
+    private void initTable() {
         tareaCL.setCellValueFactory(new PropertyValueFactory<>("titulo"));
         tareaCL.setCellFactory((TableColumn<ModeloTarea, String> arg0) -> new TableCell<ModeloTarea, String>() {
             private Text text;
@@ -206,8 +232,8 @@ public class WinC implements Initializable {
             client = new ClientSocket();
             client.setHost(Var.socketClientHost);
             client.setPort(Var.socketClientPort);
-
             client.conect();
+
             serverStatus.setText("On-Line");
             conected.setFill(Color.GREENYELLOW);
             isConected = true;
@@ -263,18 +289,6 @@ public class WinC implements Initializable {
 
     @FXML
     void launchTask(Event event) {
-        popOver = new PopOver();
-        popOver.setDetachable(false);
-        popOver.setDetached(false);
-        popOver.arrowSizeProperty().setValue(12);
-        popOver.arrowIndentProperty().setValue(13);
-        popOver.arrowLocationProperty().setValue(ArrowLocation.LEFT_BOTTOM);
-        popOver.cornerRadiusProperty().setValue(7);
-        popOver.headerAlwaysVisibleProperty().setValue(false);
-        popOver.setAnimated(true);
-
-        popOver.setContentNode(loadNode("/datamer/view/LaunchTask.fxml", "CLIENTES"));
-
         popOver.show(lbEjecutar);
     }
 
@@ -315,33 +329,50 @@ public class WinC implements Initializable {
         }
 
         Var.executor.shutdown();
+        Var.xit();
         Platform.exit();
     }
 
     private void addPane(Tab tab) {
-        tabPane.getTabs().add(tab);
-        tabPane.getSelectionModel().select(tab);
-    }
+        Tab aux = contains(tab);
 
-    private Tab loadPane(String pane, String nombre) {
-        try {
-            Node node = FXMLLoader.load(getClass().getResource(pane));
-
-            Tab tab = new Tab();
-            tab.setText(nombre);
-            tab.setContent(node);
-
-            return tab;
-        } catch (IOException ex) {
-            Logger.getLogger(WinC.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
+        if (contains(tab) != null) {
+            tabPane.getSelectionModel().select(aux);
+        } else {
+            tabPane.getTabs().add(tab);
+            tabPane.getSelectionModel().select(tab);
         }
     }
 
-    private Node loadNode(String pane, String nombre) {
+    private Tab contains(Tab tab) {
+        Tab aux;
+        Iterator it = tabPane.getTabs().iterator();
+
+        while (it.hasNext()) {
+            aux = (Tab) it.next();
+
+            if (tab.getId().equals(aux.getId())) {
+                return aux;
+            }
+        }
+
+        return null;
+    }
+
+    private Tab loadPane(String pane, String nombre) {
+        Node node = loadNode(pane);
+
+        Tab tab = new Tab();
+        tab.setId(nombre);
+        tab.setText(nombre);
+        tab.setContent(node);
+
+        return tab;
+    }
+
+    private Node loadNode(String pane) {
         try {
             Node node = FXMLLoader.load(getClass().getResource(pane));
-
             return node;
         } catch (IOException ex) {
             Logger.getLogger(WinC.class.getName()).log(Level.SEVERE, null, ex);
@@ -350,42 +381,37 @@ public class WinC implements Initializable {
     }
 
     @FXML
-    void initCaptura(ActionEvent event) {
-        addPane(loadPane(Nav.TESTRA_CAPTURA, "CAPTURA TESTRA"));
-    }
-
-    @FXML
-    void initCruceTestra(ActionEvent event) {
-        addPane(loadPane(Nav.TESTRA_CRUCE, "CRUCE TESTRA"));
-    }
-
-    @FXML
     void initBoesBoletines(ActionEvent event) {
-        addPane(loadPane(Nav.BOES_BOLETINES, "BOLETINES"));
+        addPane(loadPane(BOES_BOLETINES.getRuta(), BOES_BOLETINES.getNombre()));
     }
 
     @FXML
     void initBoesClasificacion(ActionEvent event) {
-        addPane(loadPane(Nav.BOES_CLASIFICACION, "CLASIFICACIÓN"));
+        Tab tab = loadPane(BOES_CLASIFICACION.getRuta(), BOES_CLASIFICACION.getNombre());
+        addPane(tab);
     }
 
     @FXML
     void initBoesExt(ActionEvent event) {
-        addPane(loadPane(Nav.BOES_EXTRACCION, "EXTRACCIÓN"));
-    }
-
-    @FXML
-    void initBoesFases(ActionEvent event) {
-        addPane(loadPane(Nav.BOES_FASES, "FASES"));
+        Tab tab = loadPane(BOES_EXTRACCION.getRuta(), BOES_EXTRACCION.getNombre());
+        addPane(tab);
     }
 
     @FXML
     void initBoesPattern(ActionEvent event) {
-        addPane(loadPane(Nav.BOES_PATTERN, "PATRONES"));
+        Tab tab = loadPane(BOES_PATTERN.getRuta(), BOES_PATTERN.getNombre());
+        addPane(tab);
+    }
+
+    @FXML
+    void initBoesFases(ActionEvent event) {
+        Tab tab = loadPane(BOES_FASES.getRuta(),BOES_FASES.getNombre());
+        addPane(tab);
     }
 
     @FXML
     void initTelemark(ActionEvent event) {
-        addPane(loadPane(Nav.TELEMARK, "CLIENTES"));
+        Tab tab = loadPane(TELEMARK.getRuta(), TELEMARK.getNombre());
+        addPane(tab);
     }
 }

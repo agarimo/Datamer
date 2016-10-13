@@ -1,21 +1,60 @@
 package datamer;
 
+import datamer.ctrl.WinC;
+import datamer.ctrl.boes.BoletinesC;
+import datamer.ctrl.boes.ClasificacionC;
+import datamer.ctrl.boes.ExtC;
+import datamer.ctrl.boes.FasesC;
+import datamer.ctrl.boes.PatternC;
+import datamer.ctrl.tkm.TelemarkC;
+import javafx.scene.Node;
+
 /**
  *
  * @author Agarimo
  */
 public class Nav {
-
-    public static final String BOES_BOLETINES = "/datamer/view/boes/Boletines.fxml";
-    public static final String BOES_CLASIFICACION = "/datamer/view/boes/Clasificacion.fxml";
-    public static final String BOES_EXTRACCION = "/datamer/view/boes/Ext.fxml";
-    public static final String BOES_FASES = "/datamer/view/boes/Fases.fxml";
-    public static final String BOES_PATTERN = "/datamer/view/boes/Pattern.fxml";
     
-    public static final String TELEMARK = "/datamer/view/tkm/Telemark.fxml";
-
-    public static final String TESTRA_CAPTURADOR = "/datamer/view/testra/Capturador.fxml";
-    public static final String TESTRA_CRUCE = "/datamer/view/testra/Cruce.fxml";
-    public static final String TESTRA_CAPTURA = "/datamer/view/testra/Captura.fxml";
+    // https://dominiks.gitbooks.io/javafx/content/cookbook/comms_instancemap.html
+    // Echar una ojeada a instanceMap de guava.
     
+//    /**
+//     * MAIN
+//     */
+//    
+//    private Node main;
+//    private WinC mainControl;
+//
+//    /**
+//     * BOES
+//     */
+//    
+//    private Node boletines;
+//    private Node clasificacion;
+//    private Node extraccion;
+//    private Node fases;
+//    private Node patrones;
+//    
+//    private BoletinesC boletinesControl;
+//    private ClasificacionC clasificacionControl;
+//    private ExtC extraccionControl;
+//    private FasesC fasesControl;
+//    private PatternC patronesControl;
+//    
+//    /**
+//     * TELEMARKETING
+//     */
+//    
+//    private Node tkm;
+//    private TelemarkC tkmControl;
+//    
+//    private Nav() {}
+//
+//    public static Nav getInstance() {
+//        return NavHolder.INSTANCE;
+//    }
+//
+//    private static class NavHolder {
+//        private static final Nav INSTANCE = new Nav();
+//    }
 }

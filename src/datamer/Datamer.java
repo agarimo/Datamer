@@ -2,6 +2,7 @@ package datamer;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -25,13 +26,12 @@ public class Datamer extends Application {
 
         FXMLLoader loader = new FXMLLoader();
         Parent root = loader.load(getClass().getResourceAsStream("/datamer/view/Win.fxml"));
-        Var.mainController = loader.getController();
 
         Image icon = new Image(getClass().getResourceAsStream("/datamer/resources/DeathStar.png"));
         Var.stage.getIcons().add(icon);
-        Var.stage.setTitle("DataFest 1.2");
+        Var.stage.setTitle("DataFest 1.3");
 
-        Scene scene = new Scene(root);
+        Scene scene = new Scene((Parent) root);
 //        scene.getStylesheets().setAll(getClass().getResource("/datamer/resources/modena.css").toExternalForm());
         Var.stage.setScene(scene);
         Var.stage.setMinHeight(700);

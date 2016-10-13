@@ -23,15 +23,12 @@
  */
 package datamer;
 
-import datamer.ctrl.WinC;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -47,84 +44,74 @@ import java.util.concurrent.Executors;
  */
 public class Var {
 
+    /**
+     * Variables de configuración.
+     */
     private static Properties config;
+    public static String configFile = "config.xml";
 
+    /**
+     * Variables de Ventanas.
+     */
     public static Stage stage;
-    public static WinC mainController;
-    public static Stage popup;
+//    public static WinC mainController;
 
-    public static ExecutorService executor;
-
+    /**
+     * Variables de conexión.
+     */
     public static Conexion con;
     public static String socketClientHost;
     public static int socketClientPort;
 
-    public static String configFile = "config.xml";
-
-    public static File runtimeData;
-    public static boolean isRunning;
-
     /**
-     * BOES
+     * Gestor de ejecuciones en segundo plano.
      */
-    public static String dbNameServer = "server";
-    public static String dbNameBoes = "boes";
+    public static ExecutorService executor;
 
-    
     /**
      * Fichero principal datos de programa.
      */
     public static File fileSystem;
-    
+
     /**
      * Fichero remoto datos de programa.
      */
     public static File fileRemote;
-    
+
     /**
      * Fichero almacenaje salida de datos (BB0,BB1).
      */
     public static File ficheroTxt;
-    
+
     /**
      * Fichero almacenaje PDF y Excell.
      */
     public static File ficheroEx;
-    
+
     /**
      * Fichero almacenaje Union.
      */
     public static File ficheroUnion;
 
-    
     /**
-     * TKM
+     * Archivo temporal para previsualizaciones.
      */
+    public static File temporalTxt;
+
+    //<editor-fold defaultstate="collapsed" desc="VARIABLES CONEXION DATABASE">
+    //BOES
+    public static String dbNameServer = "server";
+    public static String dbNameBoes = "boes";
+
+    //TELEMARKETING
     public static String dbNameTkm = "tkm";
-
-    /**
-     * TESTRA
-     */
-    public static String dbNameTestra = "testra";
-    public static List<String> strucFecha;
-    public static File fichero;
-    public static File temporal;
-
-    public static String testraUrl = "https://sedeapl.dgt.gob.es/WEB_TTRA_CONSULTA/ServletVisualizacion?params=";
-    public static String testraHtml = "&formato=HTML";
-    public static String testraPdf = "%26subidioma%3Des&formato=PDF";
-
-    /**
-     * IDBL
-     */
-    public static String dbNameIdbl = "idbl";
+    //</editor-fold>
 
     public static void initVar() {
         initVarDriver();
         initVarLoadConfig();
         initConnection();
         initVarFiles();
-        initVarStrucFecha();
         initVarKeyStore();
         executor = Executors.newFixedThreadPool(4);
     }
@@ -140,8 +127,7 @@ public class Var {
     private static void initVarFiles() {
         fileSystem = new File("data");
         fileRemote = new File("////SERVER/Domain$/appData");
-        fichero = new File(fileSystem, "testraData");
-        temporal = new File(fileSystem, "temp.txt");
+        temporalTxt = new File(fileSystem, "temp.txt");
         ficheroTxt = new File(fileSystem, "txtData");
         ficheroEx = new File(fileSystem, "exData");
         ficheroUnion = new File(fileSystem, "unionData");
@@ -162,33 +148,16 @@ public class Var {
             ficheroUnion.mkdirs();
         }
 
-        if (!fichero.exists()) {
-            fichero.mkdirs();
-        }
         try {
-            temporal.createNewFile();
+            temporalTxt.createNewFile();
         } catch (IOException ex) {
             Logger.getLogger(Var.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     private static void initVarKeyStore() {
-//        System.setProperty("javax.net.ssl.trustStore", "keystore");
-//        System.setProperty("javax.net.ssl.trustStorePassword", "Carras-24");
-//        System.setProperty("javax.net.ssl.trustStoreType", "JKS");
-
         System.setProperty("javax.net.ssl.keyStore", "keystore");
         System.setProperty("javax.net.ssl.keyStorePassword", "Carras-24");
-    }
-
-    private static void initVarStrucFecha() {
-        strucFecha = new ArrayList();
-
-        strucFecha.add("dd-MM-yyyy");
-        strucFecha.add("dd/MM/yyyy");
-        strucFecha.add("dd-MM-yy");
-        strucFecha.add("dd/MM/yy");
-
     }
 
     private static void initVarLoadConfig() {
@@ -207,7 +176,7 @@ public class Var {
     }
 
     public static void xit() {
-        Files.deleteDir(runtimeData);
+        Files.deleteDirContent(fileSystem);
         saveConfig();
     }
 

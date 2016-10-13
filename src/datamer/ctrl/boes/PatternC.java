@@ -1,6 +1,6 @@
 package datamer.ctrl.boes;
 
-import datamer.Regex;
+import tools.Regex;
 import datamer.Var;
 import datamer.model.boes.ModeloPattern;
 import datamer.model.boes.enty.Pattern;
@@ -71,6 +71,29 @@ public class PatternC implements Initializable {
     @FXML
     private TableColumn matCL;
     //</editor-fold>
+    
+     public static String[] PATRON_MATRICULA = {
+        "[0-9]{4}[A-Z]{3}",
+        "[A-Z]{1,2}[0-9]{4}[A-Z]{1,2}",
+        "[CEPRST]{1}[0-9]{4}[A-Z]{3}",
+        "[A-Z]{1,2}[0-9]{4}[A-Z]{1,2}",
+        "PROMOTOR",
+        "BICI",
+        "CARECE",
+        "EX",
+        "PEATON",
+        "EMPRESA",
+        "QUAD",
+        "BICICLETA"
+    };
+
+    public static String[] PATRON_NIF = {
+        "[0-9]{8}[TRWAGMYFPDXBNJZSQVHLCKE]{1}",
+        "[XYZ]{1}[0-9]{7}[TRWAGMYFPDXBNJZSQVHLCKE]{1}",
+        "[ABCDEFGHJKLMNPQRSUVW]{1}[0-9]{8}",
+        "[ABCDEFGHJKLMNPQRSUVW]{1}[0-9]{7}[JABCDEFGHI]{1}",
+        "NOCONSTA"
+    };
 
     List<Pattern> listado;
     ObservableList<ModeloPattern> nifList;
@@ -126,7 +149,7 @@ public class PatternC implements Initializable {
         while (it.hasNext()) {
             aux = it.next();
 
-            if (rx.isBuscar(Arrays.asList(Regex.nif), aux.getNif())) {
+            if (rx.isBuscar(Arrays.asList(PATRON_NIF), aux.getNif())) {
                 contadorNif++;
             } else {
                 if (!"".equals(aux.getNif())) {
@@ -137,7 +160,7 @@ public class PatternC implements Initializable {
                 }
             }
 
-            if (rx.isBuscar(Arrays.asList(Regex.matriculas), aux.getMatricula())) {
+            if (rx.isBuscar(Arrays.asList(PATRON_MATRICULA), aux.getMatricula())) {
                 contadorMat++;
             } else {
                 if (!"".equals(aux.getMatricula())) {

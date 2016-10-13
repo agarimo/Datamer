@@ -18,7 +18,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="rootPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="datamer.ctrl.WinC">
+<AnchorPane fx:id="rootPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="datamer.ctrl.WinC">
    <children>
       <MenuBar minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="1000.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <menus>
@@ -43,12 +43,6 @@
                 <MenuItem mnemonicParsing="false" text="SQL" />
               </items>
             </Menu>
-          <Menu mnemonicParsing="false" text="Testra">
-            <items>
-                  <MenuItem mnemonicParsing="false" onAction="#initCaptura" text="Captura" />
-              <MenuItem mnemonicParsing="false" onAction="#initCruceTestra" text="Cruce" />
-            </items>
-          </Menu>
             <Menu mnemonicParsing="false" text="Telemarketing">
               <items>
                 <MenuItem mnemonicParsing="false" text="Consulta IDBL" />

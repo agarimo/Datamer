@@ -4,6 +4,8 @@ import datamer.Var;
 import datamer.ctrl.boes.Query;
 import datamer.model.boes.ModeloBoletines;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -27,8 +29,8 @@ public class ScriptOrigen {
         list = Query.listaModeloBoletines(query);
     }
 
-    public ScriptOrigen(Date fecha) {
-        query = "SELECT * FROM "+Var.dbNameBoes+".vista_boletines where idOrigen=372 and fecha=" + Util.comillas(Dates.imprimeFecha(fecha));
+    public ScriptOrigen(LocalDate fecha) {
+        query = "SELECT * FROM "+Var.dbNameBoes+".vista_boletines where idOrigen=372 and fecha=" + Util.comillas(fecha.format(DateTimeFormatter.ISO_DATE));
         list = Query.listaModeloBoletines(query);
     }
 

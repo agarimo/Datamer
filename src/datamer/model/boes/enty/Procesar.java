@@ -3,11 +3,11 @@ package datamer.model.boes.enty;
 import datamer.model.boes.Estado;
 import java.io.File;
 import java.sql.SQLException;
-import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import datamer.Var;
-import tools.Dates;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import sql.Sql;
 import tools.Util;
 
@@ -18,7 +18,7 @@ import tools.Util;
 public class Procesar {
 
     private int id;
-    private Date fecha;
+    private LocalDate fecha;
     private String codigo;
     private String link;
     private int estructura;
@@ -28,7 +28,7 @@ public class Procesar {
 
     }
 
-    public Procesar(Date fecha, String codigo, String link, int estructura, int estado) {
+    public Procesar(LocalDate fecha, String codigo, String link, int estructura, int estado) {
         this.fecha = fecha;
         this.codigo = codigo;
         this.link = link;
@@ -80,11 +80,11 @@ public class Procesar {
         this.link = link;
     }
 
-    public Date getFecha() {
+    public LocalDate getFecha() {
         return fecha;
     }
 
-    public void setFecha(Date fecha) {
+    public void setFecha(LocalDate fecha) {
         this.fecha = fecha;
     }
 
@@ -116,7 +116,7 @@ public class Procesar {
 
     private Estado checkEstado() {
         Estado a = Estado.LISTO_PROCESAR;
-        File fichero = new File(Var.ficheroEx, Dates.imprimeFecha(fecha));
+        File fichero = new File(Var.ficheroEx, fecha.format(DateTimeFormatter.ISO_DATE));
         File fileXLSX = new File(fichero, codigo + ".xlsx");
         File filePDF = new File(fichero, codigo + ".pdf");
 
@@ -134,7 +134,7 @@ public class Procesar {
     public String SQLCrear() {
         return "INSERT into " + Var.dbNameBoes + ".procesar (id,fecha,codigo,link,estructura,estado) values("
                 + this.id + ","
-                + Util.comillas(Dates.imprimeFecha(this.fecha)) + ","
+                + Util.comillas(fecha.format(DateTimeFormatter.ISO_DATE)) + ","
                 + Util.comillas(this.codigo) + ","
                 + Util.comillas(this.link) + ","
                 + this.estructura + ","

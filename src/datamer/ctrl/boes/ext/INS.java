@@ -3,13 +3,14 @@ package datamer.ctrl.boes.ext;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import datamer.Var;
 import datamer.ctrl.boes.Query;
 import datamer.model.boes.enty.Multa;
 import datamer.model.boes.enty.Procesar;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import tools.Dates;
 import tools.LoadFile;
 import tools.Util;
@@ -21,24 +22,24 @@ import tools.Util;
 public class INS {
 
     private final File fichero;
-    private final Date fecha;
+    private final LocalDate fecha;
     private final List<Procesar> boletines;
     private final List<Procesar> doc;
     private final List<String[]> docData;
     private final List<String[]> data;
 
-    public INS(Date fecha) {
+    public INS(LocalDate fecha) {
         this.fecha = fecha;
         data = new ArrayList();
         docData = new ArrayList();
         this.boletines = Query
                 .listaProcesar("SELECT * FROM " + Var.dbNameBoes + ".procesar "
-                        + "WHERE fecha=" + Util.comillas(Dates.imprimeFecha(this.fecha))
+                        + "WHERE fecha=" + Util.comillas(fecha.format(DateTimeFormatter.ISO_DATE))
                         + " AND estado!=1");
         this.doc = Query
                 .listaProcesar("SELECT * FROM " + Var.dbNameBoes + ".procesar "
-                        + "WHERE fecha=" + Util.comillas(Dates.imprimeFecha(this.fecha)));
-        fichero = new File(Var.ficheroTxt, Dates.imprimeFecha(fecha));
+                        + "WHERE fecha=" + Util.comillas(fecha.format(DateTimeFormatter.ISO_DATE)));
+        fichero = new File(Var.ficheroTxt, fecha.format(DateTimeFormatter.ISO_DATE));
         fichero.mkdirs();
     }
 
@@ -73,7 +74,7 @@ public class INS {
             linea = new String[17];
             multa = it.next();
 
-            linea[0] = Dates.imprimeFecha(pr.getFecha());
+            linea[0] = pr.getFecha().format(DateTimeFormatter.ISO_DATE);
             linea[1] = splitNBoe(multa.getCodigoSancion());
             linea[2] = multa.getOrganismo();
             linea[3] = multa.getFase();
@@ -108,7 +109,7 @@ public class INS {
     private void getDatosDoc(Procesar aux) {
         String[] linea = new String[4];
         linea[0] = aux.getCodigo().replace("BOE-N-20", "").replace("-", "");
-        linea[1] = Dates.imprimeFecha(aux.getFecha());
+        linea[1] = aux.getFecha().format(DateTimeFormatter.ISO_DATE);
         linea[2] = aux.getCodigo();
         linea[3] = aux.getLink();
 
@@ -162,7 +163,7 @@ public class INS {
     }
 
     private void crearArchivos() {
-        File archivoBB1 = new File(fichero, Dates.imprimeFechaSinFormato(fecha) + ".ins");
+        File archivoBB1 = new File(fichero, fecha.format(DateTimeFormatter.ISO_DATE) + ".ins");
         LoadFile.writeFile(archivoBB1, getDataArchivos());
     }
 }

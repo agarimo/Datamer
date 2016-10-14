@@ -89,11 +89,6 @@ public class Var {
     public static File ficheroEx;
 
     /**
-     * Fichero almacenaje Union.
-     */
-    public static File ficheroUnion;
-
-    /**
      * Archivo temporal para previsualizaciones.
      */
     public static File temporalTxt;
@@ -130,7 +125,6 @@ public class Var {
         temporalTxt = new File(fileSystem, "temp.txt");
         ficheroTxt = new File(fileSystem, "txtData");
         ficheroEx = new File(fileSystem, "exData");
-        ficheroUnion = new File(fileSystem, "unionData");
 
         if (!fileSystem.exists()) {
             fileSystem.mkdirs();
@@ -142,10 +136,6 @@ public class Var {
 
         if (!ficheroEx.exists()) {
             ficheroEx.mkdirs();
-        }
-
-        if (!ficheroUnion.exists()) {
-            ficheroUnion.mkdirs();
         }
 
         try {

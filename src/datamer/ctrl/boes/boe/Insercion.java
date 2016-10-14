@@ -8,7 +8,10 @@ import datamer.model.boes.enty.Origen;
 import datamer.model.boes.enty.Publicacion;
 import tools.LoadFile;
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.LinkOption;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
 import java.util.List;
@@ -64,9 +67,8 @@ public class Insercion {
             bd.ejecutar(bol.SQLCrear());
             bd.close();
             
-            //COMPROBAR EXISTENCIA CARPETA DE DÍA.
-            //COPIAR ARCHIVO A SERVER.
-
+            tools.Files.copyFile(pdf, new File(getServerFolder(aux.getFecha()),aux.getCodigo()+".pdf"));
+            
         } catch (SQLException ex) {
             Logger.getLogger(Insercion.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -124,6 +126,16 @@ public class Insercion {
             Logger.getLogger(Insercion.class.getName()).log(Level.SEVERE, null, ex);
             return false;
         }
+    }
+    
+    private File getServerFolder(LocalDate fecha){
+        File file= new File(Var.fileRemote,fecha.format(DateTimeFormatter.ISO_DATE));
+        
+        if(Files.notExists(file.toPath(), LinkOption.NOFOLLOW_LINKS)){
+            file.mkdirs();
+        }
+        
+        return file;
     }
 
     public void guardaStatsD(List lista) {

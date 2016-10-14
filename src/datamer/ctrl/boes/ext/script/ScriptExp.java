@@ -5,7 +5,6 @@ import datamer.model.boes.enty.OrigenExpediente;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
@@ -13,8 +12,9 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import datamer.Var;
 import datamer.ctrl.boes.Query;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import org.apache.commons.collections4.map.MultiValueMap;
-import tools.Dates;
 import sql.Sql;
 import tools.Util;
 
@@ -24,11 +24,11 @@ import tools.Util;
  */
 public final class ScriptExp {
 
-    private final Date fecha;
+    private final LocalDate fecha;
     private final MultiValueMap map;
     private final String codigoBoletin;
 
-    public ScriptExp(Date fecha) {
+    public ScriptExp(LocalDate fecha) {
         this.fecha = fecha;
         this.codigoBoletin = null;
         map = cargaMap();
@@ -115,9 +115,9 @@ public final class ScriptExp {
         return list;
     }
 
-    private List cargaMultas(Date fecha, int idOrigen) {
+    private List cargaMultas(LocalDate fecha, int idOrigen) {
         List aux = Query.listaMultas("SELECT * FROM " + Var.dbNameBoes + ".multa where "
-                + "fechaPublicacion=" + Util.comillas(Dates.imprimeFecha(fecha)) + " "
+                + "fechaPublicacion=" + Util.comillas(fecha.format(DateTimeFormatter.ISO_DATE)) + " "
                 + "and idOrganismo=" + idOrigen);
         return aux;
     }

@@ -29,6 +29,8 @@ import datamer.model.boes.enty.Publicacion;
 import datamer.model.boes.enty.StrucData;
 import datamer.model.boes.enty.Tipo;
 import datamer.model.boes.enty.VistaExtraccion;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import tools.Dates;
 import tools.Util;
@@ -276,7 +278,7 @@ public class Query extends sql.Query {
                 aux.setId(rs.getInt("id"));
                 aux.setCodigo(rs.getString("codigo"));
                 aux.setEstructura(rs.getInt("estructura"));
-                aux.setFecha(rs.getDate("fecha"));
+                aux.setFecha(Dates.asLocalDate(rs.getDate("fecha")));
                 aux.setLink(rs.getString("link"));
                 aux.setEstado(rs.getInt("estado"));
             }
@@ -731,7 +733,7 @@ public class Query extends sql.Query {
             while (rs.next()) {
                 aux = new Procesar();
                 aux.setId(rs.getInt("id"));
-                aux.setFecha(rs.getDate("fecha"));
+                aux.setFecha(Dates.asLocalDate(rs.getDate("fecha")));
                 aux.setCodigo(rs.getString("codigo"));
                 aux.setLink(rs.getString("link"));
                 aux.setEstructura(rs.getInt("estructura"));
@@ -941,12 +943,13 @@ public class Query extends sql.Query {
         return list;
     }
 
-    public static List listaProcesarPendiente(Date fecha) {
+    public static List listaProcesarPendiente(LocalDate fecha) {
         List list = new ArrayList();
         String query = "select a.id,a.codigo,b.link,a.isEstructura from " + Var.dbNameBoes + ".boletin a "
                 + "left join " + Var.dbNameServer + ".publicacion b on a.codigo=b.codigo "
-                + "where a.idBoe=(select id from " + Var.dbNameBoes + ".boe where fecha=" + Util.comillas(Dates.imprimeFecha(fecha)) + ") "
+                + "where a.idBoe=(select id from " + Var.dbNameBoes + ".boe where fecha=" + Util.comillas(fecha.format(DateTimeFormatter.ISO_DATE)) + ") "
                 + "and a.id not in (select id from " + Var.dbNameBoes + ".procesar)";
+
         Procesar aux;
 
         try {

@@ -4,16 +4,14 @@ import datamer.model.boes.enty.Multa;
 import datamer.model.boes.enty.Procesar;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import datamer.Var;
 import datamer.ctrl.boes.Query;
-import datamer.ctrl.boes.boletines.Archivos;
-import datamer.ctrl.boes.boletines.Union;
 import datamer.model.boes.ModeloBoletines;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import tools.Dates;
-import tools.Files;
 import tools.LoadFile;
 import tools.Util;
 
@@ -24,7 +22,7 @@ import tools.Util;
 public final class BB0 {
 
     private final File fichero;
-    private final Date fecha;
+    private final LocalDate fecha;
     private final List<Procesar> boletines;
     private final List<ModeloBoletines> boletinesD;
     private final List<String[]> data;
@@ -32,18 +30,18 @@ public final class BB0 {
     private final int BB0 = 1;
     private final int BB1 = 2;
 
-    public BB0(Date fecha) {
+    public BB0(LocalDate fecha) {
         this.fecha = fecha;
         data = new ArrayList();
         this.boletines = Query
                 .listaProcesar("SELECT * FROM " + Var.dbNameBoes + ".procesar "
-                        + "WHERE fecha=" + Util.comillas(Dates.imprimeFecha(this.fecha))
+                        + "WHERE fecha=" + Util.comillas(fecha.format(DateTimeFormatter.ISO_DATE))
                         + " AND estado!=1");
         this.boletinesD = Query
-                .listaModeloBoletines("SELECT * FROM "+Var.dbNameBoes+".vista_boletines "
-                        + "where fecha=" + Util.comillas(Dates.imprimeFecha(this.fecha)) + " "
-                        + "and codigo in (select codigo from "+Var.dbNameBoes+".procesar where estructura=-1 and estado=1)");
-        fichero = new File(Var.ficheroTxt, Dates.imprimeFecha(fecha));
+                .listaModeloBoletines("SELECT * FROM " + Var.dbNameBoes + ".vista_boletines "
+                        + "where fecha=" + Util.comillas(fecha.format(DateTimeFormatter.ISO_DATE)) + " "
+                        + "and codigo in (select codigo from " + Var.dbNameBoes + ".procesar where estructura=-1 and estado=1)");
+        fichero = new File(Var.ficheroTxt, fecha.format(DateTimeFormatter.ISO_DATE));
         fichero.mkdirs();
     }
 
@@ -57,7 +55,6 @@ public final class BB0 {
             getDatos(aux);
         }
         crearArchivos();
-        runUnion();
     }
 
     private String getLinea(String[] linea, int tipo) {
@@ -99,7 +96,7 @@ public final class BB0 {
             multa = it.next();
 
             linea[0] = "00000";
-            linea[1] = Dates.imprimeFecha(pr.getFecha(), "dd/MM/yyyy");
+            linea[1] = pr.getFecha().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
             linea[2] = multa.getBoe();
             linea[3] = multa.getFase();
             linea[4] = multa.getTipoJuridico();
@@ -197,49 +194,7 @@ public final class BB0 {
     }
 
     private void crearArchivos() {
-        File archivoBB0 = new File(fichero, Dates.imprimeFechaSinFormato(fecha) + ".bb0");
-//        File archivoBB1 = new File(fichero, Dates.imprimeFechaSinFormato(fecha) + ".bb1");
-
+        File archivoBB0 = new File(fichero, fecha.format(DateTimeFormatter.ISO_DATE) + ".bb0");
         LoadFile.writeFile(archivoBB0, getDataArchivos(BB0));
-//        Files.escribeArchivo(archivoBB1, getDataArchivos(BB1));
-
-        crearArchivosD(fichero);
-    }
-
-    private void crearArchivosD(File fichero) {
-        Archivos ar = new Archivos(this.fecha, fichero, this.boletinesD);
-        ar.creaArchivos();
-    }
-
-    private void runUnion() {
-        String codigoUn, struc;
-        Iterator it;
-        Union un = new Union(fecha);
-        List list = un.getEstructuras();
-
-        for (Object list1 : list) {
-            struc = (String) list1;
-            un.setMap(un.cargaMap(struc));
-            it = un.getKeySet().iterator();
-
-            while (it.hasNext()) {
-                codigoUn = (String) it.next();
-                crearArchivoUnion(struc, codigoUn, un.getProcesar(codigoUn));
-            }
-        }
-    }
-
-    private void crearArchivoUnion(String struc, String codigoUn, List<Procesar> list) {
-        data.clear();
-        Procesar aux;
-        Iterator<Procesar> it = list.iterator();
-
-        while (it.hasNext()) {
-            aux = it.next();
-            getDatos(aux);
-        }
-
-        File archivo = new File(fichero, struc + codigoUn + ".bb0");
-        LoadFile.writeFile(archivo, getDataArchivos(BB0));
     }
 }

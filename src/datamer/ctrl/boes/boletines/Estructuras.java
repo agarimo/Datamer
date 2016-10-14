@@ -5,12 +5,12 @@ import datamer.ctrl.boes.Query;
 import datamer.model.boes.enty.Boletin;
 import datamer.model.boes.enty.Estructura;
 import java.sql.SQLException;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import tools.Dates;
 import sql.Sql;
 import tools.Util;
 
@@ -21,7 +21,7 @@ import tools.Util;
 public class Estructuras {
 
     Sql bd;
-    Date fecha;
+    LocalDate fecha;
     List boletines;
     List estructuras;
 
@@ -31,7 +31,7 @@ public class Estructuras {
         this.estructuras = getEstructuras();
     }
 
-    public Estructuras(Date fecha, boolean pendientes) {
+    public Estructuras(LocalDate fecha, boolean pendientes) {
         this.fecha = fecha;
         this.boletines = getBol(pendientes);
         this.estructuras = getEstructuras();
@@ -40,10 +40,10 @@ public class Estructuras {
     private List getBol(boolean pendientes) {
         if (pendientes) {
             return Query.listaBoletin("SELECT * FROM " + Var.dbNameBoes + ".boletin where isEstructura<1 and idBoe in "
-                    + "(SELECT id FROM " + Var.dbNameBoes + ".boe where fecha=" + Util.comillas(Dates.imprimeFecha(this.fecha)) + ")");
+                    + "(SELECT id FROM " + Var.dbNameBoes + ".boe where fecha=" + Util.comillas(fecha.format(DateTimeFormatter.ISO_DATE)) + ")");
         } else {
             return Query.listaBoletin("SELECT * FROM " + Var.dbNameBoes + ".boletin where idBoe in "
-                    + "(SELECT id FROM " + Var.dbNameBoes + ".boe where fecha=" + Util.comillas(Dates.imprimeFecha(this.fecha)) + ")");
+                    + "(SELECT id FROM " + Var.dbNameBoes + ".boe where fecha=" + Util.comillas(fecha.format(DateTimeFormatter.ISO_DATE)) + ")");
         }
     }
 

@@ -1,10 +1,8 @@
 package datamer.ctrl.boes;
 
 import datamer.Var;
-import datamer.ctrl.boes.boletines.Archivos;
 import datamer.ctrl.boes.boletines.Estructuras;
 import datamer.ctrl.boes.boletines.Fases;
-import datamer.ctrl.boes.boletines.Union;
 import datamer.model.boes.ModeloBoletines;
 import datamer.model.boes.enty.Boletin;
 import datamer.model.boes.enty.Procesar;
@@ -15,6 +13,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -34,15 +34,14 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.ProgressBar;
 import javafx.scene.control.SplitMenuButton;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
+import org.controlsfx.control.MaskerPane;
 import tools.Dates;
-import tools.Files;
 import tools.LoadFile;
 import sql.Sql;
 import tools.Util;
@@ -58,19 +57,7 @@ public class BoletinesC implements Initializable {
     Label lbContador;
 
     @FXML
-    Label lbEstado;
-
-    @FXML
-    ProgressBar pbEstado;
-
-    @FXML
     Button btEstructuras;
-
-    @FXML
-    Button btUnion;
-
-    @FXML
-    Button btEliminarDSC;
 
     @FXML
     SplitMenuButton btProcesar;
@@ -113,6 +100,9 @@ public class BoletinesC implements Initializable {
 
     @FXML
     DatePicker dpFechaB;
+
+    @FXML
+    MaskerPane masker;
 
     ObservableList<ModeloBoletines> boletinesList;
 
@@ -207,12 +197,13 @@ public class BoletinesC implements Initializable {
             };
         });
 
-        codigoCLB.prefWidthProperty().bind(tvBoletines.widthProperty().multiply(0.13));
-        origenCLB.prefWidthProperty().bind(tvBoletines.widthProperty().multiply(0.56));
-        fechaCLB.prefWidthProperty().bind(tvBoletines.widthProperty().multiply(0.1));
-        tipoCLB.prefWidthProperty().bind(tvBoletines.widthProperty().multiply(0.07));
-        faseCLB.prefWidthProperty().bind(tvBoletines.widthProperty().multiply(0.04));
-        estructuraCLB.prefWidthProperty().bind(tvBoletines.widthProperty().multiply(0.116));
+        tvBoletines.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        codigoCLB.setMaxWidth(1f * Integer.MAX_VALUE * 13);
+        origenCLB.setMaxWidth(1f * Integer.MAX_VALUE * 56);
+        fechaCLB.setMaxWidth(1f * Integer.MAX_VALUE * 10);
+        tipoCLB.setMaxWidth(1f * Integer.MAX_VALUE * 7);
+        faseCLB.setMaxWidth(1f * Integer.MAX_VALUE * 4);
+        estructuraCLB.setMaxWidth(1f * Integer.MAX_VALUE * 10);
 
         boletinesList = FXCollections.observableArrayList();
         tvBoletines.setItems(boletinesList);
@@ -238,14 +229,14 @@ public class BoletinesC implements Initializable {
         cargaDatosTablaBoletines(aux);
     }
 
-    void trasvaseEx(Date fecha) {
+    void trasvaseEx(LocalDate fecha) {
         Sql bd;
         Procesar aux;
         Iterator it;
 
         try {
             bd = new Sql(Var.con);
-            bd.ejecutar("DELETE FROM boes.procesar where fecha=" + Util.comillas(Dates.imprimeFecha(fecha)));
+            bd.ejecutar("DELETE FROM boes.procesar where fecha=" + Util.comillas(fecha.format(DateTimeFormatter.ISO_DATE)));
 
             it = Query.listaProcesarPendiente(fecha).iterator();
 
@@ -261,20 +252,15 @@ public class BoletinesC implements Initializable {
 
     @FXML
     void procesarBoletines(ActionEvent event) {
-        Date fecha = Dates.asDate(dpFechaB.getValue());
+        LocalDate fecha = dpFechaB.getValue();
 
         if (fecha != null) {
             Thread a = new Thread(() -> {
 
                 Platform.runLater(() -> {
-                    btProcesar.setDisable(true);
-                    miEstructuras.setDisable(true);
-                    miEstructurasP.setDisable(true);
-                    miFases.setDisable(true);
-                    btUnion.setDisable(true);
-                    pbEstado.setVisible(true);
-                    pbEstado.setProgress(0);
-                    lbEstado.setText("INICIANDO ESTRUCTURAS");
+                    masker.setVisible(true);
+                    masker.setProgress(-1);
+                    masker.setText("INICIANDO ESTRUCTURAS");
                 });
 
                 Boletin aux;
@@ -288,12 +274,17 @@ public class BoletinesC implements Initializable {
                         int contadour = contador + 1;
                         double counter = contador + 1;
                         double toutal = total;
-                        lbEstado.setText("COMPROBANDO ESTRUCTURAS " + contadour + " de " + total);
-                        pbEstado.setProgress(counter / toutal);
+                        masker.setText("ESTRUCTURA " + contadour + " de " + total);
+                        masker.setProgress(counter / toutal);
                     });
                     aux = (Boletin) list.get(i);
                     es.run(aux);
                 }
+                
+                Platform.runLater(() -> {
+                    masker.setText("INICIANDO FASES");
+                    masker.setProgress(-1);
+                });
 
                 Fases fs = new Fases(fecha);
                 list = fs.getBoletines();
@@ -305,25 +296,25 @@ public class BoletinesC implements Initializable {
                         int contadour = contador + 1;
                         double counter = contador + 1;
                         double toutal = total;
-                        lbEstado.setText("COMPROBANDO FASE " + contadour + " de " + total);
-                        pbEstado.setProgress(counter / toutal);
+                        masker.setText("FASE " + contadour + " de " + total);
+                        masker.setProgress(counter / toutal);
                     });
                     aux = (Boletin) list.get(i);
                     fs.run(aux);
                 }
+                
+                Platform.runLater(() -> {
+                    masker.setText("EJECUTANDO TRASVASE");
+                    masker.setProgress(-1);
+                });
 
                 trasvaseEx(fecha);
 
                 Platform.runLater(() -> {
-                    lbEstado.setText("COMPROBACIÓN FINALIZADA");
-                    btProcesar.setDisable(false);
-                    miEstructuras.setDisable(false);
-                    miEstructurasP.setDisable(false);
-                    miFases.setDisable(false);
-                    btUnion.setDisable(false);
-                    pbEstado.setProgress(1);
-                    pbEstado.setVisible(false);
-                    lbEstado.setText("");
+                    masker.setText("PROCESO FINALIZADO");
+                    masker.setProgress(-1);
+                    masker.setVisible(false);
+                    masker.setText("");
 
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("COMPLETADO");
@@ -340,15 +331,15 @@ public class BoletinesC implements Initializable {
 
     @FXML
     void comprobarEstructuras(ActionEvent event) {
-        Date fecha = Dates.asDate(dpFechaB.getValue());
+        LocalDate fecha = dpFechaB.getValue();
 
         if (fecha != null) {
             Thread a = new Thread(() -> {
 
                 Platform.runLater(() -> {
-                    pbEstado.setVisible(true);
-                    pbEstado.setProgress(0);
-                    lbEstado.setText("INICIANDO ESTRUCTURAS");
+                    masker.setVisible(true);
+                    masker.setProgress(-1);
+                    masker.setText("INICIANDO ESTRUCTURAS");
                 });
 
                 Boletin aux;
@@ -362,20 +353,25 @@ public class BoletinesC implements Initializable {
                         int contadour = contador + 1;
                         double counter = contador + 1;
                         double toutal = total;
-                        lbEstado.setText("COMPROBANDO ESTRUCTURAS " + contadour + " de " + total);
-                        pbEstado.setProgress(counter / toutal);
+                        masker.setText("ESTRUCTURA " + contadour + " de " + total);
+                        masker.setProgress(counter / toutal);
                     });
                     aux = (Boletin) list.get(i);
                     es.run(aux);
                 }
 
+                Platform.runLater(() -> {
+                    masker.setText("FINALIZANDO PROCESO");
+                    masker.setProgress(-1);
+                });
+
                 trasvaseEx(fecha);
 
                 Platform.runLater(() -> {
-                    lbEstado.setText("COMPROBACIÓN FINALIZADA");
-                    pbEstado.setProgress(1);
-                    pbEstado.setVisible(false);
-                    lbEstado.setText("");
+                    masker.setText("PROCESO FINALIZADO");
+                    masker.setProgress(-1);
+                    masker.setVisible(false);
+                    masker.setText("");
 
                     recargarBoletines(new ActionEvent());
                 });
@@ -386,15 +382,15 @@ public class BoletinesC implements Initializable {
 
     @FXML
     void comprobarEstructurasP(ActionEvent event) {
-        Date fecha = Dates.asDate(dpFechaB.getValue());
+        LocalDate fecha = dpFechaB.getValue();
 
         if (fecha != null) {
             Thread a = new Thread(() -> {
 
                 Platform.runLater(() -> {
-                    pbEstado.setVisible(true);
-                    pbEstado.setProgress(0);
-                    lbEstado.setText("INICIANDO ESTRUCTURAS");
+                    masker.setVisible(true);
+                    masker.setProgress(-1);
+                    masker.setText("INICIANDO ESTRUCTURAS");
                 });
 
                 Boletin aux;
@@ -408,20 +404,25 @@ public class BoletinesC implements Initializable {
                         int contadour = contador + 1;
                         double counter = contador + 1;
                         double toutal = total;
-                        lbEstado.setText("COMPROBANDO ESTRUCTURAS " + contadour + " de " + total);
-                        pbEstado.setProgress(counter / toutal);
+                        masker.setText("ESTRUCTURA " + contadour + " de " + total);
+                        masker.setProgress(counter / toutal);
                     });
                     aux = (Boletin) list.get(i);
                     es.run(aux);
                 }
+                
+                Platform.runLater(() -> {
+                    masker.setText("FINALIZANDO PROCESO");
+                    masker.setProgress(-1);
+                });
 
                 trasvaseEx(fecha);
 
                 Platform.runLater(() -> {
-                    lbEstado.setText("COMPROBACIÓN FINALIZADA");
-                    pbEstado.setProgress(1);
-                    pbEstado.setVisible(false);
-                    lbEstado.setText("");
+                    masker.setText("PROCESO FINALIZADO");
+                    masker.setProgress(-1);
+                    masker.setVisible(false);
+                    masker.setText("");
 
                     recargarBoletines(new ActionEvent());
                 });
@@ -432,16 +433,15 @@ public class BoletinesC implements Initializable {
 
     @FXML
     void comprobarFases(ActionEvent event) {
-        Date fecha = Dates.asDate(dpFechaB.getValue());
+        LocalDate fecha = dpFechaB.getValue();
 
         if (fecha != null) {
             Thread a = new Thread(() -> {
 
                 Platform.runLater(() -> {
-                    btEliminarDSC.setDisable(true);
-                    pbEstado.setVisible(true);
-                    pbEstado.setProgress(0);
-                    lbEstado.setText("DESCARGANDO BOLETINES");
+                    masker.setVisible(true);
+                    masker.setProgress(-1);
+                    masker.setText("INICIANDO FASES");
                 });
 
                 Boletin aux;
@@ -455,116 +455,18 @@ public class BoletinesC implements Initializable {
                         int contadour = contador + 1;
                         double counter = contador + 1;
                         double toutal = total;
-                        lbEstado.setText("COMPROBANDO FASE " + contadour + " de " + total);
-                        pbEstado.setProgress(counter / toutal);
+                        masker.setText("FASE " + contadour + " de " + total);
+                        masker.setProgress(counter / toutal);
                     });
                     aux = (Boletin) list.get(i);
                     fs.run(aux);
                 }
 
                 Platform.runLater(() -> {
-                    lbEstado.setText("COMPROBACIÓN FINALIZADA");
-                    btEliminarDSC.setDisable(false);
-                    pbEstado.setProgress(1);
-                    pbEstado.setVisible(false);
-                    lbEstado.setText("");
-
-                    recargarBoletines(new ActionEvent());
-                });
-            });
-            Var.executor.execute(a);
-        }
-    }
-
-    @FXML
-    void generarArchivosUnion(ActionEvent event) {
-        Date fecha = Dates.asDate(dpFechaB.getValue());
-
-        File dir = new File(Var.ficheroUnion, Dates.imprimeFecha(fecha));
-        Files.deleteDir(dir);
-        dir.mkdirs();
-
-        Thread a = new Thread(() -> {
-
-            Platform.runLater(() -> {
-                pbEstado.setVisible(true);
-                pbEstado.setProgress(0);
-                lbEstado.setText("GENERANDO ARCHIVOS .un");
-            });
-
-            String codigoUn, struc;
-            Iterator it;
-            Union un = new Union(fecha);
-            Archivos ar = new Archivos();
-            List list = un.getEstructuras();
-
-            for (int i = 0; i < list.size(); i++) {
-                final int contador = i;
-                final int total = list.size();
-                Platform.runLater(() -> {
-                    int contadour = contador + 1;
-                    double counter = contador + 1;
-                    double toutal = total;
-                    lbEstado.setText("GENERANDO ESTRUCTURA " + contadour + " de " + total);
-                    pbEstado.setProgress(counter / toutal);
-                });
-                struc = (String) list.get(i);
-                un.setMap(un.cargaMap(struc));
-                it = un.getKeySet().iterator();
-
-                while (it.hasNext()) {
-                    codigoUn = (String) it.next();
-                    ar.creaArchivos(un.getBoletines(codigoUn), fecha, struc, codigoUn);
-                }
-            }
-
-            Platform.runLater(() -> {
-                lbEstado.setText("PROCESO FINALIZADO");
-                pbEstado.setProgress(1);
-                pbEstado.setVisible(false);
-                lbEstado.setText("");
-
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("COMPLETADO");
-                alert.setHeaderText("PROCESO FINALIZADO");
-                alert.setContentText("SE HAN GENERADO LOS ARCHIVOS .un");
-                alert.showAndWait();
-            });
-        });
-        Var.executor.execute(a);
-    }
-
-    @FXML
-    void eliminarDSC(ActionEvent event) {
-        Date fecha = Dates.asDate(dpFechaB.getValue());
-
-        if (fecha != null) {
-            Thread a = new Thread(() -> {
-
-                Platform.runLater(() -> {
-                    btEliminarDSC.setDisable(true);
-                    pbEstado.setVisible(true);
-                    pbEstado.setProgress(-1);
-                    lbEstado.setText("ELIMINANDO DESCARTADOS");
-                });
-
-                ModeloBoletines aux;
-                String query = "SELECT * FROM " + Var.dbNameBoes + ".vista_boletines where "
-                        + "fecha=" + Util.comillas(Dates.imprimeFecha(fecha)) + " "
-                        + "AND tipo='*DSC*'";
-                Iterator<ModeloBoletines> it = Query.listaModeloBoletines(query).iterator();
-
-                while (it.hasNext()) {
-                    aux = it.next();
-                    Query.eliminaBoletinFase(aux.getCodigo());
-                }
-
-                Platform.runLater(() -> {
-                    lbEstado.setText("PROCESO FINALIZADO");
-                    btEliminarDSC.setDisable(false);
-                    pbEstado.setProgress(1);
-                    pbEstado.setVisible(false);
-                    lbEstado.setText("");
+                    masker.setText("PROCESO FINALIZADO");
+                    masker.setProgress(-1);
+                    masker.setVisible(false);
+                    masker.setText("");
 
                     recargarBoletines(new ActionEvent());
                 });
@@ -610,6 +512,7 @@ public class BoletinesC implements Initializable {
 
                 Thread a = new Thread(() -> {
                     Query.eliminaBoletin(aux.getCodigo());
+                    deleteBoletinFile(aux);
                 });
                 Var.executor.execute(a);
             }
@@ -674,6 +577,15 @@ public class BoletinesC implements Initializable {
             alert.setContentText("Debes seleccionar un boletín.");
 
             alert.showAndWait();
+        }
+    }
+
+    private void deleteBoletinFile(ModeloBoletines aux) {
+        File fichero = new File(Var.fileRemote, aux.getFecha());
+        File archivo = new File(fichero, aux.getCodigo() + ".pdf");
+
+        if (archivo.exists()) {
+            archivo.delete();
         }
     }
 }

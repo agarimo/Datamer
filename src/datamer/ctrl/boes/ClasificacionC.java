@@ -2,13 +2,19 @@ package datamer.ctrl.boes;
 
 import datamer.Var;
 import datamer.ctrl.boes.boe.Insercion;
+import datamer.ctrl.boes.boletines.Estructuras;
+import datamer.ctrl.boes.boletines.Fases;
 import datamer.model.boes.ModeloBoes;
+import datamer.model.boes.ModeloBoletines;
 import datamer.model.boes.Status;
+import datamer.model.boes.enty.Boletin;
+import datamer.model.boes.enty.Procesar;
 import datamer.model.boes.enty.Publicacion;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.materialicons.MaterialIcon;
 import tools.LoadFile;
 import java.awt.Desktop;
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -16,6 +22,7 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -50,6 +57,7 @@ import javafx.scene.text.Text;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import sql.Sql;
+import tools.Dates;
 import tools.Files;
 import tools.Util;
 
@@ -125,7 +133,7 @@ public class ClasificacionC implements Initializable {
         initializeIcons();
         initializeTable();
         initializeClear();
-        
+
         autoScroll = true;
         cbAutoScroll.setSelected(autoScroll);
         setProcesandoC(false);
@@ -366,9 +374,12 @@ public class ClasificacionC implements Initializable {
     void procesarTask() {
         Thread a = new Thread(() -> {
 
-            Publicacion aux;
+            Publicacion publica;
             LocalDate fecha = dpFechaC.getValue();
-            String query = "SELECT * FROM " + Var.dbNameServer + ".publicacion WHERE fecha=" + Util.comillas(fecha.format(DateTimeFormatter.ISO_DATE)) + " and selected=true;";
+            List list;
+            String query;
+
+            query = "SELECT * FROM " + Var.dbNameServer + ".publicacion WHERE fecha=" + Util.comillas(fecha.format(DateTimeFormatter.ISO_DATE)) + " and selected=true;";
 
             Platform.runLater(() -> {
                 setProcesandoC(true);
@@ -393,7 +404,7 @@ public class ClasificacionC implements Initializable {
             });
 
             procesarTaskPreClean(fecha);
-            List list = Query.listaPublicacion(query);
+            list = Query.listaPublicacion(query);
 
             for (int i = 0; i < list.size(); i++) {
                 final int contador = i;
@@ -407,16 +418,71 @@ public class ClasificacionC implements Initializable {
                     pbClasificacion.setProgress(counter / toutal);
                 });
 
-                aux = (Publicacion) list.get(i);
-                in.insertaBoletin(aux);
+                publica = (Publicacion) list.get(i);
+                in.insertaBoletin(publica);
             }
 
+            in.clean();
+
             Platform.runLater(() -> {
-                lbClasificacion.setText("INSERCIÓN FINALIZADA");
+                lbClasificacion.setText("INICIANDO ESTRUCTURAS");
                 pbClasificacion.setProgress(-1);
             });
 
-            in.clean();
+            Boletin boletin;
+            Estructuras es = new Estructuras(fecha, false);
+            list = es.getBoletines();
+
+            for (int i = 0; i < list.size(); i++) {
+                final int contador = i;
+                final int total = list.size();
+                Platform.runLater(() -> {
+                    int contadour = contador + 1;
+                    double counter = contador + 1;
+                    double toutal = total;
+                    lbClasificacion.setText("ESTRUCTURA " + contadour + " de " + total);
+                    pbClasificacion.setProgress(counter / toutal);
+                });
+                boletin = (Boletin) list.get(i);
+                es.run(boletin);
+            }
+
+            Fases fases = new Fases(fecha);
+            list = fases.getBoletines();
+
+            for (int i = 0; i < list.size(); i++) {
+                final int contador = i;
+                final int total = list.size();
+                Platform.runLater(() -> {
+                    int contadour = contador + 1;
+                    double counter = contador + 1;
+                    double toutal = total;
+                    lbClasificacion.setText("FASE " + contadour + " de " + total);
+                    pbClasificacion.setProgress(counter / toutal);
+                });
+                boletin = (Boletin) list.get(i);
+                fases.run(boletin);
+            }
+
+            trasvaseEx(fecha);
+
+            Platform.runLater(() -> {
+                lbClasificacion.setText("ELIMINANDO DSC");
+                pbClasificacion.setProgress(-1);
+            });
+
+            ModeloBoletines aux;
+            query = "SELECT * FROM " + Var.dbNameBoes + ".vista_boletines where "
+                    + "fecha=" + Util.comillas(fecha.format(DateTimeFormatter.ISO_DATE)) + " "
+                    + "AND tipo='*DSC*'";
+
+            Iterator<ModeloBoletines> it = Query.listaModeloBoletines(query).iterator();
+
+            while (it.hasNext()) {
+                aux = it.next();
+                Query.eliminaBoletinFase(aux.getCodigo());
+                deleteBoletinFile(aux);
+            }
 
             Platform.runLater(() -> {
                 setProcesandoC(false);
@@ -426,7 +492,7 @@ public class ClasificacionC implements Initializable {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("COMPLETADO");
                 alert.setHeaderText("PROCESO FINALIZADO");
-                alert.setContentText("SE HA FINALIZADO LA INSERCIÓN, DESCARGA Y LIMPIEZA");
+                alert.setContentText("SE HA FINALIZADO LA INSERCIÓN");
                 alert.showAndWait();
 
                 initializeClear();
@@ -443,6 +509,36 @@ public class ClasificacionC implements Initializable {
             bd.close();
         } catch (SQLException ex) {
             java.util.logging.Logger.getLogger(ClasificacionC.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void trasvaseEx(LocalDate fecha) {
+        Sql bd;
+        Procesar aux;
+        Iterator it;
+
+        try {
+            bd = new Sql(Var.con);
+            bd.ejecutar("DELETE FROM boes.procesar where fecha=" + Util.comillas(fecha.format(DateTimeFormatter.ISO_DATE)));
+
+            it = Query.listaProcesarPendiente(fecha).iterator();
+
+            while (it.hasNext()) {
+                aux = (Procesar) it.next();
+                bd.ejecutar(aux.SQLCrear());
+            }
+            bd.close();
+        } catch (SQLException ex) {
+            java.util.logging.Logger.getLogger(BoletinesC.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void deleteBoletinFile(ModeloBoletines aux) {
+        File fichero = new File(Var.fileRemote, aux.getFecha());
+        File archivo = new File(fichero, aux.getCodigo() + ".pdf");
+
+        if (archivo.exists()) {
+            archivo.delete();
         }
     }
 

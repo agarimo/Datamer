@@ -1,7 +1,6 @@
 package datamer.ctrl.boes.ext.script;
 
 import java.sql.SQLException;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
@@ -9,7 +8,8 @@ import java.util.logging.Logger;
 import datamer.Var;
 import datamer.ctrl.boes.Query;
 import datamer.model.boes.enty.ReqObs;
-import tools.Dates;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import sql.Sql;
 import tools.Util;
 
@@ -21,10 +21,10 @@ public class ScriptReq {
 
     private final List<ReqObs> list;
 
-    public ScriptReq(Date fecha) {
+    public ScriptReq(LocalDate fecha) {
         this.list = Query.listaReqObs("SELECT * FROM boes.reqobs WHERE idOrigen in "
                 + "(select idOrganismo from boes.multa "
-                + "WHERE fechaPublicacion=" + Util.comillas(Dates.imprimeFecha(fecha)) + ")");
+                + "WHERE fechaPublicacion=" + Util.comillas(fecha.format(DateTimeFormatter.ISO_DATE)) + ")");
     }
 
     public void run() {

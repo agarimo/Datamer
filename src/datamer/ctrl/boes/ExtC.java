@@ -251,7 +251,7 @@ public class ExtC implements Initializable {
                 modelo.estado.set(procesar.getEstado().getValue());
             }
             modelo.link.set(procesar.getLink());
-            modelo.fecha.set(Dates.imprimeFecha(procesar.getFecha()));
+            modelo.fecha.set(procesar.getFecha().format(DateTimeFormatter.ISO_DATE));
 
             procesarList.add(modelo);
         }
@@ -323,7 +323,7 @@ public class ExtC implements Initializable {
 
     @FXML
     void generarArchivos(ActionEvent event) {
-        Date fecha = Dates.asDate(dpFecha.getValue());
+        LocalDate fecha = dpFecha.getValue();
 
         if (fecha != null) {
             Thread a = new Thread(() -> {

@@ -246,7 +246,7 @@ public class WinC implements Initializable {
             conected.setFill(Color.RED);
             isConected = false;
             taskButton.setDisable(true);
-            taskStatus.setText("Sin conexión");
+            taskStatus.setText("");
             return false;
         }
     }

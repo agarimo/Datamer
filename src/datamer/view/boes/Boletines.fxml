@@ -18,7 +18,6 @@
 <?import javafx.scene.text.Font?>
 <?import org.controlsfx.control.MaskerPane?>
 
-
 <StackPane xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="datamer.ctrl.boes.BoletinesC">
    <children>
       <SplitPane dividerPositions="0.5">
@@ -49,7 +48,6 @@
                         <MenuItem fx:id="miFases" mnemonicParsing="false" onAction="#comprobarFases" text="Procesar Fases" />
                      </items>
                   </SplitMenuButton>
-                  <Button fx:id="btAbrirCarpetaBoletines" mnemonicParsing="false" onAction="#abrirCarpetaBoletines" prefHeight="30.0" prefWidth="150.0" text="Abrir Carpeta" />
                   <Pane prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
                   <HBox>
                      <children>

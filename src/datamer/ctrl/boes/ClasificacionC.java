@@ -22,7 +22,6 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -57,7 +56,6 @@ import javafx.scene.text.Text;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import sql.Sql;
-import tools.Dates;
 import tools.Files;
 import tools.Util;
 
@@ -508,7 +506,7 @@ public class ClasificacionC implements Initializable {
             bd.ejecutar(query);
             bd.close();
         } catch (SQLException ex) {
-            java.util.logging.Logger.getLogger(ClasificacionC.class.getName()).log(Level.SEVERE, null, ex);
+            LOG.error("[procesarTaskPreClean]" + ex);
         }
     }
 
@@ -529,7 +527,7 @@ public class ClasificacionC implements Initializable {
             }
             bd.close();
         } catch (SQLException ex) {
-            java.util.logging.Logger.getLogger(BoletinesC.class.getName()).log(Level.SEVERE, null, ex);
+            LOG.error("[trasvaseEx]" + ex);
         }
     }
 

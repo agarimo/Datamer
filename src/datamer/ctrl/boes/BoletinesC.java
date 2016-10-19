@@ -15,7 +15,6 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -41,7 +40,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
 import org.controlsfx.control.MaskerPane;
-import tools.Dates;
 import tools.LoadFile;
 import sql.Sql;
 import tools.Util;
@@ -70,9 +68,6 @@ public class BoletinesC implements Initializable {
 
     @FXML
     MenuItem miFases;
-
-    @FXML
-    Button btAbrirCarpetaBoletines;
 
     @FXML
     Button btRecargarBoletines;
@@ -209,9 +204,9 @@ public class BoletinesC implements Initializable {
         tvBoletines.setItems(boletinesList);
     }
 
-    void cargaDatosTablaBoletines(Date fecha) {
+    void cargaDatosTablaBoletines(LocalDate fecha) {
         ModeloBoletines aux;
-        String query = "SELECT * FROM " + Var.dbNameBoes + ".vista_boletines where fecha=" + Util.comillas(Dates.imprimeFecha(fecha)) + " order by codigo";
+        String query = "SELECT * FROM " + Var.dbNameBoes + ".vista_boletines where fecha=" + Util.comillas(fecha.format(DateTimeFormatter.ISO_DATE)) + " order by codigo";
         Iterator it = Query.listaModeloBoletines(query).iterator();
 
         while (it.hasNext()) {
@@ -225,8 +220,9 @@ public class BoletinesC implements Initializable {
     @FXML
     void cambioEnDatePickerBoletines(ActionEvent event) {
         boletinesList.clear();
-        Date aux = Dates.asDate(dpFechaB.getValue());
+        LocalDate aux = dpFechaB.getValue();
         cargaDatosTablaBoletines(aux);
+        convertExcel(aux);
     }
 
     void trasvaseEx(LocalDate fecha) {
@@ -280,7 +276,7 @@ public class BoletinesC implements Initializable {
                     aux = (Boletin) list.get(i);
                     es.run(aux);
                 }
-                
+
                 Platform.runLater(() -> {
                     masker.setText("INICIANDO FASES");
                     masker.setProgress(-1);
@@ -302,7 +298,7 @@ public class BoletinesC implements Initializable {
                     aux = (Boletin) list.get(i);
                     fs.run(aux);
                 }
-                
+
                 Platform.runLater(() -> {
                     masker.setText("EJECUTANDO TRASVASE");
                     masker.setProgress(-1);
@@ -410,7 +406,7 @@ public class BoletinesC implements Initializable {
                     aux = (Boletin) list.get(i);
                     es.run(aux);
                 }
-                
+
                 Platform.runLater(() -> {
                     masker.setText("FINALIZANDO PROCESO");
                     masker.setProgress(-1);
@@ -478,7 +474,8 @@ public class BoletinesC implements Initializable {
     @FXML
     void recargarBoletines(ActionEvent event) {
         boletinesList.clear();
-        Date aux = Dates.asDate(dpFechaB.getValue());
+        tvBoletines.refresh();
+        LocalDate aux = dpFechaB.getValue();
 
         if (aux != null) {
             cargaDatosTablaBoletines(aux);
@@ -512,7 +509,6 @@ public class BoletinesC implements Initializable {
 
                 Thread a = new Thread(() -> {
                     Query.eliminaBoletin(aux.getCodigo());
-                    deleteBoletinFile(aux);
                 });
                 Var.executor.execute(a);
             }
@@ -580,12 +576,24 @@ public class BoletinesC implements Initializable {
         }
     }
 
-    private void deleteBoletinFile(ModeloBoletines aux) {
-        File fichero = new File(Var.fileRemote, aux.getFecha());
-        File archivo = new File(fichero, aux.getCodigo() + ".pdf");
+    private void convertExcel(LocalDate fecha) {
+        File fichero = new File(Var.fileRemote, fecha.format(DateTimeFormatter.ISO_DATE));
 
-        if (archivo.exists()) {
-            archivo.delete();
+        if (fichero.exists()) {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("CONVERSIÓN");
+            alert.setHeaderText("");
+            alert.setContentText("¿Desea CONVERTIR los PDF a EXCEL?");
+
+            Optional<ButtonType> result = alert.showAndWait();
+
+            if (result.get() == ButtonType.OK) {
+                if (Var.nitro != null) {
+                    tools.Files.openFile(Var.nitro);
+                } else {
+                    tools.Files.openFile(fichero);
+                }
+            }
         }
     }
 }

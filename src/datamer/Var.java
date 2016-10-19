@@ -84,14 +84,14 @@ public class Var {
     public static File ficheroTxt;
 
     /**
-     * Fichero almacenaje PDF y Excell.
-     */
-    public static File ficheroEx;
-
-    /**
      * Archivo temporal para previsualizaciones.
      */
     public static File temporalTxt;
+
+    /**
+     * Archivo ejecución Nitro.
+     */
+    public static File nitro;
 
     //<editor-fold defaultstate="collapsed" desc="VARIABLES CONEXION DATABASE">
     //BOES
@@ -107,7 +107,6 @@ public class Var {
         initVarLoadConfig();
         initConnection();
         initVarFiles();
-        initVarKeyStore();
         executor = Executors.newFixedThreadPool(4);
     }
 
@@ -124,7 +123,6 @@ public class Var {
         fileRemote = new File("////SERVER/Domain$/appData");
         temporalTxt = new File(fileSystem, "temp.txt");
         ficheroTxt = new File(fileSystem, "txtData");
-        ficheroEx = new File(fileSystem, "exData");
 
         if (!fileSystem.exists()) {
             fileSystem.mkdirs();
@@ -134,24 +132,39 @@ public class Var {
             ficheroTxt.mkdirs();
         }
 
-        if (!ficheroEx.exists()) {
-            ficheroEx.mkdirs();
-        }
-
         try {
             temporalTxt.createNewFile();
         } catch (IOException ex) {
             Logger.getLogger(Var.class.getName()).log(Level.SEVERE, null, ex);
         }
+
+        initVarFilesNitro();
     }
 
-    private static void initVarKeyStore() {
-        System.setProperty("javax.net.ssl.keyStore", "keystore");
-        System.setProperty("javax.net.ssl.keyStorePassword", "Carras-24");
+    private static void initVarFilesNitro() {
+        nitro = null;
+        File aux = new File("C:\\Program Files\\Nitro\\");
+        findNitro(aux);
+    }
+
+    private static void findNitro(File aux) {
+        File[] files = aux.listFiles();
+
+        for (File file : files) {
+            if (file.isDirectory()) {
+                findNitro(file);
+            } else if (file.getName().equals("NitroPDF.exe")) {
+                nitro = file;
+            }
+        }
     }
 
     private static void initVarLoadConfig() {
-        loadConfig();
+        if (new File("config.xml").exists()) {
+            loadConfig();
+        } else {
+            loadDefaultConfig();
+        }
     }
 
     private static void initConnection() {
@@ -181,9 +194,23 @@ public class Var {
 
     public static void saveConfig() {
         try (OutputStream out = new FileOutputStream("config.xml")) {
-            config.storeToXML(out, "Archivo de propiedades XML de Datamer_server");
+            config.storeToXML(out, "Archivo de propiedades XML de Datamer");
         } catch (IOException ex) {
             Logger.getLogger(Var.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    private static void loadDefaultConfig() {
+        config = new Properties();
+        config.setProperty("con_host", "192.168.1.10");
+        config.setProperty("con_port", "3306");
+
+        config.setProperty("con_user", "admin");
+        config.setProperty("con_pass", "IkuinenK@@m.s84");
+
+        config.setProperty("socketClient_host", "192.168.1.10");
+        config.setProperty("socketClient_port", "10987");
+
+        saveConfig();
     }
 }

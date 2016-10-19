@@ -9,16 +9,15 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import datamer.Var;
 import datamer.ctrl.boes.Query;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import tools.Dates;
 import tools.Util;
 
 /**
@@ -27,7 +26,7 @@ import tools.Util;
  */
 public class Extraccion {
 
-    private Date fecha;
+    private LocalDate fecha;
     private List<Procesar> lista;
     private File fichero;
     
@@ -35,10 +34,10 @@ public class Extraccion {
         
     }
 
-    public Extraccion(Date fecha) {
+    public Extraccion(LocalDate fecha) {
         this.fecha = fecha;
         this.lista = cargaBoletines();
-        this.fichero = new File(Var.ficheroEx, Dates.imprimeFecha(fecha));
+        this.fichero = new File(Var.fileRemote, fecha.format(DateTimeFormatter.ISO_DATE));
     }
 
     public boolean fileExist(String codigo) {
@@ -48,7 +47,7 @@ public class Extraccion {
 
     private List<Procesar> cargaBoletines() {
         return Query.listaProcesar("SELECT * FROM " + Var.dbNameBoes + ".procesar "
-                + "where fecha=" + Util.comillas(Dates.imprimeFecha(fecha)) + " "
+                + "where fecha=" + Util.comillas(fecha.format(DateTimeFormatter.ISO_DATE)) + " "
                 + "and estado=1");
     }
 

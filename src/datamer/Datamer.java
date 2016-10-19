@@ -2,7 +2,6 @@ package datamer;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -32,7 +31,6 @@ public class Datamer extends Application {
         Var.stage.setTitle("DataFest 1.3");
 
         Scene scene = new Scene((Parent) root);
-//        scene.getStylesheets().setAll(getClass().getResource("/datamer/resources/modena.css").toExternalForm());
         Var.stage.setScene(scene);
         Var.stage.setMinHeight(700);
         Var.stage.setMinWidth(1200);

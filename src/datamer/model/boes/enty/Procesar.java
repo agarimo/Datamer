@@ -116,7 +116,7 @@ public class Procesar {
 
     private Estado checkEstado() {
         Estado a = Estado.LISTO_PROCESAR;
-        File fichero = new File(Var.ficheroEx, fecha.format(DateTimeFormatter.ISO_DATE));
+        File fichero = new File(Var.fileRemote, fecha.format(DateTimeFormatter.ISO_DATE));
         File fileXLSX = new File(fichero, codigo + ".xlsx");
         File filePDF = new File(fichero, codigo + ".pdf");
 

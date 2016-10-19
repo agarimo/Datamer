@@ -61,7 +61,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 import org.controlsfx.control.PopOver;
@@ -75,6 +74,7 @@ import tools.Util;
  */
 public class ExtC implements Initializable {
 
+    LocalDate fecha;
     Node notas;
     NotasC notasC;
     PopOver popOver;
@@ -161,24 +161,20 @@ public class ExtC implements Initializable {
 
     @FXML
     void abrirCarpeta(ActionEvent event) {
-        Date fecha = Dates.asDate(dpFecha.getValue());
-
-        if (fecha != null) {
-            File fichero = new File(Var.ficheroEx, Dates.imprimeFecha(fecha));
-            try {
-                Desktop.getDesktop().browse(fichero.toURI());
-            } catch (IOException ex) {
-//                Logger.getLogger(WinC.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+//        if (fecha != null) {
+//            File fichero = new File(Var.fileRemote, fecha.format(DateTimeFormatter.ISO_DATE));
+//            try {
+//                Desktop.getDesktop().browse(fichero.toURI());
+//            } catch (IOException ex) {
+////                Logger.getLogger(WinC.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//        }
     }
 
     @FXML
     void abrirCarpetaAr(ActionEvent event) {
-        Date fecha = Dates.asDate(dpFecha.getValue());
-
         if (fecha != null) {
-            File fichero = new File(Var.ficheroTxt, Dates.imprimeFecha(fecha));
+            File fichero = new File(Var.ficheroTxt, fecha.format(DateTimeFormatter.ISO_DATE));
             try {
                 Desktop.getDesktop().browse(fichero.toURI());
             } catch (IOException ex) {
@@ -190,10 +186,10 @@ public class ExtC implements Initializable {
     @FXML
     void cambioEnDatePicker(ActionEvent event) {
         try {
-            Date fecha = Dates.asDate(dpFecha.getValue());
+            fecha = dpFecha.getValue();
 
             if (fecha != null) {
-                String query = "SELECT * FROM boes.procesar where fecha=" + Util.comillas(Dates.imprimeFecha(fecha));
+                String query = "SELECT * FROM boes.procesar where fecha=" + Util.comillas(fecha.format(DateTimeFormatter.ISO_DATE));
                 cargarDatosProcesar(Query.listaProcesar(query));
             }
         } catch (NullPointerException ex) {
@@ -259,12 +255,9 @@ public class ExtC implements Initializable {
 
     @FXML
     void eliminarLineaPreview(ActionEvent event) {
-        System.out.println("Eliminando");
         ModeloPreview aux = (ModeloPreview) tvPreview.getSelectionModel().getSelectedItem();
-        System.out.println(aux);
 
         if (aux != null) {
-            System.out.println("Borrando");
             previewList.remove(aux);
         }
     }
@@ -323,12 +316,12 @@ public class ExtC implements Initializable {
 
     @FXML
     void generarArchivos(ActionEvent event) {
-        LocalDate fecha = dpFecha.getValue();
 
         if (fecha != null) {
             Thread a = new Thread(() -> {
 
                 Platform.runLater(() -> {
+                    btGenerarArchivos.setDisable(true);
                     mostrarPanel(this.procesar_to_wait);
                     piProgreso.setProgress(-1);
                     lbProgreso.setText("");
@@ -367,17 +360,6 @@ public class ExtC implements Initializable {
                 sa.run();
 
                 Platform.runLater(() -> {
-                    piProgreso.setProgress(1);
-                    lbProgreso.setText("");
-                    lbProceso.setText("");
-                    mostrarPanel(this.wait_to_procesar);
-
-                    cambioEnDatePicker(new ActionEvent());
-                });
-
-                Platform.runLater(() -> {
-                    mostrarPanel(this.procesar_to_wait);
-                    btGenerarArchivos.setDisable(true);
                     piProgreso.setProgress(-1);
                     lbProgreso.setText("");
                     lbProceso.setText("GENERANDO ARCHIVOS");
@@ -403,62 +385,61 @@ public class ExtC implements Initializable {
 
     @FXML
     void generarPdf(ActionEvent event) {
-        Date fecha = Dates.asDate(dpFecha.getValue());
-
-        if (fecha != null) {
-            String query = "SELECT * FROM " + Var.dbNameBoes + ".procesar where fecha=" + Util.comillas(Dates.imprimeFecha(fecha));
-            File fichero = new File(Var.ficheroEx, Dates.imprimeFecha(fecha));
-            fichero.mkdirs();
-
-            Thread a = new Thread(() -> {
-
-                Platform.runLater(() -> {
-                    mostrarPanel(this.procesar_to_wait);
-                    btGenerarPdf.setDisable(true);
-                    piProgreso.setProgress(0);
-                    lbProgreso.setText("");
-                    lbProceso.setText("GENERANDO PDFs");
-                });
-
-                File destino;
-                Procesar aux;
-                List list = Query.listaProcesar(query);
-
-                for (int i = 0; i < list.size(); i++) {
-                    final int contador = i;
-                    final int total = list.size();
-                    Platform.runLater(() -> {
-                        int contadour = contador + 1;
-                        double counter = contador;
-                        double toutal = total;
-                        lbProgreso.setText("DESCARGANDO " + contadour + " de " + total);
-                        piProgreso.setProgress(counter / toutal);
-                    });
-                    aux = (Procesar) list.get(i);
-                    destino = new File(fichero, aux.getCodigo() + ".pdf");
-
-                    try {
-                        Download.downloadFILE(aux.getLink(), destino);
-
-                    } catch (IOException ex) {
-                        Logger.getLogger(ExtC.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-
-                    aux.SQLSetEstado(Estado.LISTO_PROCESAR.getValue());
-                }
-
-                Platform.runLater(() -> {
-                    piProgreso.setProgress(1);
-                    lbProgreso.setText("");
-                    lbProceso.setText("");
-                    btGenerarPdf.setDisable(false);
-                    mostrarPanel(this.wait_to_procesar);
-
-                    cambioEnDatePicker(new ActionEvent());
-                });
-            });
-            Var.executor.execute(a);
-        }
+//
+//        if (fecha != null) {
+//            String query = "SELECT * FROM " + Var.dbNameBoes + ".procesar where fecha=" + Util.comillas(fecha.format(DateTimeFormatter.ISO_DATE));
+//            File fichero = new File(Var.fileRemote, fecha.format(DateTimeFormatter.ISO_DATE));
+//            fichero.mkdirs();
+//
+//            Thread a = new Thread(() -> {
+//
+//                Platform.runLater(() -> {
+//                    mostrarPanel(this.procesar_to_wait);
+//                    btGenerarPdf.setDisable(true);
+//                    piProgreso.setProgress(0);
+//                    lbProgreso.setText("");
+//                    lbProceso.setText("GENERANDO PDFs");
+//                });
+//
+//                File destino;
+//                Procesar aux;
+//                List list = Query.listaProcesar(query);
+//
+//                for (int i = 0; i < list.size(); i++) {
+//                    final int contador = i;
+//                    final int total = list.size();
+//                    Platform.runLater(() -> {
+//                        int contadour = contador + 1;
+//                        double counter = contador;
+//                        double toutal = total;
+//                        lbProgreso.setText("DESCARGANDO " + contadour + " de " + total);
+//                        piProgreso.setProgress(counter / toutal);
+//                    });
+//                    aux = (Procesar) list.get(i);
+//                    destino = new File(fichero, aux.getCodigo() + ".pdf");
+//
+//                    try {
+//                        Download.downloadFILE(aux.getLink(), destino);
+//
+//                    } catch (IOException ex) {
+//                        Logger.getLogger(ExtC.class.getName()).log(Level.SEVERE, null, ex);
+//                    }
+//
+//                    aux.SQLSetEstado(Estado.LISTO_PROCESAR.getValue());
+//                }
+//
+//                Platform.runLater(() -> {
+//                    piProgreso.setProgress(1);
+//                    lbProgreso.setText("");
+//                    lbProceso.setText("");
+//                    btGenerarPdf.setDisable(false);
+//                    mostrarPanel(this.wait_to_procesar);
+//
+//                    cambioEnDatePicker(new ActionEvent());
+//                });
+//            });
+//            Var.executor.execute(a);
+//        }
     }
 
     /**
@@ -469,10 +450,9 @@ public class ExtC implements Initializable {
     @FXML
     void generarPdfI(ActionEvent event) {
         ModeloProcesar pr = (ModeloProcesar) tvProcesar.getSelectionModel().getSelectedItem();
-        Date fecha = Dates.asDate(dpFecha.getValue());
 
         if (fecha != null && pr != null) {
-            File fichero = new File(Var.ficheroEx, Dates.imprimeFecha(fecha));
+            File fichero = new File(Var.fileRemote, fecha.format(DateTimeFormatter.ISO_DATE));
             fichero.mkdirs();
 
             Thread a = new Thread(() -> {
@@ -598,24 +578,144 @@ public class ExtC implements Initializable {
         clExpediente.setCellValueFactory(new PropertyValueFactory<>("expediente"));
         clSancionado.setCellValueFactory(new PropertyValueFactory<>("sancionado"));
         clNif.setCellValueFactory(new PropertyValueFactory<>("nif"));
+        clNif.setCellFactory(column -> {
+            return new TableCell<ModeloProcesar, String>() {
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    this.setAlignment(Pos.CENTER);
+
+                    if (item == null || empty) {
+                        setText(null);
+                        setStyle("");
+                    } else {
+                        setText(item);
+                        setTextFill(Color.BLACK);
+                    }
+                }
+            };
+        });
         clLocalidad.setCellValueFactory(new PropertyValueFactory<>("localidad"));
+        clLocalidad.setCellFactory(column -> {
+            return new TableCell<ModeloProcesar, String>() {
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    this.setAlignment(Pos.CENTER);
+
+                    if (item == null || empty) {
+                        setText(null);
+                        setStyle("");
+                    } else {
+                        setText(item);
+                        setTextFill(Color.BLACK);
+                    }
+                }
+            };
+        });
         clFecha.setCellValueFactory(new PropertyValueFactory<>("fecha"));
+        clFecha.setCellFactory(column -> {
+            return new TableCell<ModeloProcesar, String>() {
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    this.setAlignment(Pos.CENTER);
+
+                    if (item == null || empty) {
+                        setText(null);
+                        setStyle("");
+                    } else {
+                        setText(item);
+                        setTextFill(Color.BLACK);
+                    }
+                }
+            };
+        });
         clMatricula.setCellValueFactory(new PropertyValueFactory<>("matricula"));
+        clMatricula.setCellFactory(column -> {
+            return new TableCell<ModeloProcesar, String>() {
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    this.setAlignment(Pos.CENTER);
+
+                    if (item == null || empty) {
+                        setText(null);
+                        setStyle("");
+                    } else {
+                        setText(item);
+                        setTextFill(Color.BLACK);
+                    }
+                }
+            };
+        });
         clCuantia.setCellValueFactory(new PropertyValueFactory<>("cuantia"));
+        clCuantia.setCellFactory(column -> {
+            return new TableCell<ModeloProcesar, String>() {
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    this.setAlignment(Pos.CENTER);
+
+                    if (item == null || empty) {
+                        setText(null);
+                        setStyle("");
+                    } else {
+                        setText(item);
+                        setTextFill(Color.BLACK);
+                    }
+                }
+            };
+        });
         clArticulo.setCellValueFactory(new PropertyValueFactory<>("articulo"));
         clPuntos.setCellValueFactory(new PropertyValueFactory<>("puntos"));
-        clReqObs.setCellValueFactory(new PropertyValueFactory<>("reqObs"));
+        clPuntos.setCellFactory(column -> {
+            return new TableCell<ModeloProcesar, String>() {
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    this.setAlignment(Pos.CENTER);
 
-        clExpediente.prefWidthProperty().bind(tvPreview.widthProperty().multiply(0.1165));
-        clSancionado.prefWidthProperty().bind(tvPreview.widthProperty().multiply(0.1940));
-        clNif.prefWidthProperty().bind(tvPreview.widthProperty().multiply(0.09));
-        clLocalidad.prefWidthProperty().bind(tvPreview.widthProperty().multiply(0.1940));
-        clFecha.prefWidthProperty().bind(tvPreview.widthProperty().multiply(0.0775));
-        clMatricula.prefWidthProperty().bind(tvPreview.widthProperty().multiply(0.07));
-        clCuantia.prefWidthProperty().bind(tvPreview.widthProperty().multiply(0.0485));
-        clArticulo.prefWidthProperty().bind(tvPreview.widthProperty().multiply(0.0970));
-        clPuntos.prefWidthProperty().bind(tvPreview.widthProperty().multiply(0.0485));
-        clReqObs.prefWidthProperty().bind(tvPreview.widthProperty().multiply(0.0485));
+                    if (item == null || empty) {
+                        setText(null);
+                        setStyle("");
+                    } else {
+                        setText(item);
+                        setTextFill(Color.BLACK);
+                    }
+                }
+            };
+        });
+        clReqObs.setCellValueFactory(new PropertyValueFactory<>("reqObs"));
+        clReqObs.setCellFactory(column -> {
+            return new TableCell<ModeloProcesar, String>() {
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    this.setAlignment(Pos.CENTER);
+
+                    if (item == null || empty) {
+                        setText(null);
+                        setStyle("");
+                    } else {
+                        setText(item);
+                        setTextFill(Color.BLACK);
+                    }
+                }
+            };
+        });
+
+        tvPreview.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        clExpediente.setMaxWidth(1f * Integer.MAX_VALUE * 9);
+        clSancionado.setMaxWidth(1f * Integer.MAX_VALUE * 27);
+        clNif.setMaxWidth(1f * Integer.MAX_VALUE * 7);
+        clLocalidad.setMaxWidth(1f * Integer.MAX_VALUE * 20);
+        clFecha.setMaxWidth(1f * Integer.MAX_VALUE * 7);
+        clMatricula.setMaxWidth(1f * Integer.MAX_VALUE * 7);
+        clCuantia.setMaxWidth(1f * Integer.MAX_VALUE * 5);
+        clArticulo.setMaxWidth(1f * Integer.MAX_VALUE * 8);
+        clPuntos.setMaxWidth(1f * Integer.MAX_VALUE * 5);
+        clReqObs.setMaxWidth(1f * Integer.MAX_VALUE * 5);
 
         previewList = FXCollections.observableArrayList();
         tvPreview.setItems(previewList);
@@ -763,7 +863,6 @@ public class ExtC implements Initializable {
             isPreview = !isPreview;
             switchControles(false);
         } else {
-            Date fecha = Dates.asDate(dpFecha.getValue());
             ModeloProcesar aux = (ModeloProcesar) tvProcesar.getSelectionModel().getSelectedItem();
             Extraccion ex;
 
@@ -860,7 +959,6 @@ public class ExtC implements Initializable {
 
     private void procesarRun() {
         cambioEnDatePicker(new ActionEvent());
-        Date fecha = Dates.asDate(dpFecha.getValue());
         List<ModeloProcesar> list = getBoletinesProcesar();
 
         if (!list.isEmpty() && fecha != null) {
@@ -874,7 +972,7 @@ public class ExtC implements Initializable {
                     lbProceso.setText("PREPARANDO BBDD");
                 });
 
-                procesarRunPreClean(Dates.asLocalDate(fecha));
+                procesarRunPreClean();
 
                 Platform.runLater(() -> {
                     lbProgreso.setText("");
@@ -934,7 +1032,7 @@ public class ExtC implements Initializable {
         }
     }
 
-    private void procesarRunPreClean(LocalDate fecha) {
+    private void procesarRunPreClean() {
         String queryMultas = "DELETE FROM " + Var.dbNameBoes + ".multa WHERE fechaPublicacion=" + Util.comillas(fecha.format(DateTimeFormatter.ISO_DATE));
         String queryProcesar = "UPDATE " + Var.dbNameBoes + ".procesar SET estado=1 WHERE fecha=" + Util.comillas(fecha.format(DateTimeFormatter.ISO_DATE));
 
@@ -1110,7 +1208,7 @@ public class ExtC implements Initializable {
         ModeloProcesar pr = (ModeloProcesar) tvProcesar.getSelectionModel().getSelectedItem();
 
         if (pr != null && fecha != null) {
-            File fichero = new File(Var.ficheroEx, Dates.imprimeFecha(fecha));
+            File fichero = new File(Var.fileRemote, Dates.imprimeFecha(fecha));
             File archivo = new File(fichero, pr.getCodigo() + ".xlsx");
 
             try {

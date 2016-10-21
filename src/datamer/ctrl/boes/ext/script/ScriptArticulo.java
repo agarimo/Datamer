@@ -16,6 +16,7 @@ import sql.Sql;
  */
 public class ScriptArticulo {
 
+   
     private List<OrigenArticulo> list;
 
     public ScriptArticulo() {

@@ -44,5 +44,4 @@ public class ScriptReq {
             Logger.getLogger(ScriptReq.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
 }

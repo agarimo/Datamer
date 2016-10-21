@@ -26,7 +26,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

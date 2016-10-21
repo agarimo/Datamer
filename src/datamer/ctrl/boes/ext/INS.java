@@ -1,6 +1,5 @@
 package datamer.ctrl.boes.ext;
 
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -163,7 +162,6 @@ public class INS {
     }
 
     private void crearArchivos() {
-        File archivoBB1 = new File(fichero, fecha.format(DateTimeFormatter.ISO_DATE) + ".ins");
-        LoadFile.writeFile(archivoBB1, getDataArchivos());
+        LoadFile.writeFile(new File(fichero, fecha.format(DateTimeFormatter.ISO_DATE) + ".ins"), getDataArchivos());
     }
 }

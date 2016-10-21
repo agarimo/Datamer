@@ -1,5 +1,6 @@
 package datamer.model.boes;
 
+import java.io.File;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
@@ -15,12 +16,11 @@ public class ModeloProcesar {
     public SimpleIntegerProperty estado = new SimpleIntegerProperty();
     public SimpleStringProperty link = new SimpleStringProperty();
     public SimpleStringProperty fecha = new SimpleStringProperty();
-    
 
-    public int getId(){
+    public int getId() {
         return id.get();
     }
-    
+
     public String getCodigo() {
         return codigo.get();
     }
@@ -39,5 +39,9 @@ public class ModeloProcesar {
 
     public String getFecha() {
         return fecha.get();
+    }
+
+    public File getXLSX(File folder) {
+        return new File(new File(folder, getFecha()), getCodigo() + ".xlsx");
     }
 }

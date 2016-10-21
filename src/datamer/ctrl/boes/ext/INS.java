@@ -23,21 +23,22 @@ public class INS {
     private final File fichero;
     private final LocalDate fecha;
     private final List<Procesar> boletines;
-    private final List<Procesar> doc;
+    private final List<Procesar> documentos;
     private final List<String[]> docData;
     private final List<String[]> data;
 
-    public INS(LocalDate fecha,File fichero) {
+    public INS(LocalDate fecha, File fichero) {
         this.fecha = fecha;
         data = new ArrayList();
         docData = new ArrayList();
-        this.boletines = Query
-                .listaProcesar("SELECT * FROM " + Var.dbNameBoes + ".procesar "
-                        + "WHERE fecha=" + Util.comillas(fecha.format(DateTimeFormatter.ISO_DATE))
-                        + " AND estado!=1");
-        this.doc = Query
-                .listaProcesar("SELECT * FROM " + Var.dbNameBoes + ".procesar "
-                        + "WHERE fecha=" + Util.comillas(fecha.format(DateTimeFormatter.ISO_DATE)));
+        this.boletines = Query.listaProcesar("SELECT * FROM " + Var.dbNameBoes + ".procesar "
+                + "WHERE "
+                + "fecha=" + Util.comillas(fecha.format(DateTimeFormatter.ISO_DATE))
+                + " AND "
+                + "estado!=1");
+        this.documentos = Query.listaProcesar("SELECT * FROM " + Var.dbNameBoes + ".procesar "
+                + "WHERE "
+                + "fecha=" + Util.comillas(fecha.format(DateTimeFormatter.ISO_DATE)));
         this.fichero = new File(fichero, fecha.format(DateTimeFormatter.ISO_DATE));
         this.fichero.mkdirs();
     }
@@ -45,7 +46,7 @@ public class INS {
     public void run() {
         data.clear();
         Procesar aux;
-        Iterator<Procesar> it = doc.iterator();
+        Iterator<Procesar> it = documentos.iterator();
 
         while (it.hasNext()) {
             aux = it.next();

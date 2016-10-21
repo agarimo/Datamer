@@ -27,7 +27,7 @@ public class INS {
     private final List<String[]> docData;
     private final List<String[]> data;
 
-    public INS(LocalDate fecha) {
+    public INS(LocalDate fecha,File fichero) {
         this.fecha = fecha;
         data = new ArrayList();
         docData = new ArrayList();
@@ -38,8 +38,8 @@ public class INS {
         this.doc = Query
                 .listaProcesar("SELECT * FROM " + Var.dbNameBoes + ".procesar "
                         + "WHERE fecha=" + Util.comillas(fecha.format(DateTimeFormatter.ISO_DATE)));
-        fichero = new File(Var.ficheroTxt, fecha.format(DateTimeFormatter.ISO_DATE));
-        fichero.mkdirs();
+        this.fichero = new File(fichero, fecha.format(DateTimeFormatter.ISO_DATE));
+        this.fichero.mkdirs();
     }
 
     public void run() {

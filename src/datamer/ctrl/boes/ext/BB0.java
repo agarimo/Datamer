@@ -30,7 +30,7 @@ public final class BB0 {
     private final int BB0 = 1;
     private final int BB1 = 2;
 
-    public BB0(LocalDate fecha) {
+    public BB0(LocalDate fecha, File fichero) {
         this.fecha = fecha;
         data = new ArrayList();
         this.boletines = Query
@@ -41,8 +41,8 @@ public final class BB0 {
                 .listaModeloBoletines("SELECT * FROM " + Var.dbNameBoes + ".vista_boletines "
                         + "where fecha=" + Util.comillas(fecha.format(DateTimeFormatter.ISO_DATE)) + " "
                         + "and codigo in (select codigo from " + Var.dbNameBoes + ".procesar where estructura=-1 and estado=1)");
-        fichero = new File(Var.ficheroTxt, fecha.format(DateTimeFormatter.ISO_DATE));
-        fichero.mkdirs();
+        this.fichero = new File(fichero, fecha.format(DateTimeFormatter.ISO_DATE));
+        this.fichero.mkdirs();
     }
 
     public void run() {

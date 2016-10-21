@@ -69,6 +69,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
 import javafx.util.Duration;
 import org.apache.logging.log4j.LogManager;
 import org.controlsfx.control.PopOver;
@@ -1171,20 +1173,34 @@ public class ExtC implements Initializable {
     //<editor-fold defaultstate="collapsed" desc="PROCESO ARCHIVOS">
     @FXML
     void runArchivosAll(ActionEvent event) {
-        runArchivos(this.ARCHIVOS_ALL);
+        File fichero = fileChooser();
+        if (fichero != null && fecha != null) {
+            fichero = new File(fichero, fecha.format(DateTimeFormatter.ISO_DATE));
+            runArchivos(this.ARCHIVOS_ALL, fichero);
+        }
     }
 
     @FXML
     void runArchivosReq(ActionEvent event) {
-        runArchivos(this.ARCHIVOS_REQ);
+        runArchivos(this.ARCHIVOS_REQ, null);
     }
 
     @FXML
     void runArchivosFiles(ActionEvent event) {
-        runArchivos(this.ARCHIVOS_FILES);
+        File fichero = fileChooser();
+        if (fichero != null && fecha != null) {
+            fichero = new File(fichero, fecha.format(DateTimeFormatter.ISO_DATE));
+            runArchivos(this.ARCHIVOS_FILES, fichero);
+        }
     }
 
-    private void runArchivos(int modo) {
+    private File fileChooser() {
+        DirectoryChooser chooser = new DirectoryChooser();
+        chooser.setInitialDirectory(new File(new File(System.getProperty("user.home")), "Desktop"));
+        return chooser.showDialog(Var.stage);
+    }
+
+    private void runArchivos(int mode, File fichero) {
         if (fecha != null) {
             Thread a = new Thread(() -> {
                 Platform.runLater(() -> {
@@ -1194,19 +1210,16 @@ public class ExtC implements Initializable {
                     lbProceso.setText("...INICIANDO...");
                 });
 
-                switch (modo) {
+                switch (mode) {
                     case 0:
-                        System.out.println("iniciando ALL");
                         runScript();
-                        runFiles();
+                        runFiles(fichero);
                         break;
                     case 1:
-                        System.out.println("Iniciando REQOBS");
                         runScript();
                         break;
                     case 2:
-                        System.out.println("Iniciando FILES");
-                        runFiles();
+                        runFiles(fichero);
                         break;
                 }
 
@@ -1223,7 +1236,6 @@ public class ExtC implements Initializable {
     }
 
     private void runScript() {
-        System.out.println("RUNNING SCRIPT");
         Platform.runLater(() -> {
             lbProceso.setText("PRE-PROCESANDO DATOS");
             lbProgreso.setText("EJECUTANDO SCRIPT REQUERIMIENTOS");
@@ -1257,18 +1269,18 @@ public class ExtC implements Initializable {
         sa.run();
     }
 
-    private void runFiles() {
+    private void runFiles(File fichero) {
         Platform.runLater(() -> {
             lbProceso.setText("GENERANDO ARCHIVOS");
             lbProgreso.setText("Generando BB0");
         });
-        BB0 bb = new BB0(fecha);
+        BB0 bb = new BB0(fecha, fichero);
         bb.run();
 
         Platform.runLater(() -> {
             lbProgreso.setText("Generando INS");
         });
-        INS ins = new INS(fecha);
+        INS ins = new INS(fecha, fichero);
         ins.run();
 
         Platform.runLater(() -> {

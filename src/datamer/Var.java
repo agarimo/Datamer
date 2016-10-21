@@ -79,11 +79,6 @@ public class Var {
     public static File fileRemote;
 
     /**
-     * Fichero almacenaje salida de datos (BB0,BB1).
-     */
-    public static File ficheroTxt;
-
-    /**
      * Archivo temporal para previsualizaciones.
      */
     public static File temporalTxt;
@@ -122,14 +117,9 @@ public class Var {
         fileSystem = new File("data");
         fileRemote = new File("////SERVER/Domain$/appData");
         temporalTxt = new File(fileSystem, "temp.txt");
-        ficheroTxt = new File(fileSystem, "txtData");
 
         if (!fileSystem.exists()) {
             fileSystem.mkdirs();
-        }
-
-        if (!ficheroTxt.exists()) {
-            ficheroTxt.mkdirs();
         }
 
         try {

@@ -5,6 +5,7 @@ import datamer.ctrl.NotasC;
 import datamer.ctrl.boes.ext.BB0;
 import datamer.ctrl.boes.ext.INS;
 import datamer.ctrl.boes.ext.Extraccion;
+import datamer.ctrl.boes.ext.TXT;
 import datamer.ctrl.boes.ext.script.ScriptArticulo;
 import datamer.ctrl.boes.ext.script.ScriptExp;
 import datamer.ctrl.boes.ext.script.ScriptFase;
@@ -1203,12 +1204,15 @@ public class ExtC implements Initializable {
     private void runArchivos(int mode, File fichero) {
         if (fecha != null) {
             Thread a = new Thread(() -> {
+                
                 Platform.runLater(() -> {
                     showPanel(this.procesar_to_wait);
                     piProgreso.setProgress(-1);
                     lbProgreso.setText("");
                     lbProceso.setText("...INICIANDO...");
                 });
+                
+                fichero.mkdirs();
 
                 switch (mode) {
                     case 0:
@@ -1229,6 +1233,12 @@ public class ExtC implements Initializable {
                     lbProceso.setText("");
                     showPanel(this.wait_to_procesar);
                 });
+                
+                try {
+                    tools.Util.openFile(fichero);
+                } catch (IOException ex) {
+                    Logger.getLogger(ExtC.class.getName()).log(Level.SEVERE, null, ex);
+                }
 
             });
             Var.executor.execute(a);
@@ -1286,7 +1296,8 @@ public class ExtC implements Initializable {
         Platform.runLater(() -> {
             lbProgreso.setText("Generando TXT");
         });
-
+        TXT txt = new TXT(fecha, fichero);
+        txt.run();
     }
     //</editor-fold>
 

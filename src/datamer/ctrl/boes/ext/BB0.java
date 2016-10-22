@@ -8,7 +8,6 @@ import java.util.Iterator;
 import java.util.List;
 import datamer.Var;
 import datamer.ctrl.boes.Query;
-import datamer.model.boes.ModeloBoletines;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import tools.Dates;
@@ -21,70 +20,32 @@ import tools.Util;
  */
 public final class BB0 {
 
-    private final File fichero;
-    private final LocalDate fecha;
-    private final List<Procesar> boletines;
-    private final List<ModeloBoletines> boletinesD;
-    private final List<String[]> data;
-
-    private final int BB0 = 1;
-    private final int BB1 = 2;
+    private File fichero;
+    private LocalDate fecha;
+    private List<Procesar> boletines;
+    private List<String[]> data;
 
     public BB0(LocalDate fecha, File fichero) {
         this.fecha = fecha;
-        data = new ArrayList();
-        this.boletines = Query
-                .listaProcesar("SELECT * FROM " + Var.dbNameBoes + ".procesar "
-                        + "WHERE fecha=" + Util.comillas(fecha.format(DateTimeFormatter.ISO_DATE))
-                        + " AND estado!=1");
-        this.boletinesD = Query
-                .listaModeloBoletines("SELECT * FROM " + Var.dbNameBoes + ".vista_boletines "
-                        + "where fecha=" + Util.comillas(fecha.format(DateTimeFormatter.ISO_DATE)) + " "
-                        + "and codigo in (select codigo from " + Var.dbNameBoes + ".procesar where estructura=-1 and estado=1)");
-        this.fichero = new File(fichero, fecha.format(DateTimeFormatter.ISO_DATE));
-        this.fichero.mkdirs();
+        this.fichero = fichero;
+        this.boletines = Query.listaProcesar("SELECT * FROM " + Var.dbNameBoes + ".procesar "
+                + "WHERE "
+                + "fecha=" + Util.comillas(fecha.format(DateTimeFormatter.ISO_DATE))
+                + " AND "
+                + "estado!=1");
     }
 
     public void run() {
-        data.clear();
-        Procesar aux;
-        Iterator<Procesar> it = boletines.iterator();
+        data = new ArrayList();
 
-        while (it.hasNext()) {
-            aux = it.next();
-            getDatos(aux);
-        }
-        crearArchivos();
+        boletines.forEach((item) -> {
+            collectData(item);
+        });
+
+        flushData();
     }
 
-    private String getLinea(String[] linea, int tipo) {
-        StringBuilder sb = new StringBuilder();
-
-        switch (tipo) {
-            case BB0:
-                for (int i = 0; i < linea.length - 2; i++) {
-                    sb.append(linea[i]);
-
-                    if (i != 23) {
-                        sb.append("|");
-                    }
-                }
-                break;
-
-            case BB1:
-                for (int i = 0; i < linea.length; i++) {
-                    sb.append(linea[i]);
-
-                    if (i != 25) {
-                        sb.append("|");
-                    }
-                }
-                break;
-        }
-        return sb.toString();
-    }
-
-    private void getDatos(Procesar pr) {
+    private void collectData(Procesar pr) {
         String[] linea;
         Multa multa;
         List<Multa> multas = Query.listaMultas("SELECT * FROM " + Var.dbNameBoes + ".multa WHERE idBoletin=" + pr.getId());
@@ -103,7 +64,7 @@ public final class BB0 {
             linea[5] = formatPlazo(multa.getPlazo());
             linea[6] = Integer.toString(multa.getId());
             linea[7] = "ND";
-            linea[8] = splitCodigoSancion(multa.getCodigoSancion());
+            linea[8] = multa.getCodigoSancion().replace("-", "");;
             linea[9] = Integer.toString(1);
             linea[10] = multa.getExpediente();
             linea[11] = Dates.imprimeFecha(multa.getFechaMulta(), "ddMMyy");
@@ -153,48 +114,36 @@ public final class BB0 {
         }
     }
 
-    private String splitCodigoSancion(String codigo) {
-        return codigo.replace("-", "");
-    }
+    private String buildFile() {
+        StringBuilder sb = new StringBuilder();
 
-    private String getDataArchivos(int tipo) {
-        StringBuilder sb;
+        for (int i = 0; i < data.size(); i++) {
+            String[] arr = data.get(i);
+            sb.append(buildLinea(arr));
 
-        switch (tipo) {
-            case BB0:
-                sb = new StringBuilder();
-
-                for (int i = 0; i < data.size(); i++) {
-                    String[] arr = data.get(i);
-                    sb.append(getLinea(arr, BB0));
-
-                    if (i != data.size() - 1) {
-                        sb.append(System.lineSeparator());
-                    }
-                }
-                break;
-
-            case BB1:
-                sb = new StringBuilder();
-
-                for (int i = 0; i < data.size(); i++) {
-                    String[] arr = data.get(i);
-                    sb.append(getLinea(arr, BB1));
-
-                    if (i != data.size() - 1) {
-                        sb.append(System.lineSeparator());
-                    }
-                }
-                break;
-
-            default:
-                throw new IllegalArgumentException();
+            if (i != data.size() - 1) {
+                sb.append(System.lineSeparator());
+            }
         }
+
         return sb.toString();
     }
 
-    private void crearArchivos() {
-        File archivoBB0 = new File(fichero, fecha.format(DateTimeFormatter.ISO_DATE) + ".bb0");
-        LoadFile.writeFile(archivoBB0, getDataArchivos(BB0));
+    private String buildLinea(String[] linea) {
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < linea.length - 2; i++) {
+            sb.append(linea[i]);
+
+            if (i != 23) {
+                sb.append("|");
+            }
+        }
+
+        return sb.toString();
+    }
+
+    private void flushData() {
+        LoadFile.writeFile(new File(fichero, fecha.format(DateTimeFormatter.ISO_DATE) + ".bb0"), buildFile());
     }
 }

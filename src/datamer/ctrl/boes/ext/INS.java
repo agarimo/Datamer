@@ -29,6 +29,7 @@ public class INS {
 
     public INS(LocalDate fecha, File fichero) {
         this.fecha = fecha;
+        this.fichero = fichero;
         data = new ArrayList();
         docData = new ArrayList();
         this.boletines = Query.listaProcesar("SELECT * FROM " + Var.dbNameBoes + ".procesar "
@@ -39,8 +40,6 @@ public class INS {
         this.documentos = Query.listaProcesar("SELECT * FROM " + Var.dbNameBoes + ".procesar "
                 + "WHERE "
                 + "fecha=" + Util.comillas(fecha.format(DateTimeFormatter.ISO_DATE)));
-        this.fichero = new File(fichero, fecha.format(DateTimeFormatter.ISO_DATE));
-        this.fichero.mkdirs();
     }
 
     public void run() {
@@ -50,20 +49,20 @@ public class INS {
 
         while (it.hasNext()) {
             aux = it.next();
-            getDatosDoc(aux);
+            collectDocumentData(aux);
         }
 
         it = boletines.iterator();
 
         while (it.hasNext()) {
             aux = it.next();
-            getDatos(aux);
+            collectData(aux);
         }
 
-        crearArchivos();
+        flushData();
     }
 
-    private void getDatos(Procesar pr) {
+    private void collectData(Procesar pr) {
         String[] linea;
         Multa multa;
         List<Multa> multas = Query.listaMultas("SELECT * FROM " + Var.dbNameBoes + ".multa WHERE idBoletin=" + pr.getId());
@@ -106,7 +105,7 @@ public class INS {
         }
     }
 
-    private void getDatosDoc(Procesar aux) {
+    private void collectDocumentData(Procesar aux) {
         String[] linea = new String[4];
         linea[0] = aux.getCodigo().replace("BOE-N-20", "").replace("-", "");
         linea[1] = aux.getFecha().format(DateTimeFormatter.ISO_DATE);
@@ -127,19 +126,20 @@ public class INS {
         return aux;
     }
 
-    private String getDataArchivos() {
+    private String buildFile() {
         StringBuilder sb = new StringBuilder();
 
         docData.stream().map((arr) -> {
-            sb.append(getLinea(arr));
+            sb.append(buildLinea(arr));
             return arr;
-        }).forEach((item) -> {
-            sb.append(System.lineSeparator());
-        });
+        })
+                .forEach((item) -> {
+                    sb.append(System.lineSeparator());
+                });
 
         for (int i = 0; i < data.size(); i++) {
             String[] arr = data.get(i);
-            sb.append(getLinea(arr));
+            sb.append(buildLinea(arr));
 
             if (i != data.size() - 1) {
                 sb.append(System.lineSeparator());
@@ -149,7 +149,7 @@ public class INS {
         return sb.toString();
     }
 
-    private String getLinea(String[] linea) {
+    private String buildLinea(String[] linea) {
         StringBuilder sb = new StringBuilder();
 
         for (int i = 0; i < linea.length; i++) {
@@ -162,7 +162,7 @@ public class INS {
         return sb.toString();
     }
 
-    private void crearArchivos() {
-        LoadFile.writeFile(new File(fichero, fecha.format(DateTimeFormatter.ISO_DATE) + ".ins"), getDataArchivos());
+    private void flushData() {
+        LoadFile.writeFile(new File(fichero, fecha.format(DateTimeFormatter.ISO_DATE) + ".ins"), buildFile());
     }
 }

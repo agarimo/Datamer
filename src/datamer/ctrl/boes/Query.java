@@ -561,8 +561,10 @@ public class Query extends sql.Query {
                 aux = new ModeloBoletines();
                 aux.codigo.set(rs.getString("codigo"));
                 aux.idBoletin.set(rs.getInt("idBoletin"));
+                aux.codigoEntidad.set(rs.getString("codigoEntidad"));
                 aux.entidad.set(rs.getString("entidad"));
                 aux.origen.set(rs.getString("origen"));
+                aux.codigoAy.set(rs.getString("codigoAy"));
                 aux.fecha.set(Dates.imprimeFecha(rs.getDate("fecha")));
                 aux.tipo.set(rs.getString("tipo"));
                 aux.fase.set(rs.getString("fase"));

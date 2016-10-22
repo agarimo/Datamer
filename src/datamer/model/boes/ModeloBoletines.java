@@ -11,8 +11,10 @@ public class ModeloBoletines {
 
     public SimpleStringProperty codigo = new SimpleStringProperty();
     public SimpleIntegerProperty idBoletin = new SimpleIntegerProperty();
+    public SimpleStringProperty codigoEntidad = new SimpleStringProperty();
     public SimpleStringProperty entidad = new SimpleStringProperty();
     public SimpleStringProperty origen = new SimpleStringProperty();
+    public SimpleStringProperty codigoAy = new SimpleStringProperty();
     public SimpleStringProperty fecha = new SimpleStringProperty();
     public SimpleStringProperty tipo = new SimpleStringProperty();
     public SimpleStringProperty fase = new SimpleStringProperty();
@@ -21,31 +23,39 @@ public class ModeloBoletines {
     public SimpleStringProperty link = new SimpleStringProperty();
     public SimpleIntegerProperty idioma = new SimpleIntegerProperty();
 
-    public String getCodigo(){
+    public String getCodigo() {
         return codigo.get();
     }
-    
-    public int getIdBoletin(){
+
+    public int getIdBoletin() {
         return idBoletin.get();
     }
-    
-    public String getEntidad(){
+
+    public String getEntidad() {
         return entidad.get();
     }
-    
-    public String getOrigen(){
+
+    public String getCodigoEntidad() {
+        return codigoEntidad.get();
+    }
+
+    public String getOrigen() {
         return origen.get();
     }
     
-    public String getFecha(){
+     public String getCodigoAy() {
+        return codigoAy.get();
+    }
+
+    public String getFecha() {
         return fecha.get();
     }
-    
-    public String getTipo(){
+
+    public String getTipo() {
         return tipo.get();
     }
-    
-    public String getFase(){
+
+    public String getFase() {
         return fase.get();
     }
 
@@ -56,12 +66,12 @@ public class ModeloBoletines {
     public String getIsEstructura() {
         return isEstructura.get();
     }
-    
-    public String getLink(){
+
+    public String getLink() {
         return link.get();
     }
-    
-    public int getIdioma(){
+
+    public int getIdioma() {
         return idioma.get();
     }
 

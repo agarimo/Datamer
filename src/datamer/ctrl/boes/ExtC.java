@@ -21,7 +21,6 @@ import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.materialicons.MaterialIcon;
 import tools.Download;
 import java.awt.Desktop;
-import java.awt.Transparency;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -31,7 +30,6 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -45,7 +43,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -59,7 +56,6 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.SplitMenuButton;
 import javafx.scene.control.TableCell;
@@ -71,14 +67,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
-import javafx.stage.FileChooser;
 import javafx.util.Duration;
 import org.apache.logging.log4j.LogManager;
 import org.controlsfx.control.PopOver;
-import org.controlsfx.glyphfont.FontAwesome;
-import org.controlsfx.glyphfont.FontAwesome.Glyph;
-import org.controlsfx.glyphfont.GlyphFont;
-import org.controlsfx.glyphfont.GlyphFontRegistry;
 import tools.Dates;
 import sql.Sql;
 import tools.Util;
@@ -127,6 +118,10 @@ public class ExtC implements Initializable {
     private VBox panelPreview;
     @FXML
     private VBox panelEspera;
+    @FXML
+    private VBox panelFunciones;
+    @FXML
+    private VBox panelExtraccion;
     @FXML
     private DatePicker dpFecha;
     @FXML
@@ -195,6 +190,7 @@ public class ExtC implements Initializable {
         lbNotas.setVisible(false);
         cbHide.setSelected(true);
         lbRefresh.setVisible(false);
+        btForzarProcesar.setVisible(false);
         boletines = new ArrayList();
         initializeIcons();
         iniciarTablaProcesar();
@@ -338,6 +334,7 @@ public class ExtC implements Initializable {
     void switchControls(boolean aux) {
         dpFecha.setDisable(aux);
         btProcesar.setDisable(aux);
+        btArchivos.setDisable(aux);
     }
 
     //<editor-fold defaultstate="collapsed" desc="PROCESO DATEPICKER">
@@ -628,7 +625,7 @@ public class ExtC implements Initializable {
             try {
                 Desktop.getDesktop().browse(fichero.toURI());
             } catch (IOException ex) {
-//                Logger.getLogger(WinC.class.getName()).log(Level.SEVERE, null, ex);
+                LOG.error("[openDataFolder]" + ex);
             }
         }
     }
@@ -845,6 +842,139 @@ public class ExtC implements Initializable {
             previewList.remove(aux);
         }
     }
+//</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="PROCESO NOTAS">
+    private void iniciarNotas() {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            notas = loader.load(getClass().getResourceAsStream("/datamer/view/Notas.fxml"));
+            notasC = loader.getController();
+            notasC.setParentController(this);
+
+        } catch (IOException ex) {
+            Logger.getLogger(ExtC.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @FXML
+    void verNotas(MouseEvent event) {
+        popOver = new PopOver();
+        popOver.setDetachable(false);
+        popOver.setDetached(false);
+        popOver.arrowSizeProperty().setValue(12);
+        popOver.arrowIndentProperty().setValue(13);
+        popOver.arrowLocationProperty().setValue(PopOver.ArrowLocation.BOTTOM_CENTER);
+        popOver.cornerRadiusProperty().setValue(7);
+        popOver.headerAlwaysVisibleProperty().setValue(false);
+        popOver.setAnimated(true);
+
+        popOver.setContentNode(notas);
+        popOver.show(lbNotas);
+    }
+
+    public void cerrarPopOver() {
+        popOver.hide();
+        tvProcesar.getSelectionModel().clearSelection();
+    }
+//</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="PROCESO EXTRACCION">
+    @FXML
+    void previsualizar(ActionEvent event) {
+        if (isPreview) {
+            btPreview.setText("Previsualizar Extracción");
+            btForzarProcesar.setVisible(false);
+            panelFunciones.setVisible(true);
+            panelFunciones.setManaged(true);
+            showPanel(this.preview_to_procesar);
+            isPreview = !isPreview;
+            switchControls(false);
+        } else {
+            ModeloProcesar aux = (ModeloProcesar) tvProcesar.getSelectionModel().getSelectedItem();
+            Extraccion ex;
+
+            if (fecha != null || aux != null) {
+                ex = new Extraccion(fecha);
+                if (ex.fileExist(aux.getCodigo())) {
+                    if (listaEstructurasCreadas.contains(aux.getEstructura())) {
+
+                        Thread a = new Thread(() -> {
+                            List<Multa> procesados;
+
+                            Platform.runLater(() -> {
+                                switchControls(true);
+                                piProgreso.setProgress(-1);
+                                lbProgreso.setText("");
+                                lbProceso.setText("PROCESANDO PREVISUALIZACIÓN");
+                                btPreview.setText("Volver");
+                                btForzarProcesar.setVisible(true);
+                                panelFunciones.setVisible(false);
+                                panelFunciones.setManaged(false);
+                                showPanel(this.procesar_to_wait);
+                                isPreview = !isPreview;
+                            });
+
+                            try {
+                                procesados = ex.previewXLSX(Query.getProcesar(aux.getCodigo()));
+
+                                Platform.runLater(() -> {
+                                    cargarDatosPreview(procesados);
+                                    piProgreso.setProgress(1);
+                                    lbProgreso.setText("");
+                                    lbProceso.setText("");
+                                    showPanel(this.wait_to_preview);
+                                });
+
+                            } catch (Exception e) {
+                                Platform.runLater(() -> {
+                                    piProgreso.setProgress(1);
+                                    lbProgreso.setText("");
+                                    lbProceso.setText("");
+
+                                    btPreview.setText("Previsualizar Extracción");
+                                    btForzarProcesar.setVisible(false);
+                                    panelFunciones.setVisible(true);
+                                    panelFunciones.setManaged(true);
+                                    showPanel(this.preview_to_procesar);
+                                    isPreview = !isPreview;
+                                    switchControls(false);
+
+                                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                                    alert.setTitle("ERROR");
+                                    alert.setHeaderText("XLSX CON ERRORES");
+                                    alert.setContentText("El XLSX seleccionado contiene errores de estructura \n"
+                                            + e.getMessage());
+                                    alert.showAndWait();
+                                });
+                            }
+                        });
+                        Var.executor.execute(a);
+
+                    } else {
+                        Alert alert = new Alert(Alert.AlertType.WARNING);
+                        alert.setTitle("ERROR");
+                        alert.setHeaderText("STRUCDATA NO CREADO");
+                        alert.setContentText("Debe crear el STRUCDATA para previsualizar el boletín");
+                        alert.showAndWait();
+                    }
+                } else {
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("ERROR");
+                    alert.setHeaderText("FICHERO NO ENCONTRADO");
+                    alert.setContentText("Debe generar el fichero .xlsx para previsualizar el contenido.");
+                    alert.showAndWait();
+                }
+            } else {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("ERROR");
+                alert.setHeaderText("ERROR EN SELECCIÓN");
+                alert.setContentText("Debe seleccionar un boletín para su visualización");
+                alert.showAndWait();
+            }
+        }
+    }
 
     @FXML
     void forzarProcesado(ActionEvent event) {
@@ -896,132 +1026,6 @@ public class ExtC implements Initializable {
             });
         });
         Var.executor.execute(a);
-    }
-//</editor-fold>
-
-    //<editor-fold defaultstate="collapsed" desc="PROCESO NOTAS">
-    private void iniciarNotas() {
-        try {
-            FXMLLoader loader = new FXMLLoader();
-            notas = loader.load(getClass().getResourceAsStream("/datamer/view/Notas.fxml"));
-            notasC = loader.getController();
-            notasC.setParentController(this);
-
-        } catch (IOException ex) {
-            Logger.getLogger(ExtC.class
-                    .getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    @FXML
-    void verNotas(MouseEvent event) {
-        popOver = new PopOver();
-        popOver.setDetachable(false);
-        popOver.setDetached(false);
-        popOver.arrowSizeProperty().setValue(12);
-        popOver.arrowIndentProperty().setValue(13);
-        popOver.arrowLocationProperty().setValue(PopOver.ArrowLocation.BOTTOM_CENTER);
-        popOver.cornerRadiusProperty().setValue(7);
-        popOver.headerAlwaysVisibleProperty().setValue(false);
-        popOver.setAnimated(true);
-
-        popOver.setContentNode(notas);
-        popOver.show(lbNotas);
-    }
-
-    public void cerrarPopOver() {
-        popOver.hide();
-        tvProcesar.getSelectionModel().clearSelection();
-    }
-//</editor-fold>
-
-    //<editor-fold defaultstate="collapsed" desc="PROCESO EXTRACCION">
-    @FXML
-    void previsualizar(ActionEvent event) {
-        if (isPreview) {
-            btPreview.setText("Previsualizar Extracción");
-            showPanel(this.preview_to_procesar);
-            isPreview = !isPreview;
-            switchControls(false);
-        } else {
-            ModeloProcesar aux = (ModeloProcesar) tvProcesar.getSelectionModel().getSelectedItem();
-            Extraccion ex;
-
-            if (fecha != null || aux != null) {
-                ex = new Extraccion(fecha);
-                if (ex.fileExist(aux.getCodigo())) {
-                    if (listaEstructurasCreadas.contains(aux.getEstructura())) {
-
-                        Thread a = new Thread(() -> {
-                            List<Multa> procesados;
-
-                            Platform.runLater(() -> {
-                                switchControls(true);
-                                piProgreso.setProgress(-1);
-                                lbProgreso.setText("");
-                                lbProceso.setText("PROCESANDO PREVISUALIZACIÓN");
-                                btPreview.setText("Volver");
-                                showPanel(this.procesar_to_wait);
-                                isPreview = !isPreview;
-                            });
-
-                            try {
-                                procesados = ex.previewXLSX(Query.getProcesar(aux.getCodigo()));
-
-                                Platform.runLater(() -> {
-                                    cargarDatosPreview(procesados);
-                                    piProgreso.setProgress(1);
-                                    lbProgreso.setText("");
-                                    lbProceso.setText("");
-                                    showPanel(this.wait_to_preview);
-                                });
-
-                            } catch (Exception e) {
-                                Logger.getLogger(ExtC.class
-                                        .getName()).log(Level.SEVERE, null, ex);
-                                Platform.runLater(() -> {
-                                    piProgreso.setProgress(1);
-                                    lbProgreso.setText("");
-                                    lbProceso.setText("");
-
-                                    Alert alert = new Alert(Alert.AlertType.WARNING);
-                                    alert.setTitle("ERROR");
-                                    alert.setHeaderText("XLSX CON ERRORES");
-                                    alert.setContentText("El XLSX seleccionado contiene errores de estructura \n"
-                                            + e.getMessage());
-                                    alert.showAndWait();
-
-                                    btPreview.setText("Previsualizar Extracción");
-                                    showPanel(this.wait_to_procesar);
-                                    isPreview = !isPreview;
-                                    switchControls(false);
-                                });
-                            }
-                        });
-                        Var.executor.execute(a);
-
-                    } else {
-                        Alert alert = new Alert(Alert.AlertType.WARNING);
-                        alert.setTitle("ERROR");
-                        alert.setHeaderText("STRUCDATA NO CREADO");
-                        alert.setContentText("Debe crear el STRUCDATA para previsualizar el boletín");
-                        alert.showAndWait();
-                    }
-                } else {
-                    Alert alert = new Alert(Alert.AlertType.WARNING);
-                    alert.setTitle("ERROR");
-                    alert.setHeaderText("FICHERO NO ENCONTRADO");
-                    alert.setContentText("Debe generar el fichero .xlsx para previsualizar el contenido.");
-                    alert.showAndWait();
-                }
-            } else {
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("ERROR");
-                alert.setHeaderText("ERROR EN SELECCIÓN");
-                alert.setContentText("Debe seleccionar un boletín para su visualización");
-                alert.showAndWait();
-            }
-        }
     }
 //</editor-fold>
 
@@ -1204,14 +1208,14 @@ public class ExtC implements Initializable {
     private void runArchivos(int mode, File fichero) {
         if (fecha != null) {
             Thread a = new Thread(() -> {
-                
+
                 Platform.runLater(() -> {
                     showPanel(this.procesar_to_wait);
                     piProgreso.setProgress(-1);
                     lbProgreso.setText("");
                     lbProceso.setText("...INICIANDO...");
                 });
-                
+
                 fichero.mkdirs();
 
                 switch (mode) {
@@ -1233,7 +1237,7 @@ public class ExtC implements Initializable {
                     lbProceso.setText("");
                     showPanel(this.wait_to_procesar);
                 });
-                
+
                 try {
                     tools.Util.openFile(fichero);
                 } catch (IOException ex) {

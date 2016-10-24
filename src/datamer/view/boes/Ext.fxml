@@ -28,48 +28,65 @@
         <items>
             <VBox alignment="TOP_CENTER" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="560.0" prefWidth="170.0" spacing="10.0" SplitPane.resizableWithParent="false">
                <children>
-                  <HBox>
+                  <VBox fx:id="panelFunciones" spacing="10.0">
                      <children>
-                        <Label prefWidth="150.0" text="Fecha :">
+                        <HBox>
+                           <children>
+                              <Label prefWidth="150.0" text="FECHA">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets top="10.0" />
+                                 </HBox.margin>
+                              </Label>
+                              <Label fx:id="lbRefresh" />
+                           </children>
+                        </HBox>
+                        <DatePicker fx:id="dpFecha" onAction="#cambioEnDatePicker" prefHeight="30.0" prefWidth="150.0" />
+                        <Separator prefWidth="200.0">
+                           <VBox.margin>
+                              <Insets bottom="10.0" top="10.0" />
+                           </VBox.margin>
+                        </Separator>
+                        <Label text="FUNCIONES">
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font>
                         </Label>
-                        <Label fx:id="lbRefresh" />
+                        <SplitMenuButton fx:id="btProcesar" alignment="CENTER" mnemonicParsing="false" onAction="#procesar" prefHeight="30.0" prefWidth="150.0" text="Procesar">
+                          <items>
+                            <MenuItem mnemonicParsing="false" onAction="#resetData" text="Reiniciar Datos" />
+                          </items>
+                        </SplitMenuButton>
+                        <SplitMenuButton fx:id="btArchivos" alignment="CENTER" mnemonicParsing="false" onAction="#runArchivosAll" prefHeight="30.0" prefWidth="150.0" text="Archivos" textAlignment="CENTER">
+                          <items>
+                            <MenuItem mnemonicParsing="false" onAction="#runArchivosReq" text="REQ / OBS" />
+                            <MenuItem mnemonicParsing="false" onAction="#runArchivosFiles" text="GENERAR ARCHIVOS" />
+                          </items>
+                        </SplitMenuButton>
+                        <Separator prefWidth="200.0">
+                           <VBox.margin>
+                              <Insets bottom="10.0" top="10.0" />
+                           </VBox.margin>
+                        </Separator>
                      </children>
-                  </HBox>
-                  <DatePicker fx:id="dpFecha" layoutX="14.0" layoutY="14.0" onAction="#cambioEnDatePicker" prefHeight="30.0" prefWidth="150.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="13.0" AnchorPane.topAnchor="14.0">
-                     <VBox.margin>
-                        <Insets />
-                     </VBox.margin>
-                  </DatePicker>
-                  <Separator prefWidth="200.0" />
-                  <Label text="FUNCIONES">
-                     <font>
-                        <Font name="System Bold" size="12.0" />
-                     </font>
-                  </Label>
-                  <SplitMenuButton fx:id="btProcesar" alignment="CENTER" mnemonicParsing="false" onAction="#procesar" prefHeight="30.0" prefWidth="150.0" text="Procesar">
-                    <items>
-                      <MenuItem mnemonicParsing="false" onAction="#resetData" text="Reiniciar Datos" />
-                    </items>
-                  </SplitMenuButton>
-                  <SplitMenuButton fx:id="btArchivos" alignment="CENTER" mnemonicParsing="false" onAction="#runArchivosAll" prefHeight="30.0" prefWidth="150.0" text="Archivos" textAlignment="CENTER">
-                    <items>
-                      <MenuItem mnemonicParsing="false" onAction="#runArchivosReq" text="REQ / OBS" />
-                      <MenuItem mnemonicParsing="false" onAction="#runArchivosFiles" text="GENERAR ARCHIVOS" />
-                    </items>
-                  </SplitMenuButton>
-                  <Separator prefWidth="200.0">
-                     <VBox.margin>
-                        <Insets bottom="10.0" top="10.0" />
-                     </VBox.margin></Separator>
-                  <Label text="EXTRACCIÓN">
-                     <font>
-                        <Font name="System Bold" size="12.0" />
-                     </font>
-                  </Label>
-                  <Button fx:id="btPreview" layoutX="14.0" layoutY="264.0" mnemonicParsing="false" onAction="#previsualizar" prefHeight="30.0" prefWidth="150.0" text="Previsualizar Extracción" />
+                  </VBox>
+                  <VBox fx:id="panelExtraccion" spacing="10.0">
+                     <children>
+                        <Label text="EXTRACCIÓN">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <Button fx:id="btPreview" mnemonicParsing="false" onAction="#previsualizar" prefHeight="30.0" prefWidth="150.0" text="Previsualizar Extracción" />
+                        <Button fx:id="btForzarProcesar" mnemonicParsing="false" onAction="#forzarProcesado" prefHeight="30.0" prefWidth="150.0" text="Procesar">
+                           <VBox.margin>
+                              <Insets top="20.0" />
+                           </VBox.margin>
+                        </Button>
+                     </children>
+                  </VBox>
                   <Pane prefHeight="100.0" prefWidth="100.0" VBox.vgrow="ALWAYS" />
                </children>
                <padding>
@@ -81,7 +98,7 @@
                   <VBox fx:id="panelEspera" alignment="CENTER" visible="false">
                      <children>
                         <Label fx:id="lbProceso" alignment="CENTER" layoutX="333.0" layoutY="140.0" prefHeight="46.0" prefWidth="300.0" text="PROCESO" textAlignment="CENTER" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="150.0" />
-                        <ProgressIndicator fx:id="piProgreso" layoutX="14.0" layoutY="211.0" prefHeight="139.0" prefWidth="787.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" />
+                        <ProgressIndicator fx:id="piProgreso" layoutX="14.0" layoutY="211.0" prefHeight="75.0" prefWidth="822.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" />
                         <Label fx:id="lbProgreso" alignment="CENTER" layoutX="333.0" layoutY="380.0" prefHeight="46.0" prefWidth="300.0" text="PROGRESO" textAlignment="CENTER" AnchorPane.bottomAnchor="150.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" />
                      </children>
                   </VBox>
@@ -136,7 +153,7 @@
                         </HBox>
                      </children>
                   </VBox>
-                  <VBox fx:id="panelPreview" alignment="TOP_CENTER">
+                  <VBox fx:id="panelPreview" alignment="TOP_CENTER" visible="false">
                      <children>
                         <TableView fx:id="tvPreview" layoutX="14.0" layoutY="14.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="460.0" prefWidth="782.0" tableMenuButtonVisible="true" AnchorPane.bottomAnchor="86.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0" VBox.vgrow="ALWAYS">
                            <columns>
@@ -167,7 +184,6 @@
                               <Label layoutX="14.0" layoutY="483.0" prefHeight="30.0" prefWidth="109.0" text="Número de multas: " HBox.hgrow="NEVER" />
                               <Label fx:id="lbMultasPreview" layoutX="123.0" layoutY="483.0" prefHeight="30.0" prefWidth="109.0" HBox.hgrow="NEVER" />
                               <Pane prefHeight="30.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
-                              <Button fx:id="btForzarProcesar" layoutX="646.0" layoutY="483.0" mnemonicParsing="false" onAction="#forzarProcesado" prefHeight="30.0" prefWidth="150.0" text="Procesar" AnchorPane.bottomAnchor="47.0" AnchorPane.rightAnchor="14.0" HBox.hgrow="NEVER" />
                            </children>
                            <padding>
                               <Insets left="10.0" />

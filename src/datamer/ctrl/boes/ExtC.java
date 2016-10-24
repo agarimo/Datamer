@@ -1019,6 +1019,9 @@ public class ExtC implements Initializable {
                 btForzarProcesar.setText("Procesar");
                 btPreview.setDisable(false);
                 btPreview.setText("Previsualizar Extracción");
+                btForzarProcesar.setVisible(false);
+                panelFunciones.setVisible(true);
+                panelFunciones.setManaged(true);
                 showPanel(this.preview_to_procesar);
                 isPreview = !isPreview;
                 switchControls(false);

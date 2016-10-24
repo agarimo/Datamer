@@ -72,7 +72,7 @@
                         </Separator>
                      </children>
                   </VBox>
-                  <VBox fx:id="panelExtraccion" spacing="10.0">
+                  <VBox fx:id="panelExtraccion" spacing="10.0" VBox.vgrow="ALWAYS">
                      <children>
                         <Label text="EXTRACCIÓN">
                            <font>
@@ -80,6 +80,7 @@
                            </font>
                         </Label>
                         <Button fx:id="btPreview" mnemonicParsing="false" onAction="#previsualizar" prefHeight="30.0" prefWidth="150.0" text="Previsualizar Extracción" />
+                        <Pane prefHeight="100.0" prefWidth="100.0" VBox.vgrow="ALWAYS" />
                         <Button fx:id="btForzarProcesar" mnemonicParsing="false" onAction="#forzarProcesado" prefHeight="30.0" prefWidth="150.0" text="Procesar">
                            <VBox.margin>
                               <Insets top="20.0" />
@@ -87,7 +88,6 @@
                         </Button>
                      </children>
                   </VBox>
-                  <Pane prefHeight="100.0" prefWidth="100.0" VBox.vgrow="ALWAYS" />
                </children>
                <padding>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

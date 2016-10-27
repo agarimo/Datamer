@@ -31,6 +31,7 @@ public class Datamer extends Application {
         Var.stage.setTitle("DataFest 1.3.2");
 
         Scene scene = new Scene((Parent) root);
+//        scene.getStylesheets().setAll(getClass().getResource("/datamer/resources/materialDesign.css").toExternalForm());
         Var.stage.setScene(scene);
         Var.stage.setMinHeight(700);
         Var.stage.setMinWidth(1200);

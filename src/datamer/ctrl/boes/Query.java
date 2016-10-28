@@ -1142,4 +1142,15 @@ public class Query extends sql.Query {
         return aux;
     }
 
+    public static void resetData(LocalDate fecha) {
+        try {
+            bd = new Sql(Var.con);
+            bd.ejecutar("DELETE FROM boes.multa WHERE fechaPublicacion="+Util.comillas(fecha.format(DateTimeFormatter.ISO_DATE)));
+            bd.ejecutar("UPDATE boes.procesar SET estado=1 WHERE fecha="+Util.comillas(fecha.format(DateTimeFormatter.ISO_DATE)));
+            bd.close();
+        } catch (SQLException ex) {
+            error(ex.getMessage());
+            Logger.getLogger(Query.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }

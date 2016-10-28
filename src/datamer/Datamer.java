@@ -1,5 +1,7 @@
 package datamer;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -17,6 +19,12 @@ public class Datamer extends Application {
     @Override
     public void init() {
         Var.initVar();
+
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Datamer.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
@@ -28,7 +36,7 @@ public class Datamer extends Application {
 
         Image icon = new Image(getClass().getResourceAsStream("/datamer/resources/DeathStar.png"));
         Var.stage.getIcons().add(icon);
-        Var.stage.setTitle("DataFest 1.3.2");
+        Var.stage.setTitle("DataFest 1.3.3");
 
         Scene scene = new Scene((Parent) root);
 //        scene.getStylesheets().setAll(getClass().getResource("/datamer/resources/materialDesign.css").toExternalForm());

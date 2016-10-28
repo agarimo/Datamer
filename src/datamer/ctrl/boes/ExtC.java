@@ -1102,8 +1102,8 @@ public class ExtC implements Initializable {
                             pr.SQLSetEstado(Estado.PROCESADO_XLSX.getValue());
                         }
                     } catch (Exception e) {
-                        System.out.println(e.getMessage());
-                        System.out.println(aux.getCodigo());
+                        System.out.println(e.getClass());
+                        LOG.error("[procesarRun] ("+e.getClass()+") -"+ e.getMessage());
                         pr.SQLSetEstado(Estado.ERROR_PROCESAR.getValue());
                     }
                 }
@@ -1173,7 +1173,8 @@ public class ExtC implements Initializable {
         Optional<ButtonType> result = alert.showAndWait();
 
         if (result.get() == ButtonType.OK) {
-
+            Query.resetData(fecha);
+            cambioEnDatePicker(new ActionEvent());
         }
     }
 //</editor-fold>

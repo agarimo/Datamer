@@ -8,5 +8,5 @@
 <entry key="dbName">server</entry>
 <entry key="con_host">192.168.1.10</entry>
 <entry key="con_pass">IkuinenK@@m.s84</entry>
-<entry key="socketClient_host">localhost</entry>
+<entry key="socketClient_host">192.168.1.10</entry>
 </properties>

@@ -102,7 +102,7 @@
                         <Label fx:id="lbProgreso" alignment="CENTER" layoutX="333.0" layoutY="380.0" prefHeight="46.0" prefWidth="300.0" text="PROGRESO" textAlignment="CENTER" AnchorPane.bottomAnchor="150.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" />
                      </children>
                   </VBox>
-                  <VBox fx:id="panelProcesar" alignment="TOP_CENTER" visible="false">
+                  <VBox fx:id="panelProcesar" alignment="TOP_CENTER">
                      <children>
                         <TableView fx:id="tvProcesar" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0" VBox.vgrow="ALWAYS">
                           <columns>
@@ -143,7 +143,11 @@
                         <HBox alignment="CENTER_RIGHT" maxHeight="18.0" prefHeight="18.0" spacing="5.0">
                            <children>
                               <Label fx:id="lbNotas" onMouseClicked="#verNotas" />
-                              <Pane HBox.hgrow="ALWAYS" />
+                              <HBox alignment="CENTER" HBox.hgrow="ALWAYS">
+                                 <children>
+                                    <Button fx:id="btStrucData" alignment="CENTER" mnemonicParsing="false" text="STRUCDATA" />
+                                 </children>
+                              </HBox>
                               <Label text="Ocultar Procesados" textAlignment="RIGHT" />
                               <CheckBox fx:id="cbHide" alignment="CENTER_RIGHT" contentDisplay="RIGHT" focusTraversable="false" mnemonicParsing="false" onAction="#hideProcessed" />
                            </children>
@@ -153,7 +157,7 @@
                         </HBox>
                      </children>
                   </VBox>
-                  <VBox fx:id="panelPreview" alignment="TOP_CENTER">
+                  <VBox fx:id="panelPreview" alignment="TOP_CENTER" visible="false">
                      <children>
                         <TableView fx:id="tvPreview" layoutX="14.0" layoutY="14.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="460.0" prefWidth="782.0" tableMenuButtonVisible="true" AnchorPane.bottomAnchor="86.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0" VBox.vgrow="ALWAYS">
                            <columns>

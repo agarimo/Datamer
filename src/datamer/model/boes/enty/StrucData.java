@@ -114,4 +114,8 @@ public class StrucData {
     public static String SQLBuscar(int idEstructura){
         return "SELECT * FROM "+Var.dbNameBoes+".strucdata WHERE idEstructura="+idEstructura;
     }
+    
+    public static String SQLCrear(){
+        return "";
+    }
 }

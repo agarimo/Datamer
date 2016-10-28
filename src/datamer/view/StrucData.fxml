@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="datamer.ctrl.StrucDataC">
+   <children>
+      <HBox spacing="10.0" style="-fx-background-color: #2196F3;" VBox.vgrow="ALWAYS">
+         <children>
+            <Label prefHeight="25.0" text="Estructura : " textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+            <TextField fx:id="tfEstructura" alignment="CENTER" editable="false" prefHeight="30.0" prefWidth="80.0">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </TextField>
+         </children>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+         <padding>
+            <Insets bottom="20.0" left="10.0" right="10.0" top="20.0" />
+         </padding>
+      </HBox>
+      <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="200.0" style="-fx-background-color: #E3F2FD;">
+         <children>
+            <Label prefHeight="30.0" prefWidth="170.0" text="Expediente" HBox.hgrow="ALWAYS">
+               <padding>
+                  <Insets left="20.0" />
+               </padding>
+            </Label>
+            <TextField fx:id="tfExpediente" alignment="CENTER" prefHeight="25.0" prefWidth="31.0" style="-fx-background-color: #E3F2FD;" />
+         </children>
+      </HBox>
+      <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="80.0" prefHeight="30.0" prefWidth="200.0" style="-fx-background-color: #BBDEFB;">
+         <children>
+            <Label prefHeight="30.0" prefWidth="170.0" text="Sancionado" HBox.hgrow="ALWAYS">
+               <padding>
+                  <Insets left="20.0" />
+               </padding>
+            </Label>
+            <TextField fx:id="tfSancionado" alignment="CENTER" prefHeight="25.0" prefWidth="31.0" style="-fx-background-color: #BBDEFB;" />
+         </children>
+      </HBox>
+      <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="80.0" prefHeight="30.0" prefWidth="200.0" style="-fx-background-color: #E3F2FD;">
+         <children>
+            <Label prefHeight="30.0" prefWidth="170.0" text="NIF" HBox.hgrow="ALWAYS">
+               <padding>
+                  <Insets left="20.0" />
+               </padding>
+            </Label>
+            <TextField fx:id="tfNif" alignment="CENTER" prefHeight="25.0" prefWidth="31.0" style="-fx-background-color: #E3F2FD;" />
+         </children>
+      </HBox>
+      <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="110.0" prefHeight="30.0" prefWidth="200.0" style="-fx-background-color: #BBDEFB;">
+         <children>
+            <Label prefHeight="30.0" prefWidth="170.0" text="Localidad" HBox.hgrow="ALWAYS">
+               <padding>
+                  <Insets left="20.0" />
+               </padding>
+            </Label>
+            <TextField fx:id="tfLocalidad" alignment="CENTER" prefHeight="25.0" prefWidth="31.0" style="-fx-background-color: #BBDEFB;" />
+         </children>
+      </HBox>
+      <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="140.0" prefHeight="30.0" prefWidth="200.0" style="-fx-background-color: #E3F2FD;">
+         <children>
+            <Label prefHeight="30.0" prefWidth="170.0" text="Fecha Multa" HBox.hgrow="ALWAYS">
+               <padding>
+                  <Insets left="20.0" />
+               </padding>
+            </Label>
+            <TextField fx:id="tfFecha" alignment="CENTER" prefHeight="25.0" prefWidth="31.0" style="-fx-background-color: #E3F2FD;" />
+         </children>
+      </HBox>
+      <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="170.0" prefHeight="30.0" prefWidth="200.0" style="-fx-background-color: #BBDEFB;">
+         <children>
+            <Label prefHeight="30.0" prefWidth="170.0" text="Matricula" HBox.hgrow="ALWAYS">
+               <padding>
+                  <Insets left="20.0" />
+               </padding>
+            </Label>
+            <TextField fx:id="tfMatricula" alignment="CENTER" prefHeight="25.0" prefWidth="31.0" style="-fx-background-color: #BBDEFB;" />
+         </children>
+      </HBox>
+      <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="200.0" prefHeight="30.0" prefWidth="200.0" style="-fx-background-color: #E3F2FD;">
+         <children>
+            <Label prefHeight="30.0" prefWidth="170.0" text="Cuantía" HBox.hgrow="ALWAYS">
+               <padding>
+                  <Insets left="20.0" />
+               </padding>
+            </Label>
+            <TextField fx:id="tfCuantia" alignment="CENTER" prefHeight="25.0" prefWidth="31.0" style="-fx-background-color: #E3F2FD;" />
+         </children>
+      </HBox>
+      <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="230.0" prefHeight="30.0" prefWidth="200.0" style="-fx-background-color: #BBDEFB;">
+         <children>
+            <Label prefHeight="30.0" prefWidth="170.0" text="Artículo" HBox.hgrow="ALWAYS">
+               <padding>
+                  <Insets left="20.0" />
+               </padding>
+            </Label>
+            <TextField fx:id="tfArticuloA" alignment="CENTER" prefHeight="25.0" prefWidth="31.0" style="-fx-background-color: #BBDEFB;" />
+         </children>
+      </HBox>
+      <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="260.0" prefHeight="30.0" prefWidth="200.0" style="-fx-background-color: #E3F2FD;">
+         <children>
+            <Label prefHeight="30.0" prefWidth="170.0" HBox.hgrow="ALWAYS">
+               <padding>
+                  <Insets left="20.0" />
+               </padding>
+            </Label>
+            <TextField fx:id="tfArticuloB" alignment="CENTER" prefHeight="25.0" prefWidth="31.0" style="-fx-background-color: #E3F2FD;" />
+         </children>
+      </HBox>
+      <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="290.0" prefHeight="30.0" prefWidth="200.0" style="-fx-background-color: #BBDEFB;">
+         <children>
+            <Label prefHeight="30.0" prefWidth="170.0" HBox.hgrow="ALWAYS">
+               <padding>
+                  <Insets left="20.0" />
+               </padding>
+            </Label>
+            <TextField fx:id="tfArticuloC" alignment="CENTER" prefHeight="25.0" prefWidth="31.0" style="-fx-background-color: #BBDEFB;" />
+         </children>
+      </HBox>
+      <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="320.0" prefHeight="30.0" prefWidth="200.0" style="-fx-background-color: #E3F2FD;">
+         <children>
+            <Label prefHeight="30.0" prefWidth="170.0" HBox.hgrow="ALWAYS">
+               <padding>
+                  <Insets left="20.0" />
+               </padding>
+            </Label>
+            <TextField fx:id="tfArticuloD" alignment="CENTER" prefHeight="25.0" prefWidth="31.0" style="-fx-background-color: #E3F2FD;" />
+         </children>
+      </HBox>
+      <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="350.0" prefHeight="30.0" prefWidth="200.0" style="-fx-background-color: #BBDEFB;">
+         <children>
+            <Label prefHeight="30.0" prefWidth="170.0" text="Precepto" HBox.hgrow="ALWAYS">
+               <padding>
+                  <Insets left="20.0" />
+               </padding>
+            </Label>
+            <TextField fx:id="tfPreceptoA" alignment="CENTER" prefHeight="25.0" prefWidth="31.0" style="-fx-background-color: #BBDEFB;" />
+         </children>
+      </HBox>
+      <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="380.0" prefHeight="30.0" prefWidth="200.0" style="-fx-background-color: #E3F2FD;">
+         <children>
+            <Label prefHeight="30.0" prefWidth="170.0" HBox.hgrow="ALWAYS">
+               <padding>
+                  <Insets left="20.0" />
+               </padding>
+            </Label>
+            <TextField fx:id="tfPreceptoB" alignment="CENTER" prefHeight="25.0" prefWidth="31.0" style="-fx-background-color: #E3F2FD;" />
+         </children>
+      </HBox>
+      <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="410.0" prefHeight="30.0" prefWidth="200.0" style="-fx-background-color: #BBDEFB;">
+         <children>
+            <Label prefHeight="30.0" prefWidth="170.0" HBox.hgrow="ALWAYS">
+               <padding>
+                  <Insets left="20.0" />
+               </padding>
+            </Label>
+            <TextField fx:id="tfPreceptoC" alignment="CENTER" prefHeight="25.0" prefWidth="31.0" style="-fx-background-color: #BBDEFB;" />
+         </children>
+      </HBox>
+      <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="440.0" prefHeight="30.0" prefWidth="200.0" style="-fx-background-color: #E3F2FD;">
+         <children>
+            <Label prefHeight="30.0" prefWidth="170.0" text="Puntos" HBox.hgrow="ALWAYS">
+               <padding>
+                  <Insets left="20.0" />
+               </padding>
+            </Label>
+            <TextField fx:id="tfPuntos" alignment="CENTER" prefHeight="25.0" prefWidth="31.0" style="-fx-background-color: #E3F2FD;" />
+         </children>
+      </HBox>
+      <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="470.0" prefHeight="30.0" prefWidth="200.0" style="-fx-background-color: #BBDEFB;">
+         <children>
+            <Label prefHeight="30.0" prefWidth="170.0" text="Req / Obs" HBox.hgrow="ALWAYS">
+               <padding>
+                  <Insets left="20.0" />
+               </padding>
+            </Label>
+            <TextField fx:id="tfReqObs" alignment="CENTER" prefHeight="25.0" prefWidth="31.0" style="-fx-background-color: #BBDEFB;" />
+         </children>
+      </HBox>
+      <Button fx:id="btGuardar" mnemonicParsing="false" prefHeight="50.0" prefWidth="211.0" style="-fx-background-color: yellowgreen;" text="GUARDAR" textAlignment="CENTER" textFill="WHITE" VBox.vgrow="ALWAYS">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Button>
+   </children>
+</VBox>

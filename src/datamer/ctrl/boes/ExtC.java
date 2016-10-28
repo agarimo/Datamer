@@ -176,6 +176,8 @@ public class ExtC implements Initializable {
     private CheckBox cbHide;
     @FXML
     private Label lbRefresh;
+    @FXML
+    private Button btStrucData;
 //</editor-fold>
 
     @Override
@@ -188,6 +190,7 @@ public class ExtC implements Initializable {
         panelEspera.setOpacity(0.0);
         panelEspera.setVisible(false);
         lbNotas.setVisible(false);
+        btStrucData.setVisible(false);
         cbHide.setSelected(true);
         lbRefresh.setVisible(false);
         btForzarProcesar.setVisible(false);
@@ -431,10 +434,10 @@ public class ExtC implements Initializable {
                                 break;
                             default:
                                 if (listaEstructurasCreadas.contains(item)) {
-                                    setText("OK : " + Integer.toString(item));
+                                    setText(Integer.toString(item));
                                     setTextFill(Color.GREEN);
                                 } else {
-                                    setText("Estructura no creada : " + Integer.toString(item));
+                                    setText("STRUCDATA no creado : " + Integer.toString(item));
                                     setTextFill(Color.RED);
                                 }
                                 break;
@@ -1319,8 +1322,10 @@ public class ExtC implements Initializable {
 
                 if (aux != null) {
                     if (aux.getEstructura() == -1) {
+                        btStrucData.setVisible(false);
                         lbNotas.setVisible(false);
                     } else {
+                        btStrucData.setVisible(true);
                         lbNotas.setVisible(true);
 
                         if (notasC.setNota(aux.getEstructura())) {

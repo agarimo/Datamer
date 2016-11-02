@@ -34,7 +34,7 @@
                            <children>
                               <Label prefWidth="150.0" text="FECHA">
                                  <font>
-                                    <Font name="System Bold" size="12.0" />
+                                    <Font name="System Bold" size="14.0" />
                                  </font>
                                  <HBox.margin>
                                     <Insets top="10.0" />
@@ -51,7 +51,7 @@
                         </Separator>
                         <Label text="FUNCIONES">
                            <font>
-                              <Font name="System Bold" size="12.0" />
+                              <Font name="System Bold" size="14.0" />
                            </font>
                         </Label>
                         <SplitMenuButton fx:id="btProcesar" alignment="CENTER" mnemonicParsing="false" onAction="#procesar" prefHeight="30.0" prefWidth="150.0" text="Procesar">
@@ -76,15 +76,26 @@
                      <children>
                         <Label text="EXTRACCIÓN">
                            <font>
-                              <Font name="System Bold" size="12.0" />
+                              <Font name="System Bold" size="14.0" />
                            </font>
                         </Label>
-                        <Button fx:id="btPreview" mnemonicParsing="false" onAction="#previsualizar" prefHeight="30.0" prefWidth="150.0" text="Previsualizar" />
+                        <Button fx:id="btPreview" mnemonicParsing="false" onAction="#previsualizar" prefHeight="30.0" prefWidth="150.0" text="PREVIEW" textFill="RED">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font></Button>
+                        <Button fx:id="btManual" mnemonicParsing="false" prefHeight="30.0" prefWidth="150.0" text="MANUAL" textFill="BLUE">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Button>
                         <Pane prefHeight="100.0" prefWidth="100.0" VBox.vgrow="ALWAYS" />
-                        <Button fx:id="btForzarProcesar" mnemonicParsing="false" onAction="#forzarProcesado" prefHeight="30.0" prefWidth="150.0" text="Procesar">
+                        <Button fx:id="btForzarProcesar" mnemonicParsing="false" onAction="#forzarProcesado" prefHeight="30.0" prefWidth="150.0" text="PROCESAR" textFill="GREEN">
                            <VBox.margin>
                               <Insets top="20.0" />
                            </VBox.margin>
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
                         </Button>
                      </children>
                   </VBox>

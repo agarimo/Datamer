@@ -131,6 +131,8 @@ public class ExtC implements Initializable {
     @FXML
     private Button btPreview;
     @FXML
+    private Button btManual;
+    @FXML
     private Button btForzarProcesar;
     @FXML
     private SplitMenuButton btArchivos;
@@ -924,7 +926,7 @@ public class ExtC implements Initializable {
     @FXML
     void previsualizar(ActionEvent event) {
         if (isPreview) {
-            btPreview.setText("Previsualizar Extracción");
+            btPreview.setText("PREVIEW");
             btForzarProcesar.setVisible(false);
             panelFunciones.setVisible(true);
             panelFunciones.setManaged(true);
@@ -968,12 +970,13 @@ public class ExtC implements Initializable {
                                 });
 
                             } catch (Exception e) {
+                                Logger.getLogger(ExtC.class.getName()).log(Level.SEVERE, null, ex);
                                 Platform.runLater(() -> {
                                     piProgreso.setProgress(1);
                                     lbProgreso.setText("");
                                     lbProceso.setText("");
 
-                                    btPreview.setText("Previsualizar Extracción");
+                                    btPreview.setText("PREVIEW");
                                     btForzarProcesar.setVisible(false);
                                     panelFunciones.setVisible(true);
                                     panelFunciones.setManaged(true);
@@ -985,7 +988,7 @@ public class ExtC implements Initializable {
                                     alert.setTitle("ERROR");
                                     alert.setHeaderText("XLSX CON ERRORES");
                                     alert.setContentText("El XLSX seleccionado contiene errores de estructura \n"
-                                            + e.getMessage());
+                                            + e.getClass()+" "+e.getMessage());
                                     alert.showAndWait();
                                 });
                             }

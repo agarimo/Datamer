@@ -17,7 +17,7 @@
                   <Font name="System Bold" size="18.0" />
                </font>
             </Label>
-            <TextField fx:id="tfEstructura" alignment="CENTER" editable="false" prefHeight="30.0" prefWidth="80.0">
+            <TextField fx:id="tfEstructura" alignment="CENTER" editable="false" focusTraversable="false" prefHeight="30.0" prefWidth="80.0">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
@@ -190,7 +190,7 @@
             <TextField fx:id="tfReqObs" alignment="CENTER" prefHeight="25.0" prefWidth="31.0" style="-fx-background-color: #BBDEFB;" />
          </children>
       </HBox>
-      <Button fx:id="btGuardar" mnemonicParsing="false" prefHeight="50.0" prefWidth="211.0" style="-fx-background-color: yellowgreen;" text="GUARDAR" textAlignment="CENTER" textFill="WHITE" VBox.vgrow="ALWAYS">
+      <Button fx:id="btGuardar" mnemonicParsing="false" onAction="#guardar" prefHeight="50.0" prefWidth="211.0" style="-fx-background-color: yellowgreen;" text="GUARDAR" textAlignment="CENTER" textFill="WHITE" VBox.vgrow="ALWAYS">
          <font>
             <Font size="20.0" />
          </font>

@@ -2,6 +2,7 @@ package datamer.ctrl.boes;
 
 import datamer.Var;
 import datamer.ctrl.NotasC;
+import datamer.ctrl.StrucDataC;
 import datamer.ctrl.boes.ext.BB0;
 import datamer.ctrl.boes.ext.INS;
 import datamer.ctrl.boes.ext.Extraccion;
@@ -85,7 +86,10 @@ public class ExtC implements Initializable {
     private LocalDate fecha;
     private Node notas;
     private NotasC notasC;
-    private PopOver popOver;
+    private PopOver popOverNotas;
+    private Node strucData;
+    private StrucDataC strucDataC;
+    private PopOver popoverStrucData;
 
     private List<Integer> listaEstructurasCreadas;
     private List<Integer> listaEstructurasManual;
@@ -98,9 +102,9 @@ public class ExtC implements Initializable {
     private final int wait_to_procesar = 5;
     private final int preview_to_wait = 6;
 
-    private int ARCHIVOS_ALL = 0;
-    private int ARCHIVOS_REQ = 1;
-    private int ARCHIVOS_FILES = 2;
+    private final int ARCHIVOS_ALL = 0;
+    private final int ARCHIVOS_REQ = 1;
+    private final int ARCHIVOS_FILES = 2;
 
     private Text icono_new;
     private Text icono_view;
@@ -199,6 +203,7 @@ public class ExtC implements Initializable {
         iniciarTablaProcesar();
         iniciarTablaPreview();
         iniciarNotas();
+        iniciarStrucData();
 
         final ObservableList<ModeloProcesar> ls1 = tvProcesar.getSelectionModel().getSelectedItems();
         ls1.addListener(selectorTablaProcesar);
@@ -438,7 +443,7 @@ public class ExtC implements Initializable {
                                     setTextFill(Color.GREEN);
                                 } else {
                                     setText("STRUCDATA no creado : " + Integer.toString(item));
-                                    setTextFill(Color.RED);
+                                    setTextFill(Color.ORANGE);
                                 }
                                 break;
                         }
@@ -482,16 +487,16 @@ public class ExtC implements Initializable {
 
                             case 4:
                                 setText(Estado.PDF_NO_GENERADO.toString());
-                                setTextFill(Color.ORANGERED);
+                                setTextFill(Color.GRAY);
                                 break;
 
                             case 5:
                                 setText(Estado.XLSX_NO_GENERADO.toString());
-                                setTextFill(Color.ORANGE);
+                                setTextFill(Color.GRAY);
                                 break;
                             case 6:
                                 setText(Estado.PROCESAR_MANUAL.toString());
-                                setTextFill(Color.RED);
+                                setTextFill(Color.BLUE);
                         }
                     }
                 }
@@ -854,31 +859,63 @@ public class ExtC implements Initializable {
             notas = loader.load(getClass().getResourceAsStream("/datamer/view/Notas.fxml"));
             notasC = loader.getController();
             notasC.setParentController(this);
-
         } catch (IOException ex) {
-            Logger.getLogger(ExtC.class
-                    .getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ExtC.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     @FXML
     void verNotas(MouseEvent event) {
-        popOver = new PopOver();
-        popOver.setDetachable(false);
-        popOver.setDetached(false);
-        popOver.arrowSizeProperty().setValue(12);
-        popOver.arrowIndentProperty().setValue(13);
-        popOver.arrowLocationProperty().setValue(PopOver.ArrowLocation.BOTTOM_CENTER);
-        popOver.cornerRadiusProperty().setValue(7);
-        popOver.headerAlwaysVisibleProperty().setValue(false);
-        popOver.setAnimated(true);
+        popOverNotas = new PopOver();
+        popOverNotas.setDetachable(false);
+        popOverNotas.setDetached(false);
+        popOverNotas.arrowSizeProperty().setValue(12);
+        popOverNotas.arrowIndentProperty().setValue(13);
+        popOverNotas.arrowLocationProperty().setValue(PopOver.ArrowLocation.BOTTOM_CENTER);
+        popOverNotas.cornerRadiusProperty().setValue(7);
+        popOverNotas.headerAlwaysVisibleProperty().setValue(false);
+        popOverNotas.setAnimated(true);
 
-        popOver.setContentNode(notas);
-        popOver.show(lbNotas);
+        popOverNotas.setContentNode(notas);
+        popOverNotas.show(lbNotas);
     }
 
-    public void cerrarPopOver() {
-        popOver.hide();
+    public void cerrarNotas() {
+        popOverNotas.hide();
+        tvProcesar.getSelectionModel().clearSelection();
+    }
+//</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="PROCESO STRUCDATA">
+    private void iniciarStrucData() {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            strucData = loader.load(getClass().getResourceAsStream("/datamer/view/StrucData.fxml"));
+            strucDataC = loader.getController();
+            strucDataC.setParentController(this);
+        } catch (IOException ex) {
+            Logger.getLogger(ExtC.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @FXML
+    void verStrucData(ActionEvent event) {
+        popoverStrucData = new PopOver();
+        popoverStrucData.setDetachable(false);
+        popoverStrucData.setDetached(false);
+        popoverStrucData.arrowSizeProperty().setValue(12);
+        popoverStrucData.arrowIndentProperty().setValue(13);
+        popoverStrucData.arrowLocationProperty().setValue(PopOver.ArrowLocation.BOTTOM_CENTER);
+        popoverStrucData.cornerRadiusProperty().setValue(7);
+        popoverStrucData.headerAlwaysVisibleProperty().setValue(false);
+        popoverStrucData.setAnimated(true);
+
+        popoverStrucData.setContentNode(strucData);
+        popoverStrucData.show(btStrucData);
+    }
+
+    public void cerrarStrucData() {
+        popoverStrucData.hide();
         tvProcesar.getSelectionModel().clearSelection();
     }
 //</editor-fold>
@@ -1106,7 +1143,7 @@ public class ExtC implements Initializable {
                         }
                     } catch (Exception e) {
                         System.out.println(e.getClass());
-                        LOG.error("[procesarRun] ("+e.getClass()+") -"+ e.getMessage());
+                        LOG.error("[procesarRun] (" + e.getClass() + ") -" + e.getMessage());
                         pr.SQLSetEstado(Estado.ERROR_PROCESAR.getValue());
                     }
                 }
@@ -1327,6 +1364,8 @@ public class ExtC implements Initializable {
                     } else {
                         btStrucData.setVisible(true);
                         lbNotas.setVisible(true);
+
+                        strucDataC.loadData(aux.getEstructura());
 
                         if (notasC.setNota(aux.getEstructura())) {
                             lbNotas.setGraphic(icono_view);

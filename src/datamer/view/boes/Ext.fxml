@@ -40,7 +40,7 @@
                                     <Insets top="10.0" />
                                  </HBox.margin>
                               </Label>
-                              <Label fx:id="lbRefresh" />
+                              <Label fx:id="lbRefresh" onMouseClicked="#refresh" />
                            </children>
                         </HBox>
                         <DatePicker fx:id="dpFecha" onAction="#cambioEnDatePicker" prefHeight="30.0" prefWidth="150.0" />
@@ -145,7 +145,7 @@
                               <Label fx:id="lbNotas" onMouseClicked="#verNotas" />
                               <HBox alignment="CENTER" HBox.hgrow="ALWAYS">
                                  <children>
-                                    <Button fx:id="btStrucData" alignment="CENTER" mnemonicParsing="false" text="STRUCDATA" />
+                                    <Button fx:id="btStrucData" alignment="CENTER" mnemonicParsing="false" onAction="#verStrucData" text="STRUCDATA" />
                                  </children>
                               </HBox>
                               <Label text="Ocultar Procesados" textAlignment="RIGHT" />

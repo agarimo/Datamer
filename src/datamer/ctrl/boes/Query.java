@@ -300,10 +300,9 @@ public class Query extends sql.Query {
             rs = bd.ejecutarQueryRs(query);
 
             while (rs.next()) {
-                aux = new StrucData();
+                aux = new StrucData(0);
 
                 aux.setId(rs.getInt("id"));
-                aux.setIdEstructura(rs.getInt("idEstructura"));
                 aux.setExpediente(rs.getInt("expediente"));
                 aux.setSancionado(rs.getInt("sancionado"));
                 aux.setNif(rs.getInt("nif"));
@@ -384,7 +383,7 @@ public class Query extends sql.Query {
             rs = bd.ejecutarQueryRs(query);
 
             while (rs.next()) {
-                aux = rs.getInt("idEstructura");
+                aux = rs.getInt("id");
                 list.add(aux);
             }
             rs.close();
@@ -1145,8 +1144,8 @@ public class Query extends sql.Query {
     public static void resetData(LocalDate fecha) {
         try {
             bd = new Sql(Var.con);
-            bd.ejecutar("DELETE FROM boes.multa WHERE fechaPublicacion="+Util.comillas(fecha.format(DateTimeFormatter.ISO_DATE)));
-            bd.ejecutar("UPDATE boes.procesar SET estado=1 WHERE fecha="+Util.comillas(fecha.format(DateTimeFormatter.ISO_DATE)));
+            bd.ejecutar("DELETE FROM boes.multa WHERE fechaPublicacion=" + Util.comillas(fecha.format(DateTimeFormatter.ISO_DATE)));
+            bd.ejecutar("UPDATE boes.procesar SET estado=1 WHERE fecha=" + Util.comillas(fecha.format(DateTimeFormatter.ISO_DATE)));
             bd.close();
         } catch (SQLException ex) {
             error(ex.getMessage());

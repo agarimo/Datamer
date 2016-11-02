@@ -31,6 +31,7 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 
@@ -40,7 +41,7 @@ import javafx.scene.control.TextField;
  * @author agarimo
  */
 public class StrucDataC implements Initializable {
-    
+
     private ExtC controller;
     private StrucData sd;
 
@@ -108,27 +109,87 @@ public class StrucDataC implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
+        tfEstructura.setText("");
+        tfSancionado.setText("");
+        tfNif.setText("");
+        tfLocalidad.setText("");
+        tfFecha.setText("");
+        tfMatricula.setText("");
+        tfCuantia.setText("");
+        tfArticuloA.setText("");
+        tfArticuloB.setText("");
+        tfArticuloC.setText("");
+        tfArticuloD.setText("");
+        tfPreceptoA.setText("");
+        tfPreceptoB.setText("");
+        tfPreceptoC.setText("");
+        tfPuntos.setText("");
+        tfReqObs.setText("");
     }
-    
+
     public void setParentController(ExtC controller) {
         this.controller = controller;
     }
-    
-    public void loadData(int estructura){
-        this.sd=Query.getStrucData(StrucData.SQLBuscar(estructura));
-        
-        //volcar datos en el panel.
-        
+
+    public void loadData(int id) {
+        this.sd = Query.getStrucData(StrucData.SQLBuscar(id));
+
+        if (sd == null) {
+            sd = new StrucData(id);
+        }
+
+        tfEstructura.setText(Integer.toString(sd.getId()));
+        tfExpediente.setText(Integer.toString(sd.getExpediente()));
+        tfSancionado.setText(Integer.toString(sd.getSancionado()));
+        tfNif.setText(Integer.toString(sd.getNif()));
+        tfLocalidad.setText(Integer.toString(sd.getLocalidad()));
+        tfFecha.setText(Integer.toString(sd.getFechaMulta()));
+        tfMatricula.setText(Integer.toString(sd.getMatricula()));
+        tfCuantia.setText(Integer.toString(sd.getCuantia()));
+        tfArticuloA.setText(Integer.toString(sd.getArticuloA()));
+        tfArticuloB.setText(Integer.toString(sd.getArticuloB()));
+        tfArticuloC.setText(Integer.toString(sd.getArticuloC()));
+        tfArticuloD.setText(Integer.toString(sd.getArticuloD()));
+        tfPreceptoA.setText(Integer.toString(sd.getPreceptoA()));
+        tfPreceptoB.setText(Integer.toString(sd.getPreceptoB()));
+        tfPreceptoC.setText(Integer.toString(sd.getPreceptoC()));
+        tfPuntos.setText(Integer.toString(sd.getPuntos()));
+        tfReqObs.setText(Integer.toString(sd.getReqObs()));
     }
-    
-    public void saveData(){
-        
+
+    public void saveData() {
+        try {
+            sd.setExpediente(Integer.parseInt(tfExpediente.getText()));
+            sd.setSancionado(Integer.parseInt(tfSancionado.getText()));
+            sd.setNif(Integer.parseInt(tfNif.getText()));
+            sd.setLocalidad(Integer.parseInt(tfLocalidad.getText()));
+            sd.setFechaMulta(Integer.parseInt(tfFecha.getText()));
+            sd.setMatricula(Integer.parseInt(tfMatricula.getText()));
+            sd.setCuantia(Integer.parseInt(tfCuantia.getText()));
+            sd.setArticuloA(Integer.parseInt(tfArticuloA.getText()));
+            sd.setArticuloB(Integer.parseInt(tfArticuloB.getText()));
+            sd.setArticuloC(Integer.parseInt(tfArticuloC.getText()));
+            sd.setArticuloD(Integer.parseInt(tfArticuloD.getText()));
+            sd.setPreceptoA(Integer.parseInt(tfPreceptoA.getText()));
+            sd.setPreceptoB(Integer.parseInt(tfPreceptoB.getText()));
+            sd.setPreceptoC(Integer.parseInt(tfPreceptoC.getText()));
+            sd.setPuntos(Integer.parseInt(tfPuntos.getText()));
+            sd.setReqObs(Integer.parseInt(tfReqObs.getText()));
+
+            Query.ejecutar(sd.SQLCrear());
+        } catch (NumberFormatException ex) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("ERROR");
+            alert.setHeaderText("ERROR EN FORMATO");
+            alert.setContentText("Ha introducido caracteres no válidos.");
+            alert.showAndWait();
+        }
     }
-    
+
     @FXML
-    void guardar(ActionEvent event){
-        
+    void guardar(ActionEvent event) {
+        saveData();
+        controller.cerrarStrucData();
     }
 
 }

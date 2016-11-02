@@ -32,15 +32,15 @@ public enum Estado {
             case LISTO_PROCESAR:
                 return "Listo para procesar";
             case PROCESADO_XLSX:
-                return "Procesado";
+                return "PROCESADO";
             case ERROR_PROCESAR:
-                return "Error en procesado";
+                return "ERROR";
             case PDF_NO_GENERADO:
-                return "Pdf no generado";
+                return "PDF no generado";
             case XLSX_NO_GENERADO:
                 return "XLSX no generado";
             case PROCESAR_MANUAL:
-                return "Procesar manualmente";
+                return "MANUAL";
             default:
                 throw new IllegalArgumentException();
         }

@@ -89,12 +89,12 @@ public class NotasC implements Initializable {
     void cerrar(ActionEvent event) {
         String data = textArea.getText();
         setData(data);
-        controller.cerrarPopOver();
+        controller.cerrarNotas();
     }
 
     @FXML
     void borrar(ActionEvent event) {
         setData(null);
-        controller.cerrarPopOver();
+        controller.cerrarNotas();
     }
 }

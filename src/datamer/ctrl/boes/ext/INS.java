@@ -163,6 +163,6 @@ public class INS {
     }
 
     private void flushData() {
-        LoadFile.writeFile(new File(fichero, fecha.format(DateTimeFormatter.ISO_DATE) + ".ins"), buildFile());
+        LoadFile.writeFile(new File(fichero, fecha.format(DateTimeFormatter.ofPattern("yyyyMMdd")) + ".ins"), buildFile());
     }
 }

@@ -144,6 +144,6 @@ public final class BB0 {
     }
 
     private void flushData() {
-        LoadFile.writeFile(new File(fichero, fecha.format(DateTimeFormatter.ISO_DATE) + ".bb0"), buildFile());
+        LoadFile.writeFile(new File(fichero, fecha.format(DateTimeFormatter.ofPattern("yyyyMMdd")) + ".bb0"), buildFile());
     }
 }

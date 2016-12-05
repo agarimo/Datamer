@@ -1,6 +1,7 @@
 package datamer.ctrl.boes;
 
 import datamer.Var;
+import datamer.ctrl.ExtManualC;
 import datamer.ctrl.NotasC;
 import datamer.ctrl.StrucDataC;
 import datamer.ctrl.boes.ext.BB0;
@@ -87,9 +88,14 @@ public class ExtC implements Initializable {
     private Node notas;
     private NotasC notasC;
     private PopOver popOverNotas;
+
     private Node strucData;
     private StrucDataC strucDataC;
-    private PopOver popoverStrucData;
+    private PopOver popOverStrucData;
+
+    private Node extManual;
+    private ExtManualC extManualC;
+    private PopOver popOverExtManual;
 
     private List<Integer> listaEstructurasCreadas;
     private List<Integer> listaEstructurasManual;
@@ -184,6 +190,8 @@ public class ExtC implements Initializable {
     private Label lbRefresh;
     @FXML
     private Button btStrucData;
+    @FXML
+    private Button btParciales;
 //</editor-fold>
 
     @Override
@@ -206,6 +214,7 @@ public class ExtC implements Initializable {
         iniciarTablaPreview();
         iniciarNotas();
         iniciarStrucData();
+        iniciarManualStruc();
 
         final ObservableList<ModeloProcesar> ls1 = tvProcesar.getSelectionModel().getSelectedItems();
         ls1.addListener(selectorTablaProcesar);
@@ -356,6 +365,7 @@ public class ExtC implements Initializable {
             if (fecha != null) {
                 String query = "SELECT * FROM boes.procesar where fecha=" + Util.comillas(fecha.format(DateTimeFormatter.ISO_DATE));
                 lbRefresh.setVisible(true);
+                btStrucData.setVisible(false);
                 cargarDatos(query);
             }
         } catch (NullPointerException ex) {
@@ -902,23 +912,67 @@ public class ExtC implements Initializable {
 
     @FXML
     void verStrucData(ActionEvent event) {
-        popoverStrucData = new PopOver();
-        popoverStrucData.setDetachable(false);
-        popoverStrucData.setDetached(false);
-        popoverStrucData.arrowSizeProperty().setValue(12);
-        popoverStrucData.arrowIndentProperty().setValue(13);
-        popoverStrucData.arrowLocationProperty().setValue(PopOver.ArrowLocation.BOTTOM_CENTER);
-        popoverStrucData.cornerRadiusProperty().setValue(7);
-        popoverStrucData.headerAlwaysVisibleProperty().setValue(false);
-        popoverStrucData.setAnimated(true);
+        popOverStrucData = new PopOver();
+        popOverStrucData.setDetachable(false);
+        popOverStrucData.setDetached(false);
+        popOverStrucData.arrowSizeProperty().setValue(12);
+        popOverStrucData.arrowIndentProperty().setValue(13);
+        popOverStrucData.arrowLocationProperty().setValue(PopOver.ArrowLocation.BOTTOM_CENTER);
+        popOverStrucData.cornerRadiusProperty().setValue(7);
+        popOverStrucData.headerAlwaysVisibleProperty().setValue(false);
+        popOverStrucData.setAnimated(true);
 
-        popoverStrucData.setContentNode(strucData);
-        popoverStrucData.show(btStrucData);
+        popOverStrucData.setContentNode(strucData);
+        popOverStrucData.show(btStrucData);
     }
 
     public void cerrarStrucData() {
-        popoverStrucData.hide();
+        popOverStrucData.hide();
         tvProcesar.getSelectionModel().clearSelection();
+    }
+//</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="PROCESO MANUALSTRUC">
+    private void iniciarManualStruc() {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            extManual = loader.load(getClass().getResourceAsStream("/datamer/view/ExtManual.fxml"));
+            extManualC = loader.getController();
+            extManualC.setParentController(this);
+        } catch (IOException ex) {
+            Logger.getLogger(ExtC.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @FXML
+    void verExtManual(ActionEvent event) {
+        ModeloProcesar aux = (ModeloProcesar) tvProcesar.getSelectionModel().getSelectedItem();
+
+        if (aux != null) {
+            popOverExtManual = new PopOver();
+            popOverExtManual.setDetachable(false);
+            popOverExtManual.setDetached(true);
+            popOverExtManual.arrowSizeProperty().setValue(12);
+            popOverExtManual.arrowIndentProperty().setValue(13);
+            popOverExtManual.arrowLocationProperty().setValue(PopOver.ArrowLocation.LEFT_CENTER);
+            popOverExtManual.cornerRadiusProperty().setValue(7);
+            popOverExtManual.headerAlwaysVisibleProperty().setValue(false);
+            popOverExtManual.setAnimated(true);
+
+            popOverExtManual.setContentNode(extManual);
+            popOverExtManual.show(btManual);
+        } else {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("ERROR");
+            alert.setHeaderText("ERROR EN SELECCIÓN");
+            alert.setContentText("Debe seleccionar un boletín para continuar");
+            alert.showAndWait();
+        }
+
+    }
+
+    public void cerrarExtManual() {
+        popOverExtManual.hide();
     }
 //</editor-fold>
 
@@ -928,6 +982,7 @@ public class ExtC implements Initializable {
         if (isPreview) {
             btPreview.setText("PREVIEW");
             btForzarProcesar.setVisible(false);
+            btManual.setVisible(true);
             panelFunciones.setVisible(true);
             panelFunciones.setManaged(true);
             showPanel(this.preview_to_procesar);
@@ -952,6 +1007,7 @@ public class ExtC implements Initializable {
                                 lbProceso.setText("PROCESANDO PREVISUALIZACIÓN");
                                 btPreview.setText("Volver");
                                 btForzarProcesar.setVisible(true);
+                                btManual.setVisible(false);
                                 panelFunciones.setVisible(false);
                                 panelFunciones.setManaged(false);
                                 showPanel(this.procesar_to_wait);
@@ -988,7 +1044,7 @@ public class ExtC implements Initializable {
                                     alert.setTitle("ERROR");
                                     alert.setHeaderText("XLSX CON ERRORES");
                                     alert.setContentText("El XLSX seleccionado contiene errores de estructura \n"
-                                            + e.getClass()+" "+e.getMessage());
+                                            + e.getClass() + " " + e.getMessage());
                                     alert.showAndWait();
                                 });
                             }
@@ -1017,6 +1073,10 @@ public class ExtC implements Initializable {
                 alert.showAndWait();
             }
         }
+    }
+    
+    void previsualizarManual(){
+        
     }
 
     @FXML
@@ -1059,9 +1119,9 @@ public class ExtC implements Initializable {
             Platform.runLater(() -> {
                 rootPane.getScene().setCursor(Cursor.DEFAULT);
                 btForzarProcesar.setDisable(false);
-                btForzarProcesar.setText("Procesar");
+                btForzarProcesar.setText("PROCESAR");
                 btPreview.setDisable(false);
-                btPreview.setText("Previsualizar Extracción");
+                btPreview.setText("PREVIEW");
                 btForzarProcesar.setVisible(false);
                 panelFunciones.setVisible(true);
                 panelFunciones.setManaged(true);
@@ -1246,6 +1306,24 @@ public class ExtC implements Initializable {
         }
     }
 
+    @FXML
+    void runParciales(ActionEvent event) {
+        File fichero = fileChooser();
+        if (fichero != null && fecha != null) {
+            fichero = new File(fichero, "PARCIALES");
+            fichero.mkdirs();
+
+            TXT txt = new TXT(fecha, fichero);
+            txt.run();
+            
+            try {
+                tools.Util.openFile(fichero);
+            } catch (IOException ex) {
+                Logger.getLogger(ExtC.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
     private File fileChooser() {
         DirectoryChooser chooser = new DirectoryChooser();
         chooser.setInitialDirectory(new File(new File(System.getProperty("user.home")), "Desktop"));
@@ -1262,8 +1340,6 @@ public class ExtC implements Initializable {
                     lbProgreso.setText("");
                     lbProceso.setText("...INICIANDO...");
                 });
-
-                fichero.mkdirs();
 
                 switch (mode) {
                     case 0:
@@ -1284,13 +1360,6 @@ public class ExtC implements Initializable {
                     lbProceso.setText("");
                     showPanel(this.wait_to_procesar);
                 });
-
-                try {
-                    tools.Util.openFile(fichero);
-                } catch (IOException ex) {
-                    Logger.getLogger(ExtC.class.getName()).log(Level.SEVERE, null, ex);
-                }
-
             });
             Var.executor.execute(a);
         }
@@ -1331,6 +1400,8 @@ public class ExtC implements Initializable {
     }
 
     private void runFiles(File fichero) {
+        fichero.mkdirs();
+
         Platform.runLater(() -> {
             lbProceso.setText("GENERANDO ARCHIVOS");
             lbProgreso.setText("Generando BB0");
@@ -1349,6 +1420,12 @@ public class ExtC implements Initializable {
         });
         TXT txt = new TXT(fecha, fichero);
         txt.run();
+
+        try {
+            tools.Util.openFile(fichero);
+        } catch (IOException ex) {
+            Logger.getLogger(ExtC.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     //</editor-fold>
 

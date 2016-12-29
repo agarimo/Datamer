@@ -949,6 +949,8 @@ public class ExtC implements Initializable {
         ModeloProcesar aux = (ModeloProcesar) tvProcesar.getSelectionModel().getSelectedItem();
 
         if (aux != null) {
+            extManualC.setBoletin(aux);
+
             popOverExtManual = new PopOver();
             popOverExtManual.setDetachable(false);
             popOverExtManual.setDetached(true);
@@ -1074,13 +1076,43 @@ public class ExtC implements Initializable {
             }
         }
     }
-    
-    void previsualizarManual(){
-        
+
+    public void previsualizarManual(List<Multa> procesados) {
+        if (isPreview) {
+            btPreview.setText("PREVIEW");
+            btForzarProcesar.setVisible(false);
+            btManual.setVisible(true);
+            panelFunciones.setVisible(true);
+            panelFunciones.setManaged(true);
+            showPanel(this.preview_to_procesar);
+            isPreview = !isPreview;
+            switchControls(false);
+        } else {
+            Platform.runLater(() -> {
+                switchControls(true);
+                piProgreso.setProgress(-1);
+                lbProgreso.setText("");
+                lbProceso.setText("PROCESANDO PREVISUALIZACIÓN");
+                btPreview.setText("Volver");
+                btForzarProcesar.setVisible(true);
+                btManual.setVisible(false);
+                panelFunciones.setVisible(false);
+                panelFunciones.setManaged(false);
+                showPanel(this.procesar_to_wait);
+                isPreview = !isPreview;
+
+                cargarDatosPreview(procesados);
+                piProgreso.setProgress(1);
+                lbProgreso.setText("");
+                lbProceso.setText("");
+                showPanel(this.wait_to_preview);
+            });
+        }
     }
 
     @FXML
-    void forzarProcesado(ActionEvent event) {
+    void forzarProcesado(ActionEvent event
+    ) {
         List<Multa> list = new ArrayList();
         ModeloPreview mp;
         Iterator<ModeloPreview> it = previewList.iterator();
@@ -1122,6 +1154,7 @@ public class ExtC implements Initializable {
                 btForzarProcesar.setText("PROCESAR");
                 btPreview.setDisable(false);
                 btPreview.setText("PREVIEW");
+                btManual.setVisible(true);
                 btForzarProcesar.setVisible(false);
                 panelFunciones.setVisible(true);
                 panelFunciones.setManaged(true);
@@ -1137,7 +1170,8 @@ public class ExtC implements Initializable {
 
     //<editor-fold defaultstate="collapsed" desc="PROCESO FUNCIONES">
     @FXML
-    void procesar(ActionEvent event) {
+    void procesar(ActionEvent event
+    ) {
 
         Alert alert = new Alert(AlertType.CONFIRMATION);
         alert.setTitle("PROCESAR EXTRACCIÓN");
@@ -1315,7 +1349,7 @@ public class ExtC implements Initializable {
 
             TXT txt = new TXT(fecha, fichero);
             txt.run();
-            
+
             try {
                 tools.Util.openFile(fichero);
             } catch (IOException ex) {

@@ -24,10 +24,10 @@
 package datamer.ctrl;
 
 import datamer.ctrl.boes.ExtC;
-import datamer.ctrl.boes.Query;
 import datamer.ctrl.boes.ext.ManualStruc;
-import datamer.model.boes.enty.StrucData;
+import datamer.model.boes.ModeloProcesar;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -36,10 +36,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 
 /**
@@ -51,6 +51,8 @@ public class ExtManualC implements Initializable {
 
     private ExtC controller;
     private ManualStruc struc;
+
+    private ModeloProcesar boletin;
 
     private ObservableList<String> modelo;
 
@@ -143,20 +145,50 @@ public class ExtManualC implements Initializable {
         this.controller = controller;
     }
 
-    public void close() {
+    public void setBoletin(ModeloProcesar boletin) {
+        this.boletin = boletin;
+    }
+
+    private void close() {
+        cancelarEstructura(new ActionEvent());
         controller.cerrarStrucData();
     }
 
     @FXML
     void aceptarEstructura(ActionEvent event) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("CONTINUAR");
+        alert.setHeaderText("Se va a procesar la estructura.");
+        alert.setContentText("¿Desea CONTINUAR?");
 
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if (result.get() == ButtonType.OK) {
+            getEstructura();
+            controller.previsualizarManual(struc.getMultas());
+            close();
+        }
+    }
+
+    void getEstructura() {
+        struc.setExpediente(cbExpediente.getSelectionModel().getSelectedIndex());
+        struc.setSancionado(cbSancionado.getSelectionModel().getSelectedIndex());
+        struc.setNif(cbNif.getSelectionModel().getSelectedIndex());
+        struc.setLocalidad(cbLocalidad.getSelectionModel().getSelectedIndex());
+        struc.setFecha(cbFecha.getSelectionModel().getSelectedIndex());
+        struc.setMatricula(cbMatricula.getSelectionModel().getSelectedIndex());
+        struc.setCuantia(cbCuantia.getSelectionModel().getSelectedIndex());
+        struc.setArticulo(cbArticulo.getSelectionModel().getSelectedIndex());
+        struc.setPrecepto(cbPrecepto.getSelectionModel().getSelectedIndex());
+        struc.setPuntos(cbPuntos.getSelectionModel().getSelectedIndex());
+        struc.setReqObs(cbReqObs.getSelectionModel().getSelectedIndex());
     }
 
     @FXML
     void cancelarEstructura(ActionEvent event) {
         panelEstructura.setVisible(false);
         panelTexto.setVisible(true);
-        
+
         lbLineas.setText("");
         lbColumnas.setText("");
 
@@ -165,7 +197,7 @@ public class ExtManualC implements Initializable {
 
     @FXML
     void continuarTexto(ActionEvent event) {
-        struc = new ManualStruc(taTexto.getText().trim());
+        struc = new ManualStruc(boletin, taTexto.getText().trim());
 
         if (struc.getLineas() > 0) {
             continuarTexto();
@@ -178,6 +210,21 @@ public class ExtManualC implements Initializable {
         }
     }
 
+    @FXML
+    void restore(ActionEvent event) {
+        cbExpediente.getSelectionModel().select(-1);
+        cbSancionado.getSelectionModel().select(-1);
+        cbNif.getSelectionModel().select(-1);
+        cbLocalidad.getSelectionModel().select(-1);
+        cbFecha.getSelectionModel().select(-1);
+        cbMatricula.getSelectionModel().select(-1);
+        cbCuantia.getSelectionModel().select(-1);
+        cbArticulo.getSelectionModel().select(-1);
+        cbPrecepto.getSelectionModel().select(-1);
+        cbPuntos.getSelectionModel().select(-1);
+        cbReqObs.getSelectionModel().select(-1);
+    }
+
     private void continuarTexto() {
         taTexto.setText("");
         panelTexto.setVisible(false);
@@ -187,7 +234,6 @@ public class ExtManualC implements Initializable {
         lbColumnas.setText(Integer.toString(struc.getColumnas()));
 
         modelo.addAll(struc.getModel());
-
     }
 
 }

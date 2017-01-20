@@ -221,7 +221,6 @@ public class ClasificacionC implements Initializable {
 
     @FXML
     void keyPressed(KeyEvent event) {
-        System.out.println(event.getCode());
 
         if (event.isControlDown() && event.getCode() == KeyCode.S) {
             event.consume();

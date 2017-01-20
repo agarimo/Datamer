@@ -2,6 +2,7 @@ package datamer.ctrl.boes;
 
 import datamer.Var;
 import datamer.ctrl.ExtManualC;
+import datamer.ctrl.ManualC;
 import datamer.ctrl.NotasC;
 import datamer.ctrl.StrucDataC;
 import datamer.ctrl.boes.ext.BB0;
@@ -15,6 +16,7 @@ import datamer.ctrl.boes.ext.script.ScriptOrigen;
 import datamer.ctrl.boes.ext.script.ScriptReq;
 import datamer.ctrl.boes.ext.XLSXProcess;
 import datamer.model.boes.Estado;
+import datamer.model.boes.ModeloBoletines;
 import datamer.model.boes.ModeloPreview;
 import datamer.model.boes.ModeloProcesar;
 import datamer.model.boes.enty.Multa;
@@ -51,6 +53,8 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -69,11 +73,15 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import org.apache.logging.log4j.LogManager;
 import org.controlsfx.control.PopOver;
 import tools.Dates;
 import sql.Sql;
+import tools.LoadFile;
 import tools.Util;
 
 /**
@@ -93,9 +101,9 @@ public class ExtC implements Initializable {
     private StrucDataC strucDataC;
     private PopOver popOverStrucData;
 
-    private Node extManual;
-    private ExtManualC extManualC;
-    private PopOver popOverExtManual;
+    private Parent extManual;
+    private ManualC extManualC;
+    private Stage popOverExtManual;
 
     private List<Integer> listaEstructurasCreadas;
     private List<Integer> listaEstructurasManual;
@@ -190,8 +198,6 @@ public class ExtC implements Initializable {
     private Label lbRefresh;
     @FXML
     private Button btStrucData;
-    @FXML
-    private Button btParciales;
 //</editor-fold>
 
     @Override
@@ -675,6 +681,33 @@ public class ExtC implements Initializable {
             }
         }
     }
+
+    @FXML
+    void openTXT(ActionEvent event) {
+        ModeloProcesar pr = (ModeloProcesar) tvProcesar.getSelectionModel().getSelectedItem();
+
+        if (pr != null) {
+            Sql bd;
+            String datos = "";
+
+            try {
+                bd = new Sql(Var.con);
+                datos = bd.getString("SELECT datos FROM " + Var.dbNameServer + ".publicacion WHERE codigo=" + Util.comillas(pr.getCodigo()));
+                bd.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(BoletinesC.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            LoadFile.writeFile(Var.temporalTxt, datos);
+
+            try {
+                Desktop.getDesktop().browse(Var.temporalTxt.toURI());
+            } catch (IOException ex) {
+                LOG.error("[verPdf]" + ex);
+            }
+        }
+
+    }
 //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="PROCESO TABLA PREVIEW">
@@ -934,14 +967,24 @@ public class ExtC implements Initializable {
 
     //<editor-fold defaultstate="collapsed" desc="PROCESO MANUALSTRUC">
     private void iniciarManualStruc() {
+
         try {
             FXMLLoader loader = new FXMLLoader();
-            extManual = loader.load(getClass().getResourceAsStream("/datamer/view/ExtManual.fxml"));
+            extManual = loader.load(getClass().getResourceAsStream("/datamer/view/Manual.fxml"));
             extManualC = loader.getController();
             extManualC.setParentController(this);
         } catch (IOException ex) {
             Logger.getLogger(ExtC.class.getName()).log(Level.SEVERE, null, ex);
         }
+
+        popOverExtManual = new Stage();
+        popOverExtManual.setScene(new Scene(extManual));
+        popOverExtManual.initModality(Modality.WINDOW_MODAL);
+        popOverExtManual.initOwner(Var.stage);
+        popOverExtManual.initStyle(StageStyle.UTILITY);
+        popOverExtManual.setMinHeight(700);
+        popOverExtManual.setMinWidth(1200);
+//        popOverExtManual.setMaximized(true);
     }
 
     @FXML
@@ -950,19 +993,7 @@ public class ExtC implements Initializable {
 
         if (aux != null) {
             extManualC.setBoletin(aux);
-
-            popOverExtManual = new PopOver();
-            popOverExtManual.setDetachable(false);
-            popOverExtManual.setDetached(true);
-            popOverExtManual.arrowSizeProperty().setValue(12);
-            popOverExtManual.arrowIndentProperty().setValue(13);
-            popOverExtManual.arrowLocationProperty().setValue(PopOver.ArrowLocation.LEFT_CENTER);
-            popOverExtManual.cornerRadiusProperty().setValue(7);
-            popOverExtManual.headerAlwaysVisibleProperty().setValue(false);
-            popOverExtManual.setAnimated(true);
-
-            popOverExtManual.setContentNode(extManual);
-            popOverExtManual.show(btManual);
+            popOverExtManual.show();
         } else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("ERROR");
@@ -970,11 +1001,11 @@ public class ExtC implements Initializable {
             alert.setContentText("Debe seleccionar un boletín para continuar");
             alert.showAndWait();
         }
-
     }
 
     public void cerrarExtManual() {
         popOverExtManual.hide();
+        cambioEnDatePicker(new ActionEvent());
     }
 //</editor-fold>
 
@@ -1111,8 +1142,7 @@ public class ExtC implements Initializable {
     }
 
     @FXML
-    void forzarProcesado(ActionEvent event
-    ) {
+    void forzarProcesado(ActionEvent event) {
         List<Multa> list = new ArrayList();
         ModeloPreview mp;
         Iterator<ModeloPreview> it = previewList.iterator();
@@ -1337,24 +1367,6 @@ public class ExtC implements Initializable {
         if (fichero != null && fecha != null) {
             fichero = new File(fichero, fecha.format(DateTimeFormatter.ISO_DATE));
             runArchivos(this.ARCHIVOS_FILES, fichero);
-        }
-    }
-
-    @FXML
-    void runParciales(ActionEvent event) {
-        File fichero = fileChooser();
-        if (fichero != null && fecha != null) {
-            fichero = new File(fichero, "PARCIALES");
-            fichero.mkdirs();
-
-            TXT txt = new TXT(fecha, fichero);
-            txt.run();
-
-            try {
-                tools.Util.openFile(fichero);
-            } catch (IOException ex) {
-                Logger.getLogger(ExtC.class.getName()).log(Level.SEVERE, null, ex);
-            }
         }
     }
 

@@ -51,6 +51,48 @@ public class Query extends sql.Query {
             Logger.getLogger(Query.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public static String getTextData(String codigo){
+        String aux = null;
+        String query = "SELECT datos FROM " + Var.dbNameServer + ".publicacion WHERE codigo=" + Util.comillas(codigo);
+
+        try {
+            bd = new Sql(Var.con);
+            rs = bd.ejecutarQueryRs(query);
+
+            if (rs.next()) {
+                aux = rs.getString("datos");
+            }
+
+            rs.close();
+            bd.close();
+        } catch (SQLException ex) {
+            error(ex.getMessage());
+            Logger.getLogger(Query.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return aux;
+    }
+    
+    public static String getVersion() {
+        String aux = null;
+        String query = "SELECT * FROM " + Var.dbNameServer + ".sys where id='version'";
+
+        try {
+            bd = new Sql(Var.con);
+            rs = bd.ejecutarQueryRs(query);
+
+            if (rs.next()) {
+                aux = rs.getString("value");
+            }
+
+            rs.close();
+            bd.close();
+        } catch (SQLException ex) {
+            error(ex.getMessage());
+            Logger.getLogger(Query.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return aux;
+    }
 
     public static Nota getNota(int estructura) {
         Nota aux = null;

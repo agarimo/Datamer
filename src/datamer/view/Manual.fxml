@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.ContextMenu?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="530.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="datamer.ctrl.ManualC">
+   <children>
+      <HBox alignment="CENTER_LEFT" maxHeight="50.0" minHeight="50.0" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #2196F3;">
+         <children>
+            <Label text="BOLETIN MANUAL :" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+            <Pane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+         </children>
+         <padding>
+            <Insets left="20.0" right="10.0" />
+         </padding>
+      </HBox>
+      <HBox alignment="TOP_CENTER" maxHeight="30.0" minHeight="30.0" prefHeight="100.0" prefWidth="200.0" spacing="2.0" style="-fx-background-color: #2196F3;">
+         <children>
+            <ToggleButton fx:id="btVerTexto" minHeight="25.0" minWidth="90.0" mnemonicParsing="false" onAction="#verTexto" selected="true" text="VER TEXTO">
+               <toggleGroup>
+                  <ToggleGroup fx:id="op" />
+               </toggleGroup>
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </ToggleButton>
+            <ToggleButton fx:id="btInsertar" minHeight="25.0" minWidth="90.0" mnemonicParsing="false" onAction="#insertar" text="INSERTAR" toggleGroup="$op">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font></ToggleButton>
+            <ToggleButton fx:id="btEstructura" minHeight="25.0" minWidth="90.0" mnemonicParsing="false" onAction="#estructura" text="ESTRUCTURA" toggleGroup="$op">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font></ToggleButton>
+            <ToggleButton fx:id="btPreview" minHeight="25.0" minWidth="90.0" mnemonicParsing="false" onAction="#preview" text="PREVIEW" toggleGroup="$op">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font></ToggleButton>
+         </children>
+      </HBox>
+      <StackPane fx:id="stackPane" prefHeight="150.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+         <children>
+            <VBox fx:id="pAceptar" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" visible="false" StackPane.alignment="CENTER">
+               <children>
+                  <Label text="Se van a insertar las multas en la Base de Datos">
+                     <font>
+                        <Font name="System Bold" size="21.0" />
+                     </font>
+                  </Label>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="50.0">
+                     <children>
+                        <Button minHeight="50.0" minWidth="100.0" mnemonicParsing="false" onAction="#cancelarProcesado" style="-fx-background-color: ORANGERED;" text="CANCELAR" textFill="#fffdfd">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Button>
+                        <Button minHeight="50.0" minWidth="100.0" mnemonicParsing="false" onAction="#aceptarProcesado" style="-fx-background-color: YELLOWGREEN;" text="ACEPTAR" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            <VBox fx:id="pPreview" alignment="CENTER" StackPane.alignment="CENTER">
+               <children>
+                  <TableView fx:id="tvPreview" layoutX="14.0" layoutY="14.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="416.0" prefWidth="817.0" tableMenuButtonVisible="true" AnchorPane.bottomAnchor="86.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0" VBox.vgrow="ALWAYS">
+                     <columns>
+                        <TableColumn fx:id="clExpediente" maxWidth="-1.0" minWidth="100.0" prefWidth="-1.0" text="Expediente" />
+                        <TableColumn fx:id="clSancionado" maxWidth="-1.0" minWidth="150.0" prefWidth="-1.0" text="Sancionado" />
+                        <TableColumn fx:id="clNif" maxWidth="-1.0" minWidth="100.0" prefWidth="-1.0" text="NIF" />
+                        <TableColumn fx:id="clLocalidad" maxWidth="-1.0" minWidth="120.0" prefWidth="-1.0" text="Localidad" />
+                        <TableColumn fx:id="clFecha" maxWidth="-1.0" minWidth="80.0" prefWidth="-1.0" text="Fecha" />
+                        <TableColumn fx:id="clMatricula" maxWidth="-1.0" minWidth="80.0" prefWidth="-1.0" text="Matricula" />
+                        <TableColumn fx:id="clCuantia" maxWidth="-1.0" minWidth="50.0" prefWidth="-1.0" text="Cuantia" />
+                        <TableColumn fx:id="clArticulo" maxWidth="-1.0" minWidth="50.0" prefWidth="-1.0" text="Artículo" />
+                        <TableColumn fx:id="clPuntos" maxWidth="-1.0" minWidth="45.0" prefWidth="-1.0" text="Puntos" />
+                        <TableColumn fx:id="clReqObs" maxWidth="-1.0" minWidth="30.0" prefWidth="-1.0" text="Req" />
+                     </columns>
+                     <contextMenu>
+                        <ContextMenu>
+                           <items>
+                              <MenuItem mnemonicParsing="false" onAction="#eliminarLineaPreview" text="Eliminar linea" />
+                           </items>
+                        </ContextMenu>
+                     </contextMenu>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </TableView>
+                  <HBox alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="50.0" prefWidth="817.0" VBox.vgrow="ALWAYS">
+                     <children>
+                        <Label layoutX="14.0" layoutY="483.0" prefHeight="29.0" prefWidth="109.0" text="Número de multas: " HBox.hgrow="NEVER" />
+                        <Label fx:id="lbMultasPreview" layoutX="123.0" layoutY="483.0" prefHeight="30.0" prefWidth="109.0" HBox.hgrow="NEVER" />
+                        <Pane prefHeight="30.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+                        <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#aceptarYProcesar" prefHeight="35.0" style="-fx-background-color: YELLOWGREEN;" text="ACEPTAR Y PROCESAR" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Button>
+                     </children>
+                     <padding>
+                        <Insets left="10.0" right="10.0" />
+                     </padding>
+                  </HBox>
+               </children>
+            </VBox>
+            <VBox fx:id="pEstructura" prefHeight="200.0" prefWidth="100.0" visible="false">
+               <children>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <VBox prefHeight="200.0" prefWidth="100.0" spacing="5.0">
+                           <children>
+                              <Label prefHeight="25.0" text="Expediente" />
+                              <Label prefHeight="25.0" text="Sancionado" />
+                              <Label prefHeight="25.0" text="NIF" />
+                              <Label prefHeight="25.0" text="Localidad" />
+                              <Label prefHeight="25.0" text="Fecha Multa" />
+                              <Label prefHeight="25.0" text="Matrícula" />
+                              <Label prefHeight="25.0" text="Cuantía" />
+                              <Label prefHeight="25.0" text="Artículo" />
+                              <Label prefHeight="25.0" text="Precepto" />
+                              <Label prefHeight="25.0" text="Puntos" />
+                              <Label prefHeight="25.0" text="Req / Obs" />
+                           </children>
+                           <padding>
+                              <Insets left="20.0" top="10.0" />
+                           </padding>
+                        </VBox>
+                        <VBox prefHeight="350.0" prefWidth="255.0" spacing="5.0">
+                           <children>
+                              <ComboBox fx:id="cbExpediente" prefHeight="25.0" prefWidth="260.0" />
+                              <ComboBox fx:id="cbSancionado" prefWidth="260.0" />
+                              <ComboBox fx:id="cbNif" prefWidth="260.0" />
+                              <ComboBox fx:id="cbLocalidad" prefWidth="260.0" />
+                              <ComboBox fx:id="cbFecha" prefWidth="260.0" />
+                              <ComboBox fx:id="cbMatricula" prefWidth="260.0" />
+                              <ComboBox fx:id="cbCuantia" prefWidth="260.0" />
+                              <ComboBox fx:id="cbArticulo" prefWidth="260.0" />
+                              <ComboBox fx:id="cbPrecepto" prefWidth="260.0" />
+                              <ComboBox fx:id="cbPuntos" prefWidth="260.0" />
+                              <ComboBox fx:id="cbReqObs" prefWidth="260.0" />
+                           </children>
+                           <padding>
+                              <Insets left="20.0" top="10.0" />
+                           </padding>
+                        </VBox>
+                        <VBox prefHeight="350.0" prefWidth="180.0" spacing="5.0">
+                           <children>
+                              <Label prefHeight="25.0" prefWidth="150.0" text="Líneas cargadas : " />
+                              <Label fx:id="lbLineas" alignment="CENTER_RIGHT" prefHeight="25.0" prefWidth="150.0" text="10">
+                                 <font>
+                                    <Font name="System Bold" size="18.0" />
+                                 </font>
+                              </Label>
+                              <Label prefHeight="25.0" prefWidth="150.0" text="Columnas : " />
+                              <Label fx:id="lbColumnas" alignment="CENTER_RIGHT" prefHeight="25.0" prefWidth="150.0" text="10">
+                                 <font>
+                                    <Font name="System Bold" size="18.0" />
+                                 </font>
+                              </Label>
+                              <Pane prefHeight="66.0" prefWidth="160.0" VBox.vgrow="ALWAYS" />
+                              <Hyperlink alignment="CENTER_RIGHT" focusTraversable="false" onAction="#restore" prefHeight="23.0" prefWidth="165.0" text="Restablecer" />
+                           </children>
+                           <padding>
+                              <Insets left="20.0" top="10.0" />
+                           </padding>
+                           <HBox.margin>
+                              <Insets right="20.0" />
+                           </HBox.margin>
+                        </VBox>
+                     </children>
+                  </HBox>
+               </children>
+               <StackPane.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="40.0" />
+               </StackPane.margin>
+            </VBox>
+            <VBox fx:id="pInsertar" prefHeight="200.0" prefWidth="100.0" visible="false">
+               <children>
+                  <TextArea fx:id="taInsertar" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+               </children>
+               <StackPane.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="20.0" />
+               </StackPane.margin></VBox>
+            <VBox fx:id="pVerTexto" prefHeight="200.0" prefWidth="100.0" visible="false">
+               <children>
+                  <TextArea fx:id="taVerTexto" editable="false" focusTraversable="false" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                     <VBox.margin>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="20.0" />
+                     </VBox.margin>
+                  </TextArea>
+               </children></VBox>
+         </children>
+      </StackPane>
+   </children>
+   <effect>
+      <DropShadow />
+   </effect>
+</VBox>

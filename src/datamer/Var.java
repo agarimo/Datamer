@@ -23,6 +23,7 @@
  */
 package datamer;
 
+import datamer.ctrl.boes.Query;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -43,6 +44,13 @@ import java.util.concurrent.Executors;
  * @author Agarimo
  */
 public class Var {
+    
+    /**
+     * Variables de version.
+     */
+    
+    private static final String version="1.4.2";
+    public static boolean isUpToDate;
 
     /**
      * Variables de configuración.
@@ -103,6 +111,7 @@ public class Var {
         initConnection();
         initVarFiles();
         executor = Executors.newFixedThreadPool(4);
+        checkVersion();
     }
 
     private static void initVarDriver() {
@@ -166,6 +175,10 @@ public class Var {
 
         socketClientHost = config.getProperty("socketClient_host");
         socketClientPort = Integer.parseInt(config.getProperty("socketClient_port"));
+    }
+    
+    private static void checkVersion(){
+        isUpToDate = version.equals(Query.getVersion());
     }
 
     public static void xit() {

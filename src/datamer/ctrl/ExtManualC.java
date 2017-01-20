@@ -212,17 +212,46 @@ public class ExtManualC implements Initializable {
 
     @FXML
     void restore(ActionEvent event) {
-        cbExpediente.getSelectionModel().select(-1);
-        cbSancionado.getSelectionModel().select(-1);
-        cbNif.getSelectionModel().select(-1);
-        cbLocalidad.getSelectionModel().select(-1);
-        cbFecha.getSelectionModel().select(-1);
-        cbMatricula.getSelectionModel().select(-1);
-        cbCuantia.getSelectionModel().select(-1);
-        cbArticulo.getSelectionModel().select(-1);
-        cbPrecepto.getSelectionModel().select(-1);
-        cbPuntos.getSelectionModel().select(-1);
-        cbReqObs.getSelectionModel().select(-1);
+        if (cbExpediente.isFocused()) {
+            cbExpediente.getSelectionModel().select(-1);
+        }
+
+        if (cbSancionado.isFocused()) {
+            cbSancionado.getSelectionModel().select(-1);
+        }
+
+        if (cbNif.isFocused()) {
+            cbNif.getSelectionModel().select(-1);
+        }
+
+        if (cbLocalidad.isFocused()) {
+            cbLocalidad.getSelectionModel().select(-1);
+        }
+        if (cbFecha.isFocused()) {
+            cbFecha.getSelectionModel().select(-1);
+        }
+        if (cbMatricula.isFocused()) {
+            cbMatricula.getSelectionModel().select(-1);
+        }
+
+        if (cbCuantia.isFocused()) {
+            cbCuantia.getSelectionModel().select(-1);
+        }
+        if (cbArticulo.isFocused()) {
+            cbArticulo.getSelectionModel().select(-1);
+        }
+
+        if (cbPrecepto.isFocused()) {
+            cbPrecepto.getSelectionModel().select(-1);
+        }
+
+        if (cbPuntos.isFocused()) {
+            cbPuntos.getSelectionModel().select(-1);
+        }
+
+        if (cbReqObs.isFocused()) {
+            cbReqObs.getSelectionModel().select(-1);
+        }
     }
 
     private void continuarTexto() {
@@ -232,7 +261,6 @@ public class ExtManualC implements Initializable {
 
         lbLineas.setText(Integer.toString(struc.getLineas()));
         lbColumnas.setText(Integer.toString(struc.getColumnas()));
-
         modelo.addAll(struc.getModel());
     }
 

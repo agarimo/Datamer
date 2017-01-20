@@ -44,6 +44,7 @@ public class ManualStruc {
     ModeloProcesar boletin;
     Procesar pr;
     VistaExtraccion ve;
+    String texto;
 
     private int expediente;
     private int sancionado;
@@ -67,6 +68,7 @@ public class ManualStruc {
         this.boletin = boletin;
         ve = Query.getVistaExtraccion(VistaExtraccion.SQLBuscar(boletin.getCodigo()));
         pr = Query.getProcesar(boletin.getCodigo());
+        texto = Query.getTextData(pr.getCodigo());
         contador = 1;
         this.expediente = -1;
         this.sancionado = -1;
@@ -194,6 +196,14 @@ public class ManualStruc {
         contador = 1;
         return multas;
     }
+    
+    public Procesar getProcesar(){
+        return this.pr;
+    }
+    
+    public ModeloProcesar getModeloProcesar(){
+        return this.boletin;
+    }
 
     private Date parseFecha(String fecha) {
         LocalDate aux;
@@ -241,6 +251,7 @@ public class ManualStruc {
     }
 
     public void setData(String data) {
+        contador=1;
         splitData(data);
     }
 
@@ -342,5 +353,9 @@ public class ManualStruc {
 
     public void setReqObs(int reqObs) {
         this.reqObs = reqObs;
+    }
+    
+    public String getTexto(){
+        return this.texto;
     }
 }

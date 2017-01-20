@@ -59,7 +59,6 @@
                             <MenuItem mnemonicParsing="false" onAction="#resetData" text="Reiniciar Datos" />
                           </items>
                         </SplitMenuButton>
-                        <Button fx:id="btParciales" mnemonicParsing="false" onAction="#runParciales" prefHeight="30.0" prefWidth="150.0" text="Generar Parciales" />
                         <SplitMenuButton fx:id="btArchivos" alignment="CENTER" mnemonicParsing="false" onAction="#runArchivosAll" prefHeight="30.0" prefWidth="150.0" text="Archivos" textAlignment="CENTER">
                           <items>
                             <MenuItem mnemonicParsing="false" onAction="#runArchivosReq" text="REQ / OBS" />
@@ -129,6 +128,7 @@
                                       <items>
                                           <MenuItem mnemonicParsing="false" onAction="#openPDF" text="Ver PDF" />
                                         <MenuItem mnemonicParsing="false" onAction="#openXLSX" text="Ver XLSX" />
+                                          <MenuItem mnemonicParsing="false" onAction="#openTXT" text="Ver TXT" />
                                       </items>
                                     </Menu>
                                     <Menu mnemonicParsing="false" text="GENERAR">

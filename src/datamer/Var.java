@@ -49,7 +49,7 @@ public class Var {
      * Variables de version.
      */
     
-    private static final String version="1.4.2";
+    private static final String version="1.4.3";
     public static boolean isUpToDate;
 
     /**

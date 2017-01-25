@@ -329,6 +329,7 @@ public class ManualC implements Initializable {
     private void loadEstructura() {
         lbLineas.setText(Integer.toString(struc.getLineas()));
         lbColumnas.setText(Integer.toString(struc.getColumnas()));
+        modelo.clear();
         modelo.addAll(struc.getModel());
     }
 
@@ -394,6 +395,8 @@ public class ManualC implements Initializable {
     }
 
     private void clearEstructura() {
+        modelo.clear();
+        
         cbExpediente.getSelectionModel().select(-1);
         cbSancionado.getSelectionModel().select(-1);
         cbNif.getSelectionModel().select(-1);
